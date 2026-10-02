@@ -1,10 +1,11 @@
 <%- include('../partials/public-top') %>
 <% const si = statusInfo(election); %>
-<section class="card hero">
-  <img class="hero-logo" src="/static/img/logo.png" alt="" width="120" height="120">
-  <span class="status-pill <%= si.publicKey %>">Voting <%= si.publicKey === 'open' ? 'is open' : si.publicLabel.toLowerCase() %></span>
+<section class="card hero-premium">
+  <div class="medallion"><img src="/static/img/logo.png" alt="MANAGE Alumni Association logo" width="112" height="112"></div>
+  <span class="overline">Official election portal</span>
   <h1>Welcome to the MANAGE Alumni Association Election</h1>
   <div class="term"><%= election.name %><% if (election.term) { %> · <%= election.term %><% } %></div>
+  <span class="status-pill <%= si.publicKey %>">Voting <%= si.publicKey === 'open' ? 'is open' : si.publicLabel.toLowerCase() %></span>
   <dl class="dates">
     <div><dt>Voting opens</dt><dd><%= fmt(election.opens_at) %></dd></div>
     <div><dt>Voting closes</dt><dd><%= fmt(election.closes_at) %></dd></div>
@@ -13,6 +14,7 @@
 
 <% if (votingOpen) { %>
 <section class="card code-card" aria-labelledby="code-h">
+  <span class="overline">Step 1</span>
   <h2 id="code-h">Enter your voting code</h2>
   <p class="muted">You will find your personal code in your invitation email.</p>
   <% if (error) { %>
