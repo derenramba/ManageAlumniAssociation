@@ -72,6 +72,11 @@ With `SMTP_HOST` set, invitations are sent through SMTP by a background queue (r
 
 ## Deployment notes
 
+> **Do not deploy on Vercel, Netlify or other serverless platforms.** They have no persistent disk, so the election database would be wiped between requests and votes would be lost. Use a host with a persistent disk/volume and a single always-on process.
+
+- **Render:** *New → Blueprint*, select this repository; `render.yaml` sets up the service and a persistent disk. Set `PUBLIC_BASE_URL`, then read the generated `INITIAL_ADMIN_PASSWORD` under *Environment*.
+- **Railway / Fly.io / VPS:** use the `Dockerfile` and attach a persistent volume at `/data`.
+
 - Run behind HTTPS (e.g. nginx or Caddy) with `SECURE_COOKIES=true` and `TRUST_PROXY=true`.
 - Run a **single** Node process (the in-process mail queue and rate limiters assume one instance). SQLite in WAL mode handles election-scale load comfortably.
 - Back up the `DATA_DIR` directory (database + candidate photos), e.g. with `sqlite3 data/election.db ".backup backup.db"`.

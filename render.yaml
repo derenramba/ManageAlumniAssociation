@@ -1,0 +1,36 @@
+# One-click deployment on Render (https://render.com) — "New > Blueprint" and select this repository.
+# A persistent disk is REQUIRED: the election database and candidate photos live on it.
+services:
+  - type: web
+    name: manage-alumni-voting
+    runtime: node
+    plan: starter            # persistent disks need a paid instance
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    numInstances: 1          # must run as a single instance
+    disk:
+      name: election-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+      - key: SECURE_COOKIES
+        value: "true"
+      - key: TRUST_PROXY
+        value: "true"
+      - key: INITIAL_ADMIN_USERNAME
+        value: admin
+      - key: INITIAL_ADMIN_PASSWORD
+        generateValue: true  # shown in the Render dashboard → Environment
+      - key: PUBLIC_BASE_URL
+        sync: false          # set to the site's address, e.g. https://manage-alumni-voting.onrender.com
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false
