@@ -73,6 +73,20 @@ router.post('/invitations/template', requireElection, requirePerm('send_invitati
 });
 
 // Rendered email preview (shown in an iframe). Uses a real voter's name but never a real code.
+router.post('/invitations/test', requireElection, requirePerm('send_invitations'), async (req, res, next) => {
+  try {
+    const to = clean(req.body.to, 200);
+    if (!mailer.isValidEmail(to)) {
+      flash(res, 'error', 'Enter a valid email address for the test.');
+      return res.redirect(303, '/admin/invitations#test');
+    }
+    const r = await mailer.sendTestEmail(req.election, to, req.admin.full_name);
+    audit.log(req, 'Test invitation email sent', { category: 'invitations', entityType: 'election', entityId: req.election.id, entityLabel: req.election.name, details: { to, ok: r.ok } });
+    flash(res, r.ok ? 'success' : 'error', r.ok ? `Test email sent to ${to}. It contains a sample code, not a real one. Check the inbox and the spam folder.` : r.reason);
+    res.redirect(303, '/admin/invitations#test');
+  } catch (err) { next(err); }
+});
+
 router.get('/invitations/preview', requireElection, requirePerm('send_invitations'), (req, res) => {
   const e = req.election;
   const d = db.get();

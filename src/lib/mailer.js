@@ -149,6 +149,19 @@ async function deliver(message) {
   return null; // outbox mode: stored by caller
 }
 
+/** Sends a sample invitation (with a fake code) to check email delivery before inviting voters. */
+async function sendTestEmail(e, to, adminName) {
+  const msg = renderInvitation(e, { full_name: adminName || 'Test Recipient', email: to }, '2222222222222222');
+  msg.subject = `[TEST] ${msg.subject}`;
+  if (mode() !== 'smtp') return { ok: false, reason: 'No email service (SMTP) is configured yet, so nothing can be sent.' };
+  try {
+    await deliver(msg);
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, reason: `The email service rejected the message: ${String(err && err.message ? err.message : err).slice(0, 200)}` };
+  }
+}
+
 let running = false;
 async function processQueue(limit = 25) {
   if (running) return 0;
@@ -204,5 +217,5 @@ function isValidEmail(email) {
 
 module.exports = {
   mode, smtpConfigured, setTransport, renderInvitation, template, VARIABLES, fill, variablesFor,
-  queueInvitation, processQueue, startWorker, isValidEmail, supportDetails,
+  queueInvitation, processQueue, sendTestEmail, startWorker, isValidEmail, supportDetails,
 };

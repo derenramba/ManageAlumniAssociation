@@ -91,6 +91,16 @@
   <p class="small muted mt-1 mb-0">You will see a confirmation with the exact number of recipients before anything is sent.</p>
 </section>
 
+<section class="card mt-2" id="test">
+  <h2>Send a test email</h2>
+  <p class="muted">Check that email delivery works before inviting voters. The test uses a sample code that cannot be used to vote.</p>
+  <form method="post" action="/admin/invitations/test" class="row" data-once>
+    <input type="hidden" name="_csrf" value="">
+    <div class="field grow mb-0"><label for="test-to">Send to</label><input type="email" id="test-to" name="to" required value="" placeholder="you@example.org"></div>
+    <button class="btn secondary" type="submit" style="align-self:flex-end">Send test email</button>
+  </form>
+</section>
+
 <div class="grid-2 mt-2">
 <section class="card" id="template">
   <h2>Email template</h2>
@@ -132,7 +142,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:14:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:24:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -146,7 +156,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:13:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:23:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -160,7 +170,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:12:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:22:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -174,7 +184,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:11:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:21:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -188,7 +198,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:10:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:20:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -202,7 +212,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:09:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:19:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -216,7 +226,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:08:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:18:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -230,7 +240,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:05:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:15:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -244,7 +254,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:04:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:14:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -258,7 +268,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:03:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:13:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -272,7 +282,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:02:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:12:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -286,7 +296,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:01:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:11:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -300,7 +310,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 02:00:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:10:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -314,7 +324,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:59:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:09:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -328,7 +338,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:58:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:08:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -342,7 +352,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:56:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:06:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -356,7 +366,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:55:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:05:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -370,7 +380,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge error" title="Delivery failed: 550 mailbox unavailable">Failed</span>
 <div class="small muted">Delivery failed: 550 mailbox unavailable</div></td>
-        <td class="small nowrap">1 Oct 2026, 01:54:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:04:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -384,7 +394,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:53:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:03:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -398,7 +408,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:52:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:02:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -412,7 +422,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:51:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:01:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -426,7 +436,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:50:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 02:00:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -440,7 +450,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:49:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:59:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -454,7 +464,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:48:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:58:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -468,7 +478,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:47:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:57:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -482,7 +492,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:46:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:56:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -496,7 +506,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:45:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:55:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -510,7 +520,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:44:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:54:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -524,7 +534,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge error" title="Delivery failed: 550 mailbox unavailable">Failed</span>
 <div class="small muted">Delivery failed: 550 mailbox unavailable</div></td>
-        <td class="small nowrap">1 Oct 2026, 01:43:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:53:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -538,7 +548,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:42:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:52:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -552,7 +562,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:41:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:51:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -566,7 +576,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:40:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:50:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -580,7 +590,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:38:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:48:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -594,7 +604,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:37:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:47:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -608,7 +618,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:36:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:46:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -622,7 +632,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:35:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:45:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -636,7 +646,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:34:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:44:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -650,7 +660,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:33:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:43:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -664,7 +674,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:32:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:42:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -678,7 +688,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge error" title="Delivery failed: 550 mailbox unavailable">Failed</span>
 <div class="small muted">Delivery failed: 550 mailbox unavailable</div></td>
-        <td class="small nowrap">1 Oct 2026, 01:31:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:41:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -692,7 +702,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:30:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:40:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -706,7 +716,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:29:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:39:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -720,7 +730,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:28:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:38:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -734,7 +744,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:27:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:37:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -748,7 +758,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:26:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:36:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -762,7 +772,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:25:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:35:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -776,7 +786,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:24:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:34:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -790,7 +800,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:22:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:32:39</td><td class="num">1</td><td>
 
 
 <span class="badge neutral">Not voted</span>
@@ -804,7 +814,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:21:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:31:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
@@ -818,7 +828,7 @@ Please keep your voting code private and do not forward this email.</textarea></
 
 <span class="badge success" title="">Sent</span>
 </td>
-        <td class="small nowrap">1 Oct 2026, 01:20:49</td><td class="num">1</td><td>
+        <td class="small nowrap">1 Oct 2026, 01:30:39</td><td class="num">1</td><td>
 
 
 <span class="badge success dot">Voted</span>
