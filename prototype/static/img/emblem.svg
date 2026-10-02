@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MANAGE Alumni Association emblem">
+  <circle cx="32" cy="32" r="30" fill="#14532d"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#e8c45a" stroke-width="1.5"/>
+  <path d="M32 47V24" stroke="#e8c45a" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M32 30c-7-1-11-6-11-12 6 0 11 4 11 12z" fill="#9fd4a9"/>
+  <path d="M32 30c7-1 11-6 11-12-6 0-11 4-11 12z" fill="#ffffff"/>
+  <path d="M32 40c-6-1-10-5-10-10 5 0 10 3 10 10z" fill="#ffffff"/>
+  <path d="M32 40c6-1 10-5 10-10-5 0-10 3-10 10z" fill="#9fd4a9"/>
+  <path d="M22 48h20" stroke="#e8c45a" stroke-width="2.4" stroke-linecap="round"/>
+</svg>

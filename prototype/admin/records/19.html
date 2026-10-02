@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Ballot — Suresh Gupta — Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <a href="/admin" class="">Dashboard</a>
+      <h4>Election</h4>
+      <a href="/admin/election" class="">Election settings</a>
+      <a href="/admin/positions" class="">Positions</a>
+      <a href="/admin/candidates" class="">Candidates</a>
+      <a href="/admin/elections" class="">All elections</a>
+      <h4>Voters</h4>
+      <a href="/admin/voters" class="">Voter register</a>
+      <a href="/admin/import" class="">Import voters</a>
+      <a href="/admin/codes" class="">Voting codes</a>
+      <a href="/admin/records" class="active" aria-current="page">Voting records</a>
+      <h4>Communications</h4><a href="/admin/invitations" class="">Invitations</a>
+      <h4>Monitoring</h4>
+      <a href="/admin/turnout" class="">Turnout</a>
+      <a href="/admin/audit" class="">Audit log</a>
+      <h4>Results</h4>
+      <a href="/admin/results" class="">Results</a>
+      <a href="/admin/records?vote=voted" class="active">Detailed voting records</a>
+      <a href="/admin/results#export">Export</a>
+      <a href="/admin/results/publish" class="">Publish results</a>
+      <h4>Administration</h4>
+      <a href="/admin/users" class="">Admin users</a>
+      <a href="/admin/account" class="">My account</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        
+          <span class="election-name">MANAGE Alumni Association Election 2026 (Demo)</span>
+          <span class="badge dot success">Voting open</span>
+          <span class="badge warning">DEMO DATA</span>
+        
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted">Demo Main Administrator · Main Administrator</span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <main class="admin-content" id="main">
+      
+
+<div class="page-head"><div><h1>Suresh Gupta</h1><p class="mono">MAA-01019 · suresh.gupta@example.org · PGDAEM 2018</p></div><a class="btn secondary" href="/admin/records">Back to voting records</a></div>
+
+<section class="card" style="max-width:760px">
+  <div class="card-header"><div><p class="mb-0">Status: <span class="badge success dot">Voted</span></p><p class="mb-0">Submitted: <strong>1 October 2026, 9:51 AM IST</strong></p><p class="small muted mb-0">Receipt <span class="mono">5EE6-98D9-3F05</span></p></div><span class="ballot-locked">Submitted ballot — locked</span></div>
+  <h2>Submitted Ballot</h2>
+  <ul class="review-list">
+    <li><span class="pos">President</span><span class="sel">Dr. Lakshmi Narayanan</span></li><li><span class="pos">Vice President</span><span class="sel">Dr. Priya Rao</span></li><li><span class="pos">General Secretary</span><span class="sel">Smt. Kavitha Menon</span></li><li><span class="pos">Joint Secretary</span><span class="sel">Shri Harish Chowdary</span></li>
+    <li><span class="pos">Treasurer</span><span class="muted">Dr. Meena Gupta — elected unopposed (not voted on)</span></li>
+  </ul>
+  <p class="small muted mt-2 mb-0">This ballot is view-only. Submitted ballots cannot be modified, deleted or reset through this platform. Your viewing of this ballot has been recorded in the audit log.</p>
+</section>
+
+
+<section class="card mt-2" style="max-width:760px"><h2>Access history for this ballot</h2>
+  <ul class="mb-0 small"><li>2 Oct 2026, 22:36:05 — Demo Main Administrator viewed submitted ballot for Suresh Gupta</li></ul></section>
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
+

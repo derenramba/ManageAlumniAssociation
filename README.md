@@ -70,6 +70,18 @@ Permissions can be adjusted per user.
 
 With `SMTP_HOST` set, invitations are sent through SMTP by a background queue (rate-limited by `MAIL_RATE_PER_MINUTE`, resumes after restarts). Without SMTP, the platform runs in **outbox mode**: messages are rendered and stored in **Invitations → Email outbox** so personalisation can be checked without sending. Before every send the queue re-checks that the code is still the voter's own active code; failures are marked *Failed* without affecting eligibility or the code.
 
+## Front-end prototype (Vercel)
+
+`prototype/` is a static, front-end-only preview of every screen with dummy data, deployable on Vercel as-is (`vercel.json` serves only that folder; no backend runs). Forms and buttons click through to the next screen, but nothing is saved.
+
+Regenerate it after changing templates or styles:
+
+```bash
+npm run build:prototype
+```
+
+The pages are rendered from the real templates in `views/` and `public/`, so front-end changes made there apply to both the prototype and the full app.
+
 ## Deployment notes
 
 > **Do not deploy on Vercel, Netlify or other serverless platforms.** They have no persistent disk, so the election database would be wiped between requests and votes would be lost. Use a host with a persistent disk/volume and a single always-on process.

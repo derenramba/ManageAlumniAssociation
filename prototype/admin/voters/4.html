@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Geetha Mishra — Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <a href="/admin" class="">Dashboard</a>
+      <h4>Election</h4>
+      <a href="/admin/election" class="">Election settings</a>
+      <a href="/admin/positions" class="">Positions</a>
+      <a href="/admin/candidates" class="">Candidates</a>
+      <a href="/admin/elections" class="">All elections</a>
+      <h4>Voters</h4>
+      <a href="/admin/voters" class="active" aria-current="page">Voter register</a>
+      <a href="/admin/import" class="">Import voters</a>
+      <a href="/admin/codes" class="">Voting codes</a>
+      <a href="/admin/records" class="">Voting records</a>
+      <h4>Communications</h4><a href="/admin/invitations" class="">Invitations</a>
+      <h4>Monitoring</h4>
+      <a href="/admin/turnout" class="">Turnout</a>
+      <a href="/admin/audit" class="">Audit log</a>
+      <h4>Results</h4>
+      <a href="/admin/results" class="">Results</a>
+      <a href="/admin/records?vote=voted" class="">Detailed voting records</a>
+      <a href="/admin/results#export">Export</a>
+      <a href="/admin/results/publish" class="">Publish results</a>
+      <h4>Administration</h4>
+      <a href="/admin/users" class="">Admin users</a>
+      <a href="/admin/account" class="">My account</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        
+          <span class="election-name">MANAGE Alumni Association Election 2026 (Demo)</span>
+          <span class="badge dot success">Voting open</span>
+          <span class="badge warning">DEMO DATA</span>
+        
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted">Demo Main Administrator · Main Administrator</span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <main class="admin-content" id="main">
+      
+
+
+<div class="page-head">
+  <div><h1>Geetha Mishra</h1><p class="mono">MAA-01004</p></div>
+  <div class="row">
+    <a class="btn" href="/admin/records/4">View vote</a>
+    <a class="btn secondary" href="/admin/voters/4/edit">Edit details</a>
+    <a class="btn ghost" href="/admin/voters">Back to register</a>
+  </div>
+</div>
+
+
+  <div class="alert success"><div><strong>Vote Status: Voted</strong> — submitted 1 October 2026, 3:36 AM IST.<br><span class="ballot-locked mt-1">Ballot already submitted — voting entitlement locked</span></div></div>
+
+
+<div class="grid-2">
+<section class="card">
+  <h2>Voter information</h2>
+  <dl class="kv">
+    <dt>Voter ID</dt><dd class="mono">MAA-01004</dd>
+    <dt>Full name</dt><dd>Geetha Mishra</dd>
+    <dt>Email</dt><dd>geetha.mishra@example.org</dd>
+    <dt>Mobile</dt><dd>+91 9486134559</dd>
+    <dt>WhatsApp</dt><dd>—</dd>
+    <dt>Batch / year</dt><dd>PGDAEM 1999</dd>
+    <dt>Eligibility</dt><dd>
+<span class="badge success">Eligible</span>
+
+
+
+</dd>
+    <dt>Vote status</dt><dd>
+
+
+<span class="badge success dot">Voted</span>
+
+</dd>
+    <dt>Voting timestamp</dt><dd>1 October 2026, 3:36 AM IST</dd>
+    
+  </dl>
+  
+</section>
+
+<div>
+<section class="card">
+  <h2>Voting code</h2>
+  <p>Status: 
+
+<span class="badge success">Used</span>
+
+
+</p>
+  
+  
+  
+    <h3 class="mt-2">Code history</h3>
+    <ul class="small">
+      <li>29 Sep 2026, 22:36:07 — used, used 1 Oct 2026, 03:36:03</li>
+    </ul>
+  
+</section>
+
+<section class="card" id="invite">
+  <h2>Invitation</h2>
+  <p>Status: 
+
+
+
+<span class="badge success" title="">Sent</span>
+ <span class="small muted">last attempt 30 Sep 2026, 22:40:03</span></p>
+  
+  
+  
+  
+    <h3 class="mt-2">Send history</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
+    <tr><td class="small nowrap">30 Sep 2026, 22:40:03</td><td class="small">First invitation</td><td><span class="badge success" title="">sent</span></td><td class="small">geetha.mishra@example.org</td><td class="small">Demo Main Administrator</td></tr>
+    </tbody></table></div>
+  
+</section>
+</div>
+</div>
+
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
+

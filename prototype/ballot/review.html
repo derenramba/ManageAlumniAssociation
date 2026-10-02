@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Review your choices — MANAGE Alumni Association Election</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/voter.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<a class="sr-only" href="#main">Skip to content</a>
+<div class="demo-banner" role="note">DEMONSTRATION ELECTION — sample data for testing only</div>
+<header class="pub-header">
+  <div class="inner">
+    <img src="/static/img/emblem.svg" alt="" width="44" height="44">
+    <div>
+      <div class="org">MANAGE Alumni Association</div>
+      <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
+    </div>
+  </div>
+</header>
+<main id="main" class="pub-main">
+
+<h1>Review your choices</h1>
+<p class="muted">MANAGE Alumni Association Election 2026 (Demo)</p>
+
+
+
+<section class="card">
+  <ul class="review-list">
+  
+    <li>
+      <span class="pos">President</span>
+      <span class="sel">Dr. Rahul Sharma</span>
+    </li>
+  
+    <li>
+      <span class="pos">Vice President</span>
+      <span class="sel abstain">Abstain</span>
+    </li>
+  
+    <li>
+      <span class="pos">General Secretary</span>
+      <span class="sel">Smt. Kavitha Menon</span>
+    </li>
+  
+    <li>
+      <span class="pos">Joint Secretary</span>
+      <span class="sel">Dr. Sneha Iyer</span>
+    </li>
+  
+  
+    <li><span class="pos">Treasurer</span><span class="muted">Dr. Meena Gupta — elected unopposed</span></li>
+  
+  </ul>
+</section>
+
+<p class="final-note mt-2">Once submitted, your choices cannot be changed.</p>
+
+<div class="button-row mt-2">
+  <a class="btn secondary large" href="/ballot">Edit choices</a>
+  <form method="post" action="/ballot/submit" data-once style="flex:1 1 200px;display:flex">
+    <input type="hidden" name="_csrf" value="">
+    <input type="hidden" name="submission_token" value="ymtm028e2NXhU5vxmNFIvgDz">
+    <button type="submit" class="btn large block" data-busy="Submitting your vote…" data-label="Submit my vote">Submit my vote</button>
+  </form>
+</div>
+</main>
+<footer class="pub-footer">
+  <div class="inner">
+    
+      <strong>Need help?</strong>
+      <div>
+        MANAGE Alumni Association Election Committee<br>
+        Email: <a href="mailto:elections@example.org">elections@example.org</a><br>
+        Phone: <a href="tel:+914000000000">+91 40 0000 0000</a>
+      </div>
+    
+    <p class="small muted mt-2 mb-0">© MANAGE Alumni Association · National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
+  </div>
+</footer>
+</body>
+</html>
+

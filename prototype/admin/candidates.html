@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Candidates — Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <a href="/admin" class="">Dashboard</a>
+      <h4>Election</h4>
+      <a href="/admin/election" class="">Election settings</a>
+      <a href="/admin/positions" class="">Positions</a>
+      <a href="/admin/candidates" class="active" aria-current="page">Candidates</a>
+      <a href="/admin/elections" class="">All elections</a>
+      <h4>Voters</h4>
+      <a href="/admin/voters" class="">Voter register</a>
+      <a href="/admin/import" class="">Import voters</a>
+      <a href="/admin/codes" class="">Voting codes</a>
+      <a href="/admin/records" class="">Voting records</a>
+      <h4>Communications</h4><a href="/admin/invitations" class="">Invitations</a>
+      <h4>Monitoring</h4>
+      <a href="/admin/turnout" class="">Turnout</a>
+      <a href="/admin/audit" class="">Audit log</a>
+      <h4>Results</h4>
+      <a href="/admin/results" class="">Results</a>
+      <a href="/admin/records?vote=voted" class="">Detailed voting records</a>
+      <a href="/admin/results#export">Export</a>
+      <a href="/admin/results/publish" class="">Publish results</a>
+      <h4>Administration</h4>
+      <a href="/admin/users" class="">Admin users</a>
+      <a href="/admin/account" class="">My account</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        
+          <span class="election-name">MANAGE Alumni Association Election 2026 (Demo)</span>
+          <span class="badge dot success">Voting open</span>
+          <span class="badge warning">DEMO DATA</span>
+        
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted">Demo Main Administrator · Main Administrator</span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <main class="admin-content" id="main">
+      
+
+
+<div class="page-head"><div><h1>Candidates</h1><p>Only <strong>approved</strong> candidates appear on the ballot. All candidates are shown with equal prominence, in the order set here.</p></div>
+</div>
+<div class="locked-banner">The ballot is locked. Candidates can only be changed while the election is in Draft or Ready status and has never been opened.</div>
+
+<section class="card" id="pos-1">
+  <div class="card-header"><h2>President </h2>
+    </div>
+  
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Candidate</th><th>Batch / year</th><th>Status</th><th>Order</th></tr></thead>
+    <tbody>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">RS</span>
+<div><strong>Dr. Rahul Sharma</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2001</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">1</td>
+        
+      </tr>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">LN</span>
+<div><strong>Dr. Lakshmi Narayanan</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 1999</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">2</td>
+        
+      </tr>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">VR</span>
+<div><strong>Shri Venkata Ramana Reddy</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2003</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">3</td>
+        
+      </tr>
+    
+    </tbody></table></div>
+  
+</section>
+
+<section class="card" id="pos-2">
+  <div class="card-header"><h2>Vice President </h2>
+    </div>
+  
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Candidate</th><th>Batch / year</th><th>Status</th><th>Order</th></tr></thead>
+    <tbody>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">PR</span>
+<div><strong>Dr. Priya Rao</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2006</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">1</td>
+        
+      </tr>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">AK</span>
+<div><strong>Shri Amit Kumar Singh</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2005</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">2</td>
+        
+      </tr>
+    
+    </tbody></table></div>
+  
+</section>
+
+<section class="card" id="pos-3">
+  <div class="card-header"><h2>General Secretary </h2>
+    </div>
+  
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Candidate</th><th>Batch / year</th><th>Status</th><th>Order</th></tr></thead>
+    <tbody>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">KM</span>
+<div><strong>Smt. Kavitha Menon</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2010</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">1</td>
+        
+      </tr>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">SB</span>
+<div><strong>Dr. Suresh Babu</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2008</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">2</td>
+        
+      </tr>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">AP</span>
+<div><strong>Shri Arjun Patel</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2011</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">3</td>
+        
+      </tr>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">GV</span>
+<div><strong>Shri Gopal Verma</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2009</td>
+        <td><span class="badge neutral">Withdrawn</span></td>
+        <td class="nowrap">4</td>
+        
+      </tr>
+    
+    </tbody></table></div>
+  
+</section>
+
+<section class="card" id="pos-4">
+  <div class="card-header"><h2>Joint Secretary </h2>
+    </div>
+  
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Candidate</th><th>Batch / year</th><th>Status</th><th>Order</th></tr></thead>
+    <tbody>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">SI</span>
+<div><strong>Dr. Sneha Iyer</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2014</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">1</td>
+        
+      </tr>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">HC</span>
+<div><strong>Shri Harish Chowdary</strong><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2013</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">2</td>
+        
+      </tr>
+    
+    </tbody></table></div>
+  
+</section>
+
+<section class="card" id="pos-5">
+  <div class="card-header"><h2>Treasurer <span class="badge info">Unopposed</span></h2>
+    </div>
+  
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Candidate</th><th>Batch / year</th><th>Status</th><th>Order</th></tr></thead>
+    <tbody>
+    
+      <tr>
+        <td><div class="cand-row">
+<span class=" photo-ph" aria-hidden="true">MG</span>
+<div><strong>Dr. Meena Gupta</strong><div class="small"><span class="badge info">Elected unopposed</span></div><div class="small muted">No photo</div></div></div></td>
+        <td>PGDAEM 2004</td>
+        <td><span class="badge success">Approved</span></td>
+        <td class="nowrap">1</td>
+        
+      </tr>
+    
+    </tbody></table></div>
+  
+</section>
+
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
+

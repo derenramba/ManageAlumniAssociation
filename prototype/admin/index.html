@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Dashboard — Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <a href="/admin" class="active" aria-current="page">Dashboard</a>
+      <h4>Election</h4>
+      <a href="/admin/election" class="">Election settings</a>
+      <a href="/admin/positions" class="">Positions</a>
+      <a href="/admin/candidates" class="">Candidates</a>
+      <a href="/admin/elections" class="">All elections</a>
+      <h4>Voters</h4>
+      <a href="/admin/voters" class="">Voter register</a>
+      <a href="/admin/import" class="">Import voters</a>
+      <a href="/admin/codes" class="">Voting codes</a>
+      <a href="/admin/records" class="">Voting records</a>
+      <h4>Communications</h4><a href="/admin/invitations" class="">Invitations</a>
+      <h4>Monitoring</h4>
+      <a href="/admin/turnout" class="">Turnout</a>
+      <a href="/admin/audit" class="">Audit log</a>
+      <h4>Results</h4>
+      <a href="/admin/results" class="">Results</a>
+      <a href="/admin/records?vote=voted" class="">Detailed voting records</a>
+      <a href="/admin/results#export">Export</a>
+      <a href="/admin/results/publish" class="">Publish results</a>
+      <h4>Administration</h4>
+      <a href="/admin/users" class="">Admin users</a>
+      <a href="/admin/account" class="">My account</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        
+          <span class="election-name">MANAGE Alumni Association Election 2026 (Demo)</span>
+          <span class="badge dot success">Voting open</span>
+          <span class="badge warning">DEMO DATA</span>
+        
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted">Demo Main Administrator · Main Administrator</span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <main class="admin-content" id="main">
+      
+
+
+<div class="page-head">
+  <div>
+    <h1>MANAGE Alumni Association Election 2026 (Demo)</h1>
+    <p>Term 2026–2028 · Status: <span class="badge dot success">Voting open</span></p>
+  </div>
+  <div class="row">
+    <a class="btn secondary" href="/admin/turnout">Turnout</a>
+    
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="k">Eligible voters</div><div class="v">58</div><div class="s">60 on register</div></div>
+  <div class="stat"><div class="k">Ballots submitted</div><div class="v">29</div><div class="s">29 yet to vote</div></div>
+  <div class="stat"><div class="k">Turnout</div><div class="v">50.0%</div><div class="progress mt-1"><span style="width: 50.0%"></span></div></div>
+  <div class="stat"><div class="k">Invitations sent</div><div class="v">50</div><div class="s">0 queued · 3 failed</div></div>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <h2>Election timetable</h2>
+    <dl class="kv">
+      <dt>Status</dt><dd><span class="badge dot success">Voting open</span></dd>
+      <dt>Voting opens</dt><dd>30 September 2026, 10:36 PM IST</dd>
+      <dt>Voting closes</dt><dd>8 October 2026, 10:36 PM IST</dd>
+      <dt>Actually opened</dt><dd>30 September 2026, 10:36 PM IST</dd>
+      
+      
+      <dt>Ballot</dt><dd>5 positions · 11 approved candidates</dd>
+      <dt>Voter list</dt><dd>Approved 29 Sep 2026, 22:36:03</dd>
+      <dt>Email delivery</dt><dd>Outbox mode (SMTP not configured — emails are stored, not sent)</dd>
+    </dl>
+    
+      <h3 class="mt-3">Status actions</h3>
+      
+
+<div class="stack">
+
+  <form method="post" action="/admin/election/transition" class="confirm-box danger" data-once>
+    <input type="hidden" name="_csrf" value="">
+    <input type="hidden" name="action" value="suspend">
+    <input type="hidden" name="back" value="/admin">
+    
+      <label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>I confirm that voting should be suspended. Voters will not be able to submit ballots until it is resumed.</span></label>
+      <div class="field"><label for="reason-suspend" class="small">Reason (recorded in audit log)</label><input type="text" id="reason-suspend" name="reason" maxlength="500"></div>
+    
+    <button class="btn danger " type="submit">Suspend voting</button>
+    
+  </form>
+
+  <form method="post" action="/admin/election/transition" class="confirm-box danger" data-once>
+    <input type="hidden" name="_csrf" value="">
+    <input type="hidden" name="action" value="close">
+    <input type="hidden" name="back" value="/admin">
+    
+      <label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>I confirm that voting should close now. No further ballots will be accepted.</span></label>
+      <div class="field"><label for="reason-close" class="small">Reason (recorded in audit log)</label><input type="text" id="reason-close" name="reason" maxlength="500"></div>
+    
+    <button class="btn danger " type="submit">Close election</button>
+    
+  </form>
+
+
+</div>
+
+    
+  </section>
+
+  <section class="card">
+    <h2>Important issues</h2>
+    
+      <ul class="checklist">
+      
+        <li class="warning"><span class="ic" aria-hidden="true">!</span><span class="grow">5 voter(s) with email have not yet received an invitation</span><a class="small" href="/admin/invitations">Review</a></li>
+      
+        <li class="warning"><span class="ic" aria-hidden="true">!</span><span class="grow">3 eligible voter(s) have no email — deliver their codes externally</span><a class="small" href="/admin/voters?filter=no_email">Review</a></li>
+      
+        <li class="warning"><span class="ic" aria-hidden="true">!</span><span class="grow">3 invitation(s) failed to send</span><a class="small" href="/admin/invitations?status=failed">Review</a></li>
+      
+      </ul>
+    
+    
+      <h3 class="mt-3">Most recent ballots</h3>
+      <ul class="checklist">
+      <li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Naveen Nair</span><span class="small muted nowrap">2 Oct 2026, 22:36:04</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Suresh Chowdary</span><span class="small muted nowrap">2 Oct 2026, 09:36:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Gopal Joshi</span><span class="small muted nowrap">2 Oct 2026, 08:21:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Vikram Patel</span><span class="small muted nowrap">2 Oct 2026, 07:06:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Vikram Kumar</span><span class="small muted nowrap">2 Oct 2026, 05:51:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Divya Verma</span><span class="small muted nowrap">2 Oct 2026, 04:36:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Srinivas Das</span><span class="small muted nowrap">2 Oct 2026, 03:21:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Swathi Joshi</span><span class="small muted nowrap">2 Oct 2026, 02:06:03</span></li>
+      </ul>
+    
+  </section>
+</div>
+
+<section class="card mt-2">
+  <h2>Election workflow</h2>
+  <ol class="mb-0">
+    <li><a href="/admin/election">Configure election settings</a> (dates, support contact)</li>
+    <li><a href="/admin/positions">Create positions</a>, <a href="/admin/candidates">add & approve candidates</a>, mark unopposed posts</li>
+    <li><a href="/admin/import">Import</a> or <a href="/admin/voters/new">add voters</a>, review <a href="/admin/voters/quality">duplicates</a>, then approve the final voter list</li>
+    <li><a href="/admin/codes">Generate voting codes</a> — one per eligible voter</li>
+    <li><a href="/admin/invitations">Preview and send invitations</a></li>
+    <li>Open voting, monitor <a href="/admin/turnout">turnout</a>, then close the election</li>
+    <li>Review <a href="/admin/results">results</a>, export, and publish</li>
+  </ol>
+</section>
+    </main>
+  </div>
+</div>
+</body>
+</html>
+

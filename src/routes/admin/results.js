@@ -30,7 +30,7 @@ router.get('/results', requireElection, requirePerm('view_results'), requireResu
 });
 
 router.get('/results/publish', requireElection, requirePerm('publish_results'), requireResultsAvailable, (req, res) => {
-  res.render('admin/publish', { title: 'Publish results', r: computeResults(req.election.id) });
+  res.render('admin/publish', { title: 'Publish results', r: computeResults(req.election.id), transitions: election.TRANSITIONS });
 });
 
 function aggregateRows(e, r) {

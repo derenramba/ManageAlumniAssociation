@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Election settings — Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <a href="/admin" class="">Dashboard</a>
+      <h4>Election</h4>
+      <a href="/admin/election" class="active" aria-current="page">Election settings</a>
+      <a href="/admin/positions" class="">Positions</a>
+      <a href="/admin/candidates" class="">Candidates</a>
+      <a href="/admin/elections" class="">All elections</a>
+      <h4>Voters</h4>
+      <a href="/admin/voters" class="">Voter register</a>
+      <a href="/admin/import" class="">Import voters</a>
+      <a href="/admin/codes" class="">Voting codes</a>
+      <a href="/admin/records" class="">Voting records</a>
+      <h4>Communications</h4><a href="/admin/invitations" class="">Invitations</a>
+      <h4>Monitoring</h4>
+      <a href="/admin/turnout" class="">Turnout</a>
+      <a href="/admin/audit" class="">Audit log</a>
+      <h4>Results</h4>
+      <a href="/admin/results" class="">Results</a>
+      <a href="/admin/records?vote=voted" class="">Detailed voting records</a>
+      <a href="/admin/results#export">Export</a>
+      <a href="/admin/results/publish" class="">Publish results</a>
+      <h4>Administration</h4>
+      <a href="/admin/users" class="">Admin users</a>
+      <a href="/admin/account" class="">My account</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        
+          <span class="election-name">MANAGE Alumni Association Election 2026 (Demo)</span>
+          <span class="badge dot success">Voting open</span>
+          <span class="badge warning">DEMO DATA</span>
+        
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted">Demo Main Administrator · Main Administrator</span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <main class="admin-content" id="main">
+      
+
+
+<div class="page-head"><div><h1>Election settings</h1><p>Status: <span class="badge dot success">Voting open</span> · Voters see: <strong>Open</strong></p></div></div>
+
+<div class="grid-2">
+<section class="card">
+  <h2>Details</h2>
+  <form method="post" action="/admin/election" data-once>
+    <input type="hidden" name="_csrf" value="">
+    <fieldset  style="border:0;padding:0;margin:0">
+    <div class="field"><label for="name">Election name</label><input type="text" id="name" name="name" value="MANAGE Alumni Association Election 2026 (Demo)" required maxlength="200"></div>
+    <div class="field"><label for="term">Election term / year</label><input type="text" id="term" name="term" value="Term 2026–2028" maxlength="100" placeholder="e.g. 2026–2028"></div>
+    <div class="field"><label for="description">Description (shown on the welcome page)</label><textarea id="description" name="description" rows="4">Help choose the next team for our alumni association. Enter your personal voting code to vote for the contested positions. Posts already declared elected unopposed are shown for information. Please review your choices before submitting, as your ballot can be submitted only once.</textarea></div>
+    <div class="form-grid">
+      <div class="field"><label for="opens_at">Opening date/time (IST)</label><input type="datetime-local" id="opens_at" name="opens_at" value="2026-09-30T22:36" readonly>
+        <div class="hint">Locked — voting has already opened.</div></div>
+      <div class="field"><label for="closes_at">Closing date/time (IST)</label><input type="datetime-local" id="closes_at" name="closes_at" value="2026-10-08T22:36" >
+        <div class="hint">Changing the closing time during voting is recorded in the audit log.</div></div>
+    </div>
+    <h3>Support contact</h3>
+    <div class="form-grid">
+      <div class="field"><label for="support_name">Name / committee</label><input type="text" id="support_name" name="support_name" value="MANAGE Alumni Association Election Committee"></div>
+      <div class="field"><label for="support_email">Support email</label><input type="email" id="support_email" name="support_email" value="elections@example.org"></div>
+      <div class="field"><label for="support_phone">Support phone</label><input type="tel" id="support_phone" name="support_phone" value="+91 40 0000 0000"></div>
+    </div>
+    <h3>Public information</h3>
+    <label class="check mb-1"><input type="checkbox" name="show_turnout_publicly" value="1" checked> <span>Show live overall turnout to voters (never candidate totals)</span></label>
+    <label class="check mb-2"><input type="checkbox" name="public_results_show_totals" value="1" checked> <span>Show candidate vote totals on the public results page once results are published</span></label>
+    <button class="btn" type="submit">Save settings</button>
+    </fieldset>
+  </form>
+</section>
+
+<div>
+  <section class="card">
+    <h2>Election status</h2>
+    <p class="small muted">Draft → Ready → Scheduled/Open → (Suspended) → Closed → Results review → Results published → Archived</p>
+    
+
+<div class="stack">
+
+  <form method="post" action="/admin/election/transition" class="confirm-box danger" data-once>
+    <input type="hidden" name="_csrf" value="">
+    <input type="hidden" name="action" value="suspend">
+    <input type="hidden" name="back" value="/admin/election">
+    
+      <label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>I confirm that voting should be suspended. Voters will not be able to submit ballots until it is resumed.</span></label>
+      <div class="field"><label for="reason-suspend" class="small">Reason (recorded in audit log)</label><input type="text" id="reason-suspend" name="reason" maxlength="500"></div>
+    
+    <button class="btn danger " type="submit">Suspend voting</button>
+    
+  </form>
+
+  <form method="post" action="/admin/election/transition" class="confirm-box danger" data-once>
+    <input type="hidden" name="_csrf" value="">
+    <input type="hidden" name="action" value="close">
+    <input type="hidden" name="back" value="/admin/election">
+    
+      <label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>I confirm that voting should close now. No further ballots will be accepted.</span></label>
+      <div class="field"><label for="reason-close" class="small">Reason (recorded in audit log)</label><input type="text" id="reason-close" name="reason" maxlength="500"></div>
+    
+    <button class="btn danger " type="submit">Close election</button>
+    
+  </form>
+
+
+</div>
+
+  </section>
+  <section class="card">
+    <h2>Readiness checklist</h2>
+    <ul class="checklist">
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Election name is set<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Opening and closing date/time are set<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Closing time is after opening time<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Support contact details are set<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">At least one position has been created<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">At least one position is contested<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">President: has approved candidates<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Vice President: has approved candidates<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">General Secretary: has approved candidates<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Joint Secretary: has approved candidates<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Treasurer: unopposed winner declared (approved candidate)<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Final eligible voter list approved<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">There is at least one eligible voter<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">All voters reviewed<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="ok"><span class="ic" aria-hidden="true">✓</span>
+    <span class="grow">Every eligible voter has a voting code<span class="sr-only"> — done</span></span>
+    </li>
+
+  <li class="warning"><span class="ic" aria-hidden="true">!</span>
+    <span class="grow">5 voter(s) with email have not yet received an invitation<span class="sr-only"> — warning</span></span>
+    <a class="small" href="/admin/invitations">Fix</a></li>
+
+  <li class="warning"><span class="ic" aria-hidden="true">!</span>
+    <span class="grow">3 eligible voter(s) have no email — deliver their codes externally<span class="sr-only"> — warning</span></span>
+    <a class="small" href="/admin/voters?filter=no_email">Fix</a></li>
+
+</ul>
+
+    <div class="locked-banner mt-2 mb-0">Ballot configuration is locked because voting has opened.</div>
+  </section>
+</div>
+</div>
+    </main>
+  </div>
+</div>
+</body>
+</html>
+

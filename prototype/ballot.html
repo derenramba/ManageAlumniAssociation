@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Your ballot — MANAGE Alumni Association Election</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/voter.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<a class="sr-only" href="#main">Skip to content</a>
+<div class="demo-banner" role="note">DEMONSTRATION ELECTION — sample data for testing only</div>
+<header class="pub-header">
+  <div class="inner">
+    <img src="/static/img/emblem.svg" alt="" width="44" height="44">
+    <div>
+      <div class="org">MANAGE Alumni Association</div>
+      <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
+    </div>
+  </div>
+</header>
+<main id="main" class="pub-main">
+
+<div class="row between mb-1">
+  <h1 class="mb-0">Your ballot</h1>
+  <form method="post" action="/exit" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn ghost small" type="submit">Exit without voting</button></form>
+</div>
+<p class="muted">MANAGE Alumni Association Election 2026 (Demo). For each contested post, select <strong>one candidate</strong> or choose <strong>Abstain</strong>. You will be able to review your choices before submitting.</p>
+
+
+<div class="alert error" role="alert" id="incomplete-msg" hidden><div><p>Please make a choice for every contested position. Choosing “Abstain for this post” counts as a choice.</p></div></div>
+
+
+<form method="post" action="/ballot" id="ballot-form" novalidate>
+  <input type="hidden" name="_csrf" value="">
+  <div class="ballot-progress" aria-live="polite">
+    <div class="label"><span id="progress-label">0 of 4 contested positions completed</span></div>
+    <div class="progress"><span id="progress-bar" style="width: 0%"></span></div>
+  </div>
+
+  
+    
+    <fieldset class="position" data-position="1" id="pos-1" style="border:0;padding:0;margin:0 0 1.75rem">
+      <legend class="sr-only">President</legend>
+      <header>
+        <h2 aria-hidden="true">President</h2>
+        <div class="muted small">Select one candidate, or abstain.</div>
+      </header>
+      <p class="position-error" role="alert">Please select a candidate or choose to abstain for President.</p>
+      <div class="choices multi">
+        
+        <label class="choice">
+          <input type="radio" name="pos_1" value="1"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">RS</span>
+
+          <span>
+            <span class="name">Dr. Rahul Sharma</span>
+            <span class="meta">PGDAEM 2001</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+        <label class="choice">
+          <input type="radio" name="pos_1" value="2"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">LN</span>
+
+          <span>
+            <span class="name">Dr. Lakshmi Narayanan</span>
+            <span class="meta">PGDAEM 1999</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+        <label class="choice">
+          <input type="radio" name="pos_1" value="3"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">VR</span>
+
+          <span>
+            <span class="name">Shri Venkata Ramana Reddy</span>
+            <span class="meta">PGDAEM 2003</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+      </div>
+      <div class="choices mt-1">
+        
+        <label class="choice abstain">
+          <input type="radio" name="pos_1" value="abstain" >
+          <span class="icon" aria-hidden="true">—</span>
+          <span><span class="name">Abstain for this post</span><span class="meta">Do not vote for any candidate for President</span><span class="state">Selected</span></span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+      </div>
+    </fieldset>
+    
+  
+    
+    <fieldset class="position" data-position="2" id="pos-2" style="border:0;padding:0;margin:0 0 1.75rem">
+      <legend class="sr-only">Vice President</legend>
+      <header>
+        <h2 aria-hidden="true">Vice President</h2>
+        <div class="muted small">Select one candidate, or abstain.</div>
+      </header>
+      <p class="position-error" role="alert">Please select a candidate or choose to abstain for Vice President.</p>
+      <div class="choices multi">
+        
+        <label class="choice">
+          <input type="radio" name="pos_2" value="4"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">PR</span>
+
+          <span>
+            <span class="name">Dr. Priya Rao</span>
+            <span class="meta">PGDAEM 2006</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+        <label class="choice">
+          <input type="radio" name="pos_2" value="5"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">AK</span>
+
+          <span>
+            <span class="name">Shri Amit Kumar Singh</span>
+            <span class="meta">PGDAEM 2005</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+      </div>
+      <div class="choices mt-1">
+        
+        <label class="choice abstain">
+          <input type="radio" name="pos_2" value="abstain" >
+          <span class="icon" aria-hidden="true">—</span>
+          <span><span class="name">Abstain for this post</span><span class="meta">Do not vote for any candidate for Vice President</span><span class="state">Selected</span></span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+      </div>
+    </fieldset>
+    
+  
+    
+    <fieldset class="position" data-position="3" id="pos-3" style="border:0;padding:0;margin:0 0 1.75rem">
+      <legend class="sr-only">General Secretary</legend>
+      <header>
+        <h2 aria-hidden="true">General Secretary</h2>
+        <div class="muted small">Select one candidate, or abstain.</div>
+      </header>
+      <p class="position-error" role="alert">Please select a candidate or choose to abstain for General Secretary.</p>
+      <div class="choices multi">
+        
+        <label class="choice">
+          <input type="radio" name="pos_3" value="6"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">KM</span>
+
+          <span>
+            <span class="name">Smt. Kavitha Menon</span>
+            <span class="meta">PGDAEM 2010</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+        <label class="choice">
+          <input type="radio" name="pos_3" value="7"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">SB</span>
+
+          <span>
+            <span class="name">Dr. Suresh Babu</span>
+            <span class="meta">PGDAEM 2008</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+        <label class="choice">
+          <input type="radio" name="pos_3" value="8"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">AP</span>
+
+          <span>
+            <span class="name">Shri Arjun Patel</span>
+            <span class="meta">PGDAEM 2011</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+      </div>
+      <div class="choices mt-1">
+        
+        <label class="choice abstain">
+          <input type="radio" name="pos_3" value="abstain" >
+          <span class="icon" aria-hidden="true">—</span>
+          <span><span class="name">Abstain for this post</span><span class="meta">Do not vote for any candidate for General Secretary</span><span class="state">Selected</span></span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+      </div>
+    </fieldset>
+    
+  
+    
+    <fieldset class="position" data-position="4" id="pos-4" style="border:0;padding:0;margin:0 0 1.75rem">
+      <legend class="sr-only">Joint Secretary</legend>
+      <header>
+        <h2 aria-hidden="true">Joint Secretary</h2>
+        <div class="muted small">Select one candidate, or abstain.</div>
+      </header>
+      <p class="position-error" role="alert">Please select a candidate or choose to abstain for Joint Secretary.</p>
+      <div class="choices multi">
+        
+        <label class="choice">
+          <input type="radio" name="pos_4" value="9"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">SI</span>
+
+          <span>
+            <span class="name">Dr. Sneha Iyer</span>
+            <span class="meta">PGDAEM 2014</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+        <label class="choice">
+          <input type="radio" name="pos_4" value="10"  required>
+          
+<span class="photo photo-ph" aria-hidden="true">HC</span>
+
+          <span>
+            <span class="name">Shri Harish Chowdary</span>
+            <span class="meta">PGDAEM 2013</span>
+            <span class="state">Selected</span>
+          </span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+        
+      </div>
+      <div class="choices mt-1">
+        
+        <label class="choice abstain">
+          <input type="radio" name="pos_4" value="abstain" >
+          <span class="icon" aria-hidden="true">—</span>
+          <span><span class="name">Abstain for this post</span><span class="meta">Do not vote for any candidate for Joint Secretary</span><span class="state">Selected</span></span>
+          <span class="tick" aria-hidden="true"></span>
+        </label>
+      </div>
+    </fieldset>
+    
+  
+    
+    <section class="position" aria-label="Treasurer (unopposed)">
+      <header><h2>Treasurer</h2><div class="muted small">Declared elected unopposed — for information only, no vote needed.</div></header>
+      <div class="unopposed-card">
+        
+<span class="photo photo-ph" aria-hidden="true">MG</span>
+
+        <div><strong>Dr. Meena Gupta</strong> — Elected unopposed as Treasurer<div class="small muted">PGDAEM 2004</div></div>
+      </div>
+    </section>
+    
+  
+
+  <button type="submit" id="review-btn" class="btn large block">Review my choices</button>
+  <p class="small muted center mt-1">Nothing is submitted yet. You will confirm on the next screen.</p>
+</form>
+
+</main>
+<footer class="pub-footer">
+  <div class="inner">
+    
+      <strong>Need help?</strong>
+      <div>
+        MANAGE Alumni Association Election Committee<br>
+        Email: <a href="mailto:elections@example.org">elections@example.org</a><br>
+        Phone: <a href="tel:+914000000000">+91 40 0000 0000</a>
+      </div>
+    
+    <p class="small muted mt-2 mb-0">© MANAGE Alumni Association · National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
+  </div>
+</footer>
+</body>
+</html>
+

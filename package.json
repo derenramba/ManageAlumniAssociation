@@ -9,6 +9,7 @@
     "dev": "node --watch server.js",
     "seed:demo": "node scripts/seed-demo.js",
     "create-admin": "node scripts/create-admin.js",
+    "build:prototype": "node scripts/build-prototype.js",
     "test": "node --test test/*.test.js"
   },
   "engines": {

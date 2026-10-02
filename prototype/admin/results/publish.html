@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Publish results — Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <a href="/admin" class="">Dashboard</a>
+      <h4>Election</h4>
+      <a href="/admin/election" class="">Election settings</a>
+      <a href="/admin/positions" class="">Positions</a>
+      <a href="/admin/candidates" class="">Candidates</a>
+      <a href="/admin/elections" class="">All elections</a>
+      <h4>Voters</h4>
+      <a href="/admin/voters" class="">Voter register</a>
+      <a href="/admin/import" class="">Import voters</a>
+      <a href="/admin/codes" class="">Voting codes</a>
+      <a href="/admin/records" class="">Voting records</a>
+      <h4>Communications</h4><a href="/admin/invitations" class="">Invitations</a>
+      <h4>Monitoring</h4>
+      <a href="/admin/turnout" class="">Turnout</a>
+      <a href="/admin/audit" class="">Audit log</a>
+      <h4>Results</h4>
+      <a href="/admin/results" class="active" aria-current="page">Results</a>
+      <a href="/admin/records?vote=voted" class="">Detailed voting records</a>
+      <a href="/admin/results#export">Export</a>
+      <a href="/admin/results/publish" class="active" aria-current="page">Publish results</a>
+      <h4>Administration</h4>
+      <a href="/admin/users" class="">Admin users</a>
+      <a href="/admin/account" class="">My account</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        
+          <span class="election-name">MANAGE Alumni Association Election 2026 (Demo)</span>
+          <span class="badge dot neutral">Closed</span>
+          <span class="badge warning">DEMO DATA</span>
+        
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted">Demo Main Administrator · Main Administrator</span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <main class="admin-content" id="main">
+      
+
+<div class="page-head"><div><h1>Publish results</h1><p>Closing the election and publishing results are separate, deliberate steps. Publishing makes the official results visible on the public website.</p></div><a class="btn secondary" href="/admin/results">Back to results</a></div>
+
+  
+    <div class="alert info"><div>Recommended: begin a formal results review before publishing.</div></div>
+    
+
+<div class="stack">
+
+  <form method="post" action="/admin/election/transition" class="" data-once>
+    <input type="hidden" name="_csrf" value="">
+    <input type="hidden" name="action" value="start_review">
+    <input type="hidden" name="back" value="/admin/results/publish">
+    
+    <button class="btn  secondary" type="submit">Begin results review</button>
+    
+  </form>
+
+
+  <a class="btn" href="/admin/results/publish">Publish results…</a>
+
+</div>
+
+  
+  
+  
+  
+  <section class="confirm-box mt-2" style="max-width:820px">
+    <h2 class="mt-0">Publish official results?</h2>
+    <p>45 accepted ballots from 58 eligible voters (77.6% turnout). The public page will show winners, candidate totals, abstentions, turnout and unopposed declarations. Individual voting records are never published.</p>
+    <form method="post" action="/admin/election/transition" data-once>
+      <input type="hidden" name="_csrf" value=""><input type="hidden" name="action" value="publish"><input type="hidden" name="back" value="/admin/results/publish">
+      <label class="check mb-2"><input type="checkbox" name="confirm" value="yes" required> <span>I confirm the results have been reviewed and should be published publicly.</span></label>
+      <div class="row"><a class="btn secondary" href="/admin/results">Cancel</a><button class="btn" type="submit">Publish Results</button></div>
+    </form>
+  </section>
+  <h2 class="mt-3">Results to be published</h2>
+  <div class="alert success"><div>All contested positions reconcile: candidate votes + abstentions = 45 accepted ballots.</div></div>
+
+<section class="card">
+  <div class="card-header"><h2>President</h2>
+    <span class="badge success">Reconciled</span></div>
+  
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Candidate</th><th class="num">Votes</th><th class="num">Share</th><th>Outcome</th></tr></thead>
+      <tbody>
+      
+        <tr><td><strong>Dr. Rahul Sharma</strong> <span class="small muted">PGDAEM 2001</span></td>
+          <td class="num"><strong>20</strong></td><td class="num">44.4%</td>
+          <td><span class="badge success">Highest total</span></td></tr>
+      
+        <tr><td><strong>Shri Venkata Ramana Reddy</strong> <span class="small muted">PGDAEM 2003</span></td>
+          <td class="num"><strong>13</strong></td><td class="num">28.9%</td>
+          <td></td></tr>
+      
+        <tr><td><strong>Dr. Lakshmi Narayanan</strong> <span class="small muted">PGDAEM 1999</span></td>
+          <td class="num"><strong>10</strong></td><td class="num">22.2%</td>
+          <td></td></tr>
+      
+        <tr><td class="muted">Abstain</td><td class="num">2</td><td class="num">4.4%</td><td></td></tr>
+        <tr><td><strong>Total</strong></td><td class="num"><strong>45</strong></td><td class="num small muted">ballots: 45</td><td></td></tr>
+      </tbody></table></div>
+    
+  
+</section>
+
+<section class="card">
+  <div class="card-header"><h2>Vice President</h2>
+    <span class="badge success">Reconciled</span></div>
+  
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Candidate</th><th class="num">Votes</th><th class="num">Share</th><th>Outcome</th></tr></thead>
+      <tbody>
+      
+        <tr><td><strong>Dr. Priya Rao</strong> <span class="small muted">PGDAEM 2006</span></td>
+          <td class="num"><strong>26</strong></td><td class="num">57.8%</td>
+          <td><span class="badge success">Highest total</span></td></tr>
+      
+        <tr><td><strong>Shri Amit Kumar Singh</strong> <span class="small muted">PGDAEM 2005</span></td>
+          <td class="num"><strong>15</strong></td><td class="num">33.3%</td>
+          <td></td></tr>
+      
+        <tr><td class="muted">Abstain</td><td class="num">4</td><td class="num">8.9%</td><td></td></tr>
+        <tr><td><strong>Total</strong></td><td class="num"><strong>45</strong></td><td class="num small muted">ballots: 45</td><td></td></tr>
+      </tbody></table></div>
+    
+  
+</section>
+
+<section class="card">
+  <div class="card-header"><h2>General Secretary</h2>
+    <span class="badge success">Reconciled</span></div>
+  
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Candidate</th><th class="num">Votes</th><th class="num">Share</th><th>Outcome</th></tr></thead>
+      <tbody>
+      
+        <tr><td><strong>Smt. Kavitha Menon</strong> <span class="small muted">PGDAEM 2010</span></td>
+          <td class="num"><strong>19</strong></td><td class="num">42.2%</td>
+          <td><span class="badge success">Highest total</span></td></tr>
+      
+        <tr><td><strong>Shri Arjun Patel</strong> <span class="small muted">PGDAEM 2011</span></td>
+          <td class="num"><strong>13</strong></td><td class="num">28.9%</td>
+          <td></td></tr>
+      
+        <tr><td><strong>Dr. Suresh Babu</strong> <span class="small muted">PGDAEM 2008</span></td>
+          <td class="num"><strong>10</strong></td><td class="num">22.2%</td>
+          <td></td></tr>
+      
+        <tr><td class="muted">Abstain</td><td class="num">3</td><td class="num">6.7%</td><td></td></tr>
+        <tr><td><strong>Total</strong></td><td class="num"><strong>45</strong></td><td class="num small muted">ballots: 45</td><td></td></tr>
+      </tbody></table></div>
+    
+  
+</section>
+
+<section class="card">
+  <div class="card-header"><h2>Joint Secretary</h2>
+    <span class="badge success">Reconciled</span></div>
+  
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Candidate</th><th class="num">Votes</th><th class="num">Share</th><th>Outcome</th></tr></thead>
+      <tbody>
+      
+        <tr><td><strong>Dr. Sneha Iyer</strong> <span class="small muted">PGDAEM 2014</span></td>
+          <td class="num"><strong>27</strong></td><td class="num">60.0%</td>
+          <td><span class="badge success">Highest total</span></td></tr>
+      
+        <tr><td><strong>Shri Harish Chowdary</strong> <span class="small muted">PGDAEM 2013</span></td>
+          <td class="num"><strong>14</strong></td><td class="num">31.1%</td>
+          <td></td></tr>
+      
+        <tr><td class="muted">Abstain</td><td class="num">4</td><td class="num">8.9%</td><td></td></tr>
+        <tr><td><strong>Total</strong></td><td class="num"><strong>45</strong></td><td class="num small muted">ballots: 45</td><td></td></tr>
+      </tbody></table></div>
+    
+  
+</section>
+
+<section class="card">
+  <div class="card-header"><h2>Treasurer</h2>
+    <span class="badge info">Unopposed</span></div>
+  
+    <p class="mb-0"><strong>Dr. Meena Gupta</strong> — Elected unopposed as Treasurer</p>
+  
+</section>
+
+
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
+

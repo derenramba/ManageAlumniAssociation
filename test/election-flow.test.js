@@ -240,6 +240,8 @@ test('close, reconcile, export and publish', async () => {
 
   r = await admin.get('/admin/results');
   assert.match(r.text, /All contested positions reconcile/);
+  r = await admin.get('/admin/results/publish');
+  assert.equal(r.status, 200);
   const { computeResults } = require('../src/lib/results');
   const res = computeResults(electionId);
   assert.equal(res.ballots, 2);

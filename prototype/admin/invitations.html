@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Invitations — Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <a href="/admin" class="">Dashboard</a>
+      <h4>Election</h4>
+      <a href="/admin/election" class="">Election settings</a>
+      <a href="/admin/positions" class="">Positions</a>
+      <a href="/admin/candidates" class="">Candidates</a>
+      <a href="/admin/elections" class="">All elections</a>
+      <h4>Voters</h4>
+      <a href="/admin/voters" class="">Voter register</a>
+      <a href="/admin/import" class="">Import voters</a>
+      <a href="/admin/codes" class="">Voting codes</a>
+      <a href="/admin/records" class="">Voting records</a>
+      <h4>Communications</h4><a href="/admin/invitations" class="active" aria-current="page">Invitations</a>
+      <h4>Monitoring</h4>
+      <a href="/admin/turnout" class="">Turnout</a>
+      <a href="/admin/audit" class="">Audit log</a>
+      <h4>Results</h4>
+      <a href="/admin/results" class="">Results</a>
+      <a href="/admin/records?vote=voted" class="">Detailed voting records</a>
+      <a href="/admin/results#export">Export</a>
+      <a href="/admin/results/publish" class="">Publish results</a>
+      <h4>Administration</h4>
+      <a href="/admin/users" class="">Admin users</a>
+      <a href="/admin/account" class="">My account</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        
+          <span class="election-name">MANAGE Alumni Association Election 2026 (Demo)</span>
+          <span class="badge dot success">Voting open</span>
+          <span class="badge warning">DEMO DATA</span>
+        
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted">Demo Main Administrator · Main Administrator</span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <main class="admin-content" id="main">
+      
+
+<div class="page-head"><div><h1>Invitations</h1><p>Each eligible voter receives a personalised email with the common voting link and <strong>their own</strong> voting code. Resending always reuses the voter's existing code.</p></div></div>
+
+
+  <div class="alert warning"><div><strong>Outbox mode:</strong> no SMTP server is configured, so emails are stored in the <a href="/admin/invitations/outbox">Email outbox</a> instead of being delivered. Set <code>SMTP_HOST</code>, <code>SMTP_USER</code>, <code>SMTP_PASS</code> and <code>SMTP_FROM</code> to send real email.</div></div>
+
+
+<div class="stats">
+  <div class="stat"><div class="k">Ready to send</div><div class="v">2</div><div class="s">eligible · valid email · active code · not yet sent</div></div>
+  <div class="stat"><div class="k">Sent</div><div class="v">50</div></div>
+  <div class="stat"><div class="k">Queued</div><div class="v">0</div></div>
+  <div class="stat"><div class="k">Failed</div><div class="v">3</div></div>
+  <div class="stat"><div class="k">No email</div><div class="v">3</div><div class="s"><a href="/admin/voters?filter=no_email&eligibility=eligible">deliver externally</a></div></div>
+</div>
+
+
+<div class="alert warning"><div>1 eligible voter(s) have an invalid email address and will be skipped. <a href="/admin/voters/quality">Review</a>.</div></div>
+
+<section class="card">
+  <h2>Send</h2>
+  <div class="row">
+    <a class="btn large " href="/admin/invitations/confirm?mode=unsent" >Send Invitations (2)</a>
+    <a class="btn secondary " href="/admin/invitations/confirm?mode=failed">Retry failed (1)</a>
+    <a class="btn ghost" href="/admin/voters">Send / resend to selected voters…</a>
+    <a class="btn ghost" href="/admin/invitations/outbox">Email outbox</a>
+  </div>
+  <p class="small muted mt-1 mb-0">You will see a confirmation with the exact number of recipients before anything is sent.</p>
+</section>
+
+<div class="grid-2 mt-2">
+<section class="card" id="template">
+  <h2>Email template</h2>
+  <form method="post" action="/admin/invitations/template" data-once>
+    <input type="hidden" name="_csrf" value="">
+    <div class="field"><label for="email_subject">Subject</label><input type="text" id="email_subject" name="email_subject" value="Your voting code for the {{election_name}}"></div>
+    <div class="field"><label for="email_intro">Introduction</label><textarea id="email_intro" name="email_intro" rows="3">Voting for the {{election_name}} is now available.</textarea><div class="hint">Shown after “Dear {{first_name}},”. The voting link, personal code and dates are inserted automatically after this.</div></div>
+    <div class="field"><label for="email_instructions">Instructions</label><textarea id="email_instructions" name="email_instructions" rows="6">Please select one candidate or choose to abstain for each contested position, review your choices and submit your ballot.
+
+Your voting code may only be used to submit one ballot.
+
+Please keep your voting code private and do not forward this email.</textarea></div>
+    <div class="field"><label for="email_support">Support information</label><textarea id="email_support" name="email_support" rows="3">{{support_details}}</textarea></div>
+    <div class="field"><label for="email_closing">Closing / signature</label><textarea id="email_closing" name="email_closing" rows="2">MANAGE Alumni Association</textarea></div>
+    <p class="small var-list">Available variables: <code>{{first_name}}</code> <code>{{full_name}}</code> <code>{{voting_code}}</code> <code>{{voting_link}}</code> <code>{{opening_date}}</code> <code>{{closing_date}}</code> <code>{{election_name}}</code> <code>{{support_details}}</code> </p>
+    <div class="row"><button class="btn" type="submit">Save template</button><button class="btn ghost" type="submit" name="reset" value="yes" data-confirm="Restore the default template text?">Restore default</button></div>
+  </form>
+</section>
+<section class="card">
+  <div class="card-header"><h2>Preview</h2><a class="small" href="/admin/invitations/preview?format=text" target="_blank" rel="noopener">Plain-text version ↗</a></div>
+  <p class="small muted">Preview uses a real voter's name with a sample code. Each voter receives their own code.</p>
+  <iframe class="email-preview" src="/admin/invitations/preview" title="Invitation email preview" sandbox></iframe>
+</section>
+</div>
+
+<section class="card mt-2">
+  <div class="card-header"><h2>Invitation status by voter</h2>
+    <div class="tabs mb-0">
+      <a href="?status=" class="active">All</a><a href="?status=not_sent" class="">Not sent</a><a href="?status=queued" class="">Queued</a><a href="?status=sent" class="">Sent</a><a href="?status=failed" class="">Failed</a>
+    </div></div>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Voter</th><th>Email</th><th>Status</th><th>Last attempt</th><th>Sends</th><th>Vote</th></tr></thead>
+    <tbody>
+    
+      <tr><td><a href="/admin/voters/60#invite">Suresh Chowdary</a></td><td class="small">suresh.chowdary@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:34:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/57#invite">Gopal Joshi</a></td><td class="small">gopal.joshi@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:33:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/56#invite">Vikram Patel</a></td><td class="small">vikram.patel@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:32:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/55#invite">Vikram Kumar</a></td><td class="small">vikram.kumar@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:31:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/54#invite">Venkatesh Nair</a></td><td class="small">venkatesh.nair@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:30:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/53#invite">Rajesh Joshi</a></td><td class="small">rajesh.joshi@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:29:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/52#invite">Meena Joshi</a></td><td class="small">meena.joshi@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:28:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/49#invite">Divya Verma</a></td><td class="small">divya.verma@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:25:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/48#invite">Srinivas Das</a></td><td class="small">srinivas.das@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:24:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/47#invite">Swathi Joshi</a></td><td class="small">swathi.joshi@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:23:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/46#invite">Priya Hegde</a></td><td class="small">priya.hegde@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:22:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/45#invite">Srinivas Verma</a></td><td class="small">srinivas.verma@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:21:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/44#invite">Priya Joshi</a></td><td class="small">priya.joshi@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:20:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/43#invite">Meena Sharma</a></td><td class="small">meena.sharma@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:19:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/42#invite">Kavitha Patel</a></td><td class="small">kavitha.patel@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:18:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/40#invite">Vikram Joshi</a></td><td class="small">vikram.joshi@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:16:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/39#invite">Swathi Rao</a></td><td class="small">swathi.rao@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:15:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/38#invite">Harish Hegde</a></td><td class="small">harish.hegde@example.org</td>
+        <td>
+
+
+
+<span class="badge error" title="Delivery failed: 550 mailbox unavailable">Failed</span>
+<div class="small muted">Delivery failed: 550 mailbox unavailable</div></td>
+        <td class="small nowrap">30 Sep 2026, 23:14:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/37#invite">Anjali Chowdary</a></td><td class="small">anjali.chowdary@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:13:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/36#invite">Naveen Gupta</a></td><td class="small">naveen.gupta@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:12:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/35#invite">Srinivas Hegde</a></td><td class="small">srinivas.hegde@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:11:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/34#invite">Suresh Mishra</a></td><td class="small">suresh.mishra@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:10:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/33#invite">Deepa Mishra</a></td><td class="small">naveen.reddy@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:09:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/32#invite">Amit Das</a></td><td class="small">amit.das@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:08:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/31#invite">Harish Sharma</a></td><td class="small">harish.sharma@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:07:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/30#invite">Ravi Reddy</a></td><td class="small">ravi.reddy@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:06:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/29#invite">Srinivas Nair</a></td><td class="small">srinivas.nair@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:05:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/28#invite">Vikram Mishra</a></td><td class="small">vikram.mishra@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:04:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/27#invite">Vikram Gupta</a></td><td class="small">vikram.gupta@example.org</td>
+        <td>
+
+
+
+<span class="badge error" title="Delivery failed: 550 mailbox unavailable">Failed</span>
+<div class="small muted">Delivery failed: 550 mailbox unavailable</div></td>
+        <td class="small nowrap">30 Sep 2026, 23:03:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/26#invite">Ravi Pillai</a></td><td class="small">ravi.pillai@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:02:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/25#invite">Arjun Iyer</a></td><td class="small">arjun.iyer@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:01:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/24#invite">Kavitha Verma</a></td><td class="small">kavitha.verma@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 23:00:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/22#invite">Vikram Das</a></td><td class="small">vikram.das@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:58:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/21#invite">Aparna Sharma</a></td><td class="small">aparna.sharma@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:57:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/20#invite">Sneha Menon</a></td><td class="small">sneha.menon@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:56:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/19#invite">Suresh Gupta</a></td><td class="small">suresh.gupta@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:55:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/18#invite">Sneha Hegde</a></td><td class="small">sneha.hegde@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:54:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/17#invite">Nandini Sharma</a></td><td class="small">nandini.sharma@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:53:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/16#invite">Shalini Reddy</a></td><td class="small">shalini.reddy@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:52:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/15#invite">Bhavana Hegde</a></td><td class="small">not-an-email</td>
+        <td>
+
+
+
+<span class="badge error" title="Delivery failed: 550 mailbox unavailable">Failed</span>
+<div class="small muted">Delivery failed: 550 mailbox unavailable</div></td>
+        <td class="small nowrap">30 Sep 2026, 22:51:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/14#invite">Ravi Gupta</a></td><td class="small">ravi.gupta@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:50:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/13#invite">Sneha Kumar</a></td><td class="small">sneha.kumar@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:49:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/12#invite">Suresh Das</a></td><td class="small">suresh.das@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:48:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/11#invite">Ravi Rao</a></td><td class="small">ravi.rao@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:47:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/10#invite">Meena Pillai</a></td><td class="small">meena.pillai@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:46:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/9#invite">Kavitha Das</a></td><td class="small">kavitha.das@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:45:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/8#invite">Suresh Naidu</a></td><td class="small">suresh.naidu@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:44:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/6#invite">Naveen Reddy</a></td><td class="small">naveen.reddy@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:42:03</td><td class="num">1</td><td>
+
+
+<span class="badge neutral">Not voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/5#invite">Naveen Nair</a></td><td class="small">naveen.nair@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:41:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+      <tr><td><a href="/admin/voters/4#invite">Geetha Mishra</a></td><td class="small">geetha.mishra@example.org</td>
+        <td>
+
+
+
+<span class="badge success" title="">Sent</span>
+</td>
+        <td class="small nowrap">30 Sep 2026, 22:40:03</td><td class="num">1</td><td>
+
+
+<span class="badge success dot">Voted</span>
+
+</td></tr>
+    
+    
+    </tbody></table></div>
+  
+<nav class="pager" aria-label="Pagination">
+  <span class="small muted">Page 1 of 2</span>
+  
+  <a class="btn secondary small" href="?page=2">Next →</a>
+</nav>
+
+
+</section>
+    </main>
+  </div>
+</div>
+</body>
+</html>
+

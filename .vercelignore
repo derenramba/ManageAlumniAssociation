@@ -1,0 +1,11 @@
+# Vercel serves only the static front-end prototype (./prototype).
+# The full app (server.js, src/, …) needs a host with a persistent disk — see README.
+src
+server.js
+scripts
+test
+views
+data
+node_modules
+Dockerfile
+render.yaml

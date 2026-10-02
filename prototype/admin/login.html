@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>Administrator sign in — MANAGE Alumni Association Election</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml"><link rel="stylesheet" href="/static/css/app.css"><script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script></head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="login-wrap">
+  <div class="card login-card">
+    <div class="row mb-2"><img src="/static/img/emblem.svg" alt="" width="48" height="48"><div><strong>MANAGE Alumni Association</strong><div class="small muted">Election administration</div></div></div>
+    <h1>Administrator sign in</h1>
+    
+    
+    <form method="post" action="/admin/login" data-once>
+      <input type="hidden" name="_csrf" value="">
+      <div class="field"><label for="username">Username</label><input type="text" id="username" name="username" value="" autocomplete="username" required autofocus></div>
+      <div class="field"><label for="password">Password</label><input type="password" id="password" name="password" autocomplete="current-password" required></div>
+      <button class="btn block large" type="submit">Sign in</button>
+    </form>
+    <p class="small muted mt-2 mb-0">This area is for authorised election administrators only. All actions are recorded in the audit log. Voters do not need to sign in — <a href="/">go to the voting page</a>.</p>
+  </div>
+</div>
+</body></html>

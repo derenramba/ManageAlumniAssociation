@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<title>Positions — Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+<script src="/static/js/prototype.js" defer></script>
+</head>
+<body>
+<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <a href="/admin" class="">Dashboard</a>
+      <h4>Election</h4>
+      <a href="/admin/election" class="">Election settings</a>
+      <a href="/admin/positions" class="active" aria-current="page">Positions</a>
+      <a href="/admin/candidates" class="">Candidates</a>
+      <a href="/admin/elections" class="">All elections</a>
+      <h4>Voters</h4>
+      <a href="/admin/voters" class="">Voter register</a>
+      <a href="/admin/import" class="">Import voters</a>
+      <a href="/admin/codes" class="">Voting codes</a>
+      <a href="/admin/records" class="">Voting records</a>
+      <h4>Communications</h4><a href="/admin/invitations" class="">Invitations</a>
+      <h4>Monitoring</h4>
+      <a href="/admin/turnout" class="">Turnout</a>
+      <a href="/admin/audit" class="">Audit log</a>
+      <h4>Results</h4>
+      <a href="/admin/results" class="">Results</a>
+      <a href="/admin/records?vote=voted" class="">Detailed voting records</a>
+      <a href="/admin/results#export">Export</a>
+      <a href="/admin/results/publish" class="">Publish results</a>
+      <h4>Administration</h4>
+      <a href="/admin/users" class="">Admin users</a>
+      <a href="/admin/account" class="">My account</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        
+          <span class="election-name">MANAGE Alumni Association Election 2026 (Demo)</span>
+          <span class="badge dot success">Voting open</span>
+          <span class="badge warning">DEMO DATA</span>
+        
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted">Demo Main Administrator · Main Administrator</span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <main class="admin-content" id="main">
+      
+
+<div class="page-head"><div><h1>Positions</h1><p>Positions appear on the ballot in this order. Mark a position <strong>unopposed</strong> when a candidate has been officially declared elected unopposed — voters then see it for information only.</p></div></div>
+<div class="locked-banner">The ballot is locked. Positions can only be changed while the election is in Draft or Ready status and has never been opened.</div>
+
+
+<section class="card">
+  <div class="card-header">
+    <h2>1. President <span class="badge neutral">Contested</span></h2>
+    
+  </div>
+  <p class="small muted">3 approved · 0 draft · 0 withdrawn candidate(s) — <a href="/admin/candidates#pos-1">manage candidates</a></p>
+  
+  
+</section>
+
+<section class="card">
+  <div class="card-header">
+    <h2>2. Vice President <span class="badge neutral">Contested</span></h2>
+    
+  </div>
+  <p class="small muted">2 approved · 0 draft · 0 withdrawn candidate(s) — <a href="/admin/candidates#pos-2">manage candidates</a></p>
+  
+  
+</section>
+
+<section class="card">
+  <div class="card-header">
+    <h2>3. General Secretary <span class="badge neutral">Contested</span></h2>
+    
+  </div>
+  <p class="small muted">3 approved · 0 draft · 1 withdrawn candidate(s) — <a href="/admin/candidates#pos-3">manage candidates</a></p>
+  
+  
+</section>
+
+<section class="card">
+  <div class="card-header">
+    <h2>4. Joint Secretary <span class="badge neutral">Contested</span></h2>
+    
+  </div>
+  <p class="small muted">2 approved · 0 draft · 0 withdrawn candidate(s) — <a href="/admin/candidates#pos-4">manage candidates</a></p>
+  
+  
+</section>
+
+<section class="card">
+  <div class="card-header">
+    <h2>5. Treasurer <span class="badge info">Unopposed</span></h2>
+    
+  </div>
+  <p class="small muted">1 approved · 0 draft · 0 withdrawn candidate(s) — <a href="/admin/candidates#pos-5">manage candidates</a></p>
+  <p><strong>Dr. Meena Gupta</strong> — Elected unopposed as Treasurer</p>
+  
+</section>
+
+
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
+
