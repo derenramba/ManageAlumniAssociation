@@ -495,3 +495,26 @@ table.data th { background: #f7f5f0; color: var(--ink-2); letter-spacing: .08em;
 .position.answered .pos-status { border: 2px solid var(--leaf); background: var(--leaf); box-shadow: 0 0 0 4px var(--leaf-50); }
 .position.answered .pos-status::after { content: "✓"; color: #fff; font-weight: 700; font-size: .95rem; }
 .position.has-error .pos-status { border-color: var(--error); }
+
+/* Status labels are plain text, never pill/button shaped (client request). */
+.badge, .status-pill, .ballot-locked, .confidential {
+  display: inline; padding: 0; margin: 0; border: 0 !important; border-radius: 0; background: none !important;
+  box-shadow: none !important; font-size: inherit; font-weight: 700; letter-spacing: .01em; white-space: normal;
+}
+.badge::before, .status-pill::before, .ballot-locked::before { content: none !important; display: none !important; }
+.badge { font-size: .92em; white-space: nowrap; }
+.badge.success { color: var(--success); }
+.badge.warning { color: var(--warning); }
+.badge.error { color: var(--error); }
+.badge.info { color: var(--brand); }
+.badge.neutral { color: var(--ink-3); font-weight: 400; }
+.status-pill { font-size: .95rem; text-transform: uppercase; letter-spacing: .14em; }
+.status-pill.open { color: var(--success); }
+.status-pill.not_open { color: var(--brand); }
+.status-pill.suspended { color: var(--warning); }
+.status-pill.closed { color: var(--ink-2); }
+.status-pill.published { color: var(--leaf-600); }
+.hero-premium .status-pill { display: block; margin-top: .25rem; color: #e2c48a !important; }
+.ballot-locked { color: var(--ink); }
+.confidential { color: var(--error); text-transform: uppercase; letter-spacing: .08em; }
+.unopposed-card .badge { display: block; margin-top: .2rem; }
