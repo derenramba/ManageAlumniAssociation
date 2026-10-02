@@ -100,6 +100,43 @@ function qualityReport(electionId) {
 
 // ---------- Import ----------
 
+const EMPTY_VALUES = /^(n\/?a|na|nil|none|not applicable|not available|null|[-–—.?x]+)$/i;
+const EMAIL_RE = /[^\s@,;:<>()\[\]"']+@[^\s@,;:<>()\[\]"']+\.[A-Za-z]{2,}/g;
+
+/** Splits a cell that may hold several emails: returns { primary, others, raw }. */
+function splitEmails(raw) {
+  const s = String(raw || '').trim();
+  if (!s || EMPTY_VALUES.test(s)) return { primary: '', others: [], raw: '' };
+  const found = [...new Set((s.match(EMAIL_RE) || []).map((e) => e.replace(/[.,;]+$/, '')))];
+  if (!found.length) return { primary: '', others: [], raw: s };
+  return { primary: found[0], others: found.slice(1), raw: s };
+}
+
+/** Splits a cell that may hold several phone numbers. */
+function splitPhones(raw) {
+  const s = String(raw || '').trim();
+  if (!s || EMPTY_VALUES.test(s)) return { primary: '', others: [] };
+  const parts = s.split(/\s*[,;\/|]\s*|\s{3,}|\s+(?:or|and)\s+/i)
+    .map((p) => p.replace(/[^\d+()\s-]/g, '').replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim())
+    .filter((p) => (p.match(/\d/g) || []).length >= 6);
+  const uniq = [...new Set(parts)];
+  return { primary: uniq[0] || '', others: uniq.slice(1) };
+}
+
+/** "1996-98" → "1996 to 1998" (no dashes; full years). */
+function normaliseBatch(raw) {
+  const s = String(raw || '').trim();
+  const m = s.match(/^(\d{4})\s*[-–—\/]\s*(\d{2}|\d{4})$/);
+  if (!m) return s;
+  let end = m[2];
+  if (end.length === 2) {
+    const century = m[1].slice(0, 2);
+    end = (parseInt(end, 10) < parseInt(m[1].slice(2), 10) ? String(parseInt(century, 10) + 1) : century) + end;
+  }
+  return `${m[1]} to ${end}`;
+}
+
+
 const HEADER_ALIASES = {
   voter_ref: ['voter id', 'voterid', 'voter_id', 'id', 'member id', 'membership id', 'membership no', 'membership number', 'member no', 'alumni id', 'reg no', 'registration no'],
   full_name: ['name', 'full name', 'fullname', 'full_name', 'voter name', 'member name', 'alumni name'],
@@ -109,14 +146,15 @@ const HEADER_ALIASES = {
   mobile: ['mobile', 'phone', 'mobile number', 'phone number', 'mobile no', 'contact', 'contact number', 'cell', 'telephone'],
   whatsapp: ['whatsapp', 'whatsapp number', 'whatsapp no', 'whats app'],
   batch: ['batch', 'year', 'batch/year', 'batch year', 'graduation year', 'passing year', 'pgdaem batch', 'course batch'],
+  location: ['location', 'city', 'place', 'state', 'address', 'country'],
 };
 
 function mapHeaders(headers) {
   const map = {};
   headers.forEach((h, i) => {
-    const key = String(h || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    const key = String(h || '').trim().toLowerCase().replace(/[.:#*]/g, '').replace(/\s+/g, ' ').trim();
     for (const [field, aliases] of Object.entries(HEADER_ALIASES)) {
-      if (map[field] === undefined && (aliases.includes(key) || key === field)) map[field] = i;
+      if (map[field] === undefined && (aliases.includes(key) || key === field || aliases.includes(key.replace(/ (id|no|number)$/, '')))) map[field] = i;
     }
   });
   return map;
@@ -151,20 +189,31 @@ function analyseImport(electionId, table) {
     const rowNo = idx + 2;
     let fullName = cell(r, 'full_name');
     if (!fullName) fullName = [cell(r, 'first_name'), cell(r, 'last_name')].filter(Boolean).join(' ');
+    const em = splitEmails(cell(r, 'email'));
+    const ph = splitPhones(cell(r, 'mobile'));
+    const wa = splitPhones(cell(r, 'whatsapp'));
+    const location = cell(r, 'location');
+    const extra = [];
+    if (em.others.length) extra.push(`Other emails: ${em.others.join(', ')}`);
+    if (ph.others.length) extra.push(`Other phones: ${ph.others.join(', ')}`);
+    if (location && !EMPTY_VALUES.test(location)) extra.push(`Location: ${location}`);
     const item = {
       row: rowNo,
       voter_ref: cell(r, 'voter_ref').slice(0, 60),
-      full_name: fullName.slice(0, 150),
-      email: cell(r, 'email').slice(0, 200),
-      mobile: cell(r, 'mobile').slice(0, 40),
-      whatsapp: cell(r, 'whatsapp').slice(0, 40),
-      batch: cell(r, 'batch').slice(0, 60),
+      full_name: fullName.replace(/\s+/g, ' ').slice(0, 150),
+      email: (em.primary || '').slice(0, 200),
+      mobile: ph.primary.slice(0, 40),
+      whatsapp: wa.primary.slice(0, 40),
+      batch: normaliseBatch(cell(r, 'batch')).slice(0, 60),
+      notes: extra.join(' | ').slice(0, 1000),
       errors: [], warnings: [], action: 'create', matchId: null,
     };
     if (!item.full_name) item.errors.push('Missing name');
-    if (!item.email) item.warnings.push('Missing email');
-    else if (!isValidEmail(item.email)) item.warnings.push('Invalid email');
+    if (!em.raw) item.warnings.push('Missing email');
+    else if (!em.primary) item.warnings.push(`Invalid email: "${em.raw.slice(0, 60)}"`);
+    if (em.others.length) item.warnings.push(`Several emails: invitation goes to ${em.primary}`);
     if (!item.mobile) item.warnings.push('Missing phone');
+    if (ph.others.length) item.warnings.push('Several phone numbers: first one used');
 
     // Match to an existing voter record (stable identity) so repeat imports never duplicate entitlements.
     let match = null;
@@ -232,16 +281,16 @@ function applyImport(electionId, rows, { eligibility = 'pending' } = {}) {
             .run(r.email, r.mobile, r.whatsapp, now, v.id);
         } else {
           d.prepare(`UPDATE voters SET full_name = ?, email = COALESCE(NULLIF(?, ''), email), mobile = COALESCE(NULLIF(?, ''), mobile),
-            whatsapp = COALESCE(NULLIF(?, ''), whatsapp), batch = COALESCE(NULLIF(?, ''), batch), updated_at = ? WHERE id = ?`)
-            .run(r.full_name, r.email, r.mobile, r.whatsapp, r.batch, now, v.id);
+            whatsapp = COALESCE(NULLIF(?, ''), whatsapp), batch = COALESCE(NULLIF(?, ''), batch), notes = COALESCE(NULLIF(?, ''), notes), updated_at = ? WHERE id = ?`)
+            .run(r.full_name, r.email, r.mobile, r.whatsapp, r.batch, r.notes || '', now, v.id);
         }
         stats.updated++;
         continue;
       }
       let ref = r.voter_ref;
       if (!ref || d.prepare('SELECT 1 FROM voters WHERE election_id = ? AND voter_ref = ?').get(electionId, ref)) ref = nextRef(++refCounter);
-      d.prepare('INSERT INTO voters (election_id, voter_ref, full_name, email, mobile, whatsapp, batch, eligibility, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-        .run(electionId, ref, r.full_name, r.email || null, r.mobile || null, r.whatsapp || null, r.batch || null, eligibility, now, now);
+      d.prepare('INSERT INTO voters (election_id, voter_ref, full_name, email, mobile, whatsapp, batch, eligibility, notes, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .run(electionId, ref, r.full_name, r.email || null, r.mobile || null, r.whatsapp || null, r.batch || null, eligibility, r.notes || null, now, now);
       stats.created++;
     }
   })();
@@ -249,5 +298,5 @@ function applyImport(electionId, rows, { eligibility = 'pending' } = {}) {
 }
 
 module.exports = {
-  normEmail, normMobile, normName, nextVoterRef, listVoters, getVoterRow, qualityReport, analyseImport, applyImport, mapHeaders, VOTER_LIST_SQL,
+  normEmail, normMobile, normName, splitEmails, splitPhones, normaliseBatch, nextVoterRef, listVoters, getVoterRow, qualityReport, analyseImport, applyImport, mapHeaders, VOTER_LIST_SQL,
 };

@@ -294,13 +294,19 @@ async function readTable(file) {
     const ws = wb.worksheets[0];
     if (!ws) return [];
     const out = [];
+    const cellText = (v) => {
+      if (v == null) return '';
+      if (v instanceof Date) return v.toISOString().slice(0, 10);
+      if (typeof v !== 'object') return String(v);
+      if (Array.isArray(v.richText)) return v.richText.map((t) => t.text).join('');
+      if (v.text !== undefined) return cellText(v.text);
+      if (v.result !== undefined) return cellText(v.result);
+      if (v.hyperlink) return String(v.hyperlink).replace(/^mailto:/i, '');
+      return '';
+    };
     ws.eachRow({ includeEmpty: false }, (row) => {
       const vals = [];
-      for (let i = 1; i <= ws.columnCount; i++) {
-        let v = row.getCell(i).value;
-        if (v && typeof v === 'object') v = v.text || v.result || (v.richText ? v.richText.map((t) => t.text).join('') : '') || (v.hyperlink ? String(v.hyperlink).replace(/^mailto:/, '') : '');
-        vals.push(v == null ? '' : String(v));
-      }
+      for (let i = 1; i <= ws.columnCount; i++) vals.push(cellText(row.getCell(i).value).trim());
       out.push(vals);
     });
     return out;
@@ -364,6 +370,8 @@ router.post('/import/:id/apply', numericId, requirePerm('manage_voters'), (req, 
   const rows = JSON.parse(imp.rows_json);
   const table = [['voter id', 'name', 'email', 'mobile', 'whatsapp', 'batch'], ...rows.map((r) => [r.voter_ref, r.full_name, r.email, r.mobile, r.whatsapp, r.batch])];
   const fresh = voters.analyseImport(req.election.id, table).rows;
+  // Keep the extra details (other emails/phones, location) found in the original file.
+  fresh.forEach((r, i) => { if (rows[i] && rows[i].notes) r.notes = rows[i].notes; });
   const claimed = d.prepare('UPDATE voter_imports SET applied_at = ? WHERE id = ? AND applied_at IS NULL').run(nowIso(), imp.id).changes;
   if (!claimed) return res.redirect(303, '/admin/import');
   const stats = voters.applyImport(req.election.id, fresh, { eligibility });
