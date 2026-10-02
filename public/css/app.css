@@ -486,3 +486,12 @@ table.data th { background: #f7f5f0; color: var(--ink-2); letter-spacing: .08em;
   .hero-premium .medallion img { width: 96px; height: 96px; }
   .card { padding: 1.15rem; }
 }
+
+/* Post status: quiet marker + live hint instead of a pill */
+.position .pos-hint { margin-top: .2rem; font-size: .95rem; color: var(--ink-3); font-style: italic; }
+.position.answered .pos-hint { color: var(--leaf-600); font-style: normal; font-weight: 700; }
+.position.has-error .pos-hint { color: var(--error); }
+.position .pos-status { flex: none; width: 30px; height: 30px; margin-top: .15rem; border-radius: 50%; border: 2px dashed #cdbf9f; display: grid; place-items: center; transition: background .2s, border-color .2s; }
+.position.answered .pos-status { border: 2px solid var(--leaf); background: var(--leaf); box-shadow: 0 0 0 4px var(--leaf-50); }
+.position.answered .pos-status::after { content: "✓"; color: #fff; font-weight: 700; font-size: .95rem; }
+.position.has-error .pos-status { border-color: var(--error); }

@@ -15,8 +15,12 @@
         var checked = p.querySelector('input[type=radio]:checked');
         if (checked) { done++; p.classList.remove('has-error'); }
         p.classList.toggle('answered', !!checked);
-        var chip = p.querySelector('[data-chip]');
-        if (chip) chip.textContent = checked ? '✓ Done' : 'Choose one';
+        var hint = p.querySelector('[data-hint]');
+        if (hint) {
+          if (!checked) hint.textContent = 'Select one candidate, or abstain';
+          else if (checked.value === 'abstain') hint.textContent = 'You chose to abstain';
+          else hint.textContent = 'Your choice: ' + checked.closest('label').querySelector('.name').textContent;
+        }
         p.querySelectorAll('.choice').forEach(function (c) {
           var input = c.querySelector('input');
           c.classList.toggle('is-checked', !!(input && input.checked));

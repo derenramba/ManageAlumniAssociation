@@ -27,9 +27,11 @@
         <div>
           <div class="post-no">Post <%= postNo %> of <%= contested.length %></div>
           <h2 aria-hidden="true"><%= p.title %></h2>
+          <% const selCand = answered && selections[p.id] !== 'abstain' ? p.candidates.find(c => String(c.id) === String(selections[p.id])) : null; %>
+          <div class="pos-hint" data-hint><%= !answered ? 'Select one candidate, or abstain' : selCand ? 'Your choice: ' + selCand.full_name : 'You chose to abstain' %></div>
           <% if (p.description) { %><div class="small muted"><%= p.description %></div><% } %>
         </div>
-        <span class="chip" data-chip><%= answered ? '✓ Done' : 'Choose one' %></span>
+        <span class="pos-status" aria-hidden="true"></span>
       </header>
       <p class="position-error" role="alert"><%= errors[p.id] || ('Please select a candidate or choose to abstain for ' + p.title + '.') %></p>
       <div class="choices<%= p.candidates.length > 1 ? ' multi' : '' %>">
@@ -58,7 +60,7 @@
     </fieldset>
     <% } else if (p.unopposedCandidate) { %>
     <section class="position info" aria-label="<%= p.title %> (unopposed)">
-      <header><div><div class="post-no">For information</div><h2><%= p.title %></h2></div><span class="chip">No vote needed</span></header>
+      <header><div><div class="post-no">For information</div><h2><%= p.title %></h2><div class="pos-hint">Declared elected unopposed. No vote needed.</div></div></header>
       <div class="unopposed-card">
         <%- include('../partials/photo', { cand: p.unopposedCandidate, cls: 'photo' }) %>
         <div><strong><%= p.unopposedCandidate.full_name %></strong><% if (p.unopposedCandidate.batch) { %><div class="small muted"><%= p.unopposedCandidate.batch %></div><% } %><span class="badge success">Elected unopposed</span></div>
