@@ -23,8 +23,8 @@
   --radius: 12px;
   --radius-sm: 8px;
   --shadow: 0 1px 2px rgba(16, 24, 20, .06), 0 2px 8px rgba(16, 24, 20, .05);
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
-  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  --font: "Times New Roman", Times, serif;
+  --mono: "Times New Roman", Times, serif;
 }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }

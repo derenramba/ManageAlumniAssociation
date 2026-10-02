@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Dashboard — Election Admin · MANAGE Alumni Association</title>
+<title>Dashboard | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,7 +59,7 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
@@ -67,7 +67,7 @@
 <div class="page-head">
   <div>
     <h1>MANAGE Alumni Association Election 2026 (Demo)</h1>
-    <p>Term 2026–2028 · Status: <span class="badge dot success">Voting open</span></p>
+    <p>Term 2026 to 2028 · Status: <span class="badge dot success">Voting open</span></p>
   </div>
   <div class="row">
     <a class="btn secondary" href="/admin/turnout">Turnout</a>
@@ -87,14 +87,14 @@
     <h2>Election timetable</h2>
     <dl class="kv">
       <dt>Status</dt><dd><span class="badge dot success">Voting open</span></dd>
-      <dt>Voting opens</dt><dd>30 September 2026, 10:36 PM IST</dd>
-      <dt>Voting closes</dt><dd>8 October 2026, 10:36 PM IST</dd>
-      <dt>Actually opened</dt><dd>30 September 2026, 10:36 PM IST</dd>
+      <dt>Voting opens</dt><dd>1 October 2026, 12:53 AM IST</dd>
+      <dt>Voting closes</dt><dd>9 October 2026, 12:53 AM IST</dd>
+      <dt>Actually opened</dt><dd>1 October 2026, 12:53 AM IST</dd>
       
       
       <dt>Ballot</dt><dd>5 positions · 11 approved candidates</dd>
-      <dt>Voter list</dt><dd>Approved 29 Sep 2026, 22:36:03</dd>
-      <dt>Email delivery</dt><dd>Outbox mode (SMTP not configured — emails are stored, not sent)</dd>
+      <dt>Voter list</dt><dd>Approved 30 Sep 2026, 00:53:26</dd>
+      <dt>Email delivery</dt><dd>Outbox mode (SMTP not configured, emails are stored, not sent)</dd>
     </dl>
     
       <h3 class="mt-3">Status actions</h3>
@@ -139,7 +139,7 @@
       
         <li class="warning"><span class="ic" aria-hidden="true">!</span><span class="grow">5 voter(s) with email have not yet received an invitation</span><a class="small" href="/admin/invitations">Review</a></li>
       
-        <li class="warning"><span class="ic" aria-hidden="true">!</span><span class="grow">3 eligible voter(s) have no email — deliver their codes externally</span><a class="small" href="/admin/voters?filter=no_email">Review</a></li>
+        <li class="warning"><span class="ic" aria-hidden="true">!</span><span class="grow">3 eligible voter(s) have no email, deliver their codes externally</span><a class="small" href="/admin/voters?filter=no_email">Review</a></li>
       
         <li class="warning"><span class="ic" aria-hidden="true">!</span><span class="grow">3 invitation(s) failed to send</span><a class="small" href="/admin/invitations?status=failed">Review</a></li>
       
@@ -148,7 +148,7 @@
     
       <h3 class="mt-3">Most recent ballots</h3>
       <ul class="checklist">
-      <li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Naveen Nair</span><span class="small muted nowrap">2 Oct 2026, 22:36:04</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Suresh Chowdary</span><span class="small muted nowrap">2 Oct 2026, 09:36:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Gopal Joshi</span><span class="small muted nowrap">2 Oct 2026, 08:21:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Vikram Patel</span><span class="small muted nowrap">2 Oct 2026, 07:06:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Vikram Kumar</span><span class="small muted nowrap">2 Oct 2026, 05:51:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Divya Verma</span><span class="small muted nowrap">2 Oct 2026, 04:36:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Srinivas Das</span><span class="small muted nowrap">2 Oct 2026, 03:21:03</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Swathi Joshi</span><span class="small muted nowrap">2 Oct 2026, 02:06:03</span></li>
+      <li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Naveen Nair</span><span class="small muted nowrap">3 Oct 2026, 00:53:27</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Suresh Chowdary</span><span class="small muted nowrap">2 Oct 2026, 11:53:26</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Gopal Joshi</span><span class="small muted nowrap">2 Oct 2026, 10:38:26</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Vikram Patel</span><span class="small muted nowrap">2 Oct 2026, 09:23:26</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Vikram Kumar</span><span class="small muted nowrap">2 Oct 2026, 08:08:26</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Divya Verma</span><span class="small muted nowrap">2 Oct 2026, 06:53:26</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Srinivas Das</span><span class="small muted nowrap">2 Oct 2026, 05:38:26</span></li><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow">Swathi Joshi</span><span class="small muted nowrap">2 Oct 2026, 04:23:26</span></li>
       </ul>
     
   </section>
@@ -160,7 +160,7 @@
     <li><a href="/admin/election">Configure election settings</a> (dates, support contact)</li>
     <li><a href="/admin/positions">Create positions</a>, <a href="/admin/candidates">add & approve candidates</a>, mark unopposed posts</li>
     <li><a href="/admin/import">Import</a> or <a href="/admin/voters/new">add voters</a>, review <a href="/admin/voters/quality">duplicates</a>, then approve the final voter list</li>
-    <li><a href="/admin/codes">Generate voting codes</a> — one per eligible voter</li>
+    <li><a href="/admin/codes">Generate voting codes</a> one per eligible voter</li>
     <li><a href="/admin/invitations">Preview and send invitations</a></li>
     <li>Open voting, monitor <a href="/admin/turnout">turnout</a>, then close the election</li>
     <li>Review <a href="/admin/results">results</a>, export, and publish</li>

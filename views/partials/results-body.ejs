@@ -5,7 +5,7 @@
   <div class="card-header"><h2><%= p.title %></h2>
     <% if (p.unopposed) { %><span class="badge info">Unopposed</span><% } else if (p.tie) { %><span class="badge warning">Tie detected — administrator review required</span><% } else if (p.reconciled) { %><span class="badge success">Reconciled</span><% } else { %><span class="badge error">Does not reconcile</span><% } %></div>
   <% if (p.unopposed) { %>
-    <p class="mb-0"><% if (p.unopposedCandidate) { %><strong><%= p.unopposedCandidate.full_name %></strong> — Elected unopposed as <%= p.title %><% } else { %>No candidate declared.<% } %></p>
+    <p class="mb-0"><% if (p.unopposedCandidate) { %><strong><%= p.unopposedCandidate.full_name %></strong> is elected unopposed as <%= p.title %><% } else { %>No candidate declared.<% } %></p>
   <% } else { %>
     <div class="table-wrap"><table class="data">
       <thead><tr><th>Candidate</th><th class="num">Votes</th><th class="num">Share</th><th>Outcome</th></tr></thead>

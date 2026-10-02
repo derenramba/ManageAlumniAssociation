@@ -15,7 +15,7 @@
     <% } %>
   </div>
   <p class="small muted"><%= p.candidates.filter(c => c.status === 'approved').length %> approved · <%= p.candidates.filter(c => c.status === 'draft').length %> draft · <%= p.candidates.filter(c => c.status === 'withdrawn').length %> withdrawn candidate(s) — <a href="/admin/candidates#pos-<%= p.id %>">manage candidates</a></p>
-  <% if (p.kind === 'unopposed' && p.unopposedCandidate) { %><p><strong><%= p.unopposedCandidate.full_name %></strong> — Elected unopposed as <%= p.title %></p><% } %>
+  <% if (p.kind === 'unopposed' && p.unopposedCandidate) { %><p><strong><%= p.unopposedCandidate.full_name %></strong> is elected unopposed as <%= p.title %></p><% } %>
   <% if (canEdit) { %>
   <details>
     <summary class="btn secondary small">Edit position</summary>
@@ -31,7 +31,7 @@
         <div class="field mt-1" data-show-when="kind=unopposed">
           <label for="u<%= p.id %>">Candidate declared elected unopposed</label>
           <select id="u<%= p.id %>" name="unopposed_candidate_id">
-            <option value="">— choose an approved candidate —</option>
+            <option value="">Choose an approved candidate…</option>
             <% p.candidates.filter(c => c.status === 'approved').forEach(function (c) { %><option value="<%= c.id %>" <%= p.unopposed_candidate_id === c.id ? 'selected' : '' %>><%= c.full_name %></option><% }) %>
           </select>
           <div class="hint">Add and approve the candidate under Candidates first.</div>

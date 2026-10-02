@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Bhavana Hegde — Election Admin · MANAGE Alumni Association</title>
+<title>Bhavana Hegde | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,13 +59,13 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
 
 <div class="page-head">
-  <div><h1>Bhavana Hegde</h1><p class="mono">MAA-01015</p></div>
+  <div><h1>Bhavana Hegde</h1><p class="mono">MAA01015</p></div>
   <div class="row">
     
     <a class="btn secondary" href="/admin/voters/15/edit">Edit details</a>
@@ -79,9 +79,9 @@
 <section class="card">
   <h2>Voter information</h2>
   <dl class="kv">
-    <dt>Voter ID</dt><dd class="mono">MAA-01015</dd>
+    <dt>Voter ID</dt><dd class="mono">MAA01015</dd>
     <dt>Full name</dt><dd>Bhavana Hegde</dd>
-    <dt>Email</dt><dd>not-an-email</dd>
+    <dt>Email</dt><dd>not an email</dd>
     <dt>Mobile</dt><dd>+91 9661998391</dd>
     <dt>WhatsApp</dt><dd>+91 9661998391</dd>
     <dt>Batch / year</dt><dd>PGDAEM 2006</dd>
@@ -97,7 +97,7 @@
 <span class="badge neutral">Not voted</span>
 
 </dd>
-    <dt>Voting timestamp</dt><dd>—</dd>
+    <dt>Voting timestamp</dt><dd></dd>
     
   </dl>
   
@@ -125,7 +125,7 @@
 
 </p>
   
-    <p class="row"><span class="code-mask" id="code-15">••••-••••-••••-••••</span> <button type="button" class="btn secondary small" data-reveal-code="/admin/codes/voter/15/reveal" data-target="code-15">Copy</button></p>
+    <p class="row"><span class="code-mask" id="code-15">•••• •••• •••• ••••</span> <button type="button" class="btn secondary small" data-reveal-code="/admin/codes/voter/15/reveal" data-target="code-15">Copy</button></p>
     <p class="small muted">Revealing or copying a code is recorded in the audit log.</p>
   
   
@@ -134,7 +134,7 @@
         <form method="post" class="mt-1" data-once>
           <input type="hidden" name="_csrf" value="">
           <div class="field"><label for="reason">Reason</label><input type="text" id="reason" name="reason" required placeholder="e.g. Voter reports code was shared"></div>
-          <label class="check mb-1"><input type="checkbox" name="send_invitation" value="1" checked> <span>Email the new code to not-an-email (replace only)</span></label>
+          <label class="check mb-1"><input type="checkbox" name="send_invitation" value="1" checked> <span>Email the new code to not an email (replace only)</span></label>
           <div class="row">
             <button class="btn secondary" type="submit" formaction="/admin/codes/voter/15/replace" data-confirm="Replace this code? The old code will stop working immediately.">Replace code</button>
             <button class="btn danger secondary" type="submit" formaction="/admin/codes/voter/15/revoke">Revoke only</button>
@@ -146,7 +146,7 @@
   
     <h3 class="mt-2">Code history</h3>
     <ul class="small">
-      <li>29 Sep 2026, 22:36:18 — active</li>
+      <li>30 Sep 2026, 00:53:41, active</li>
     </ul>
   
 </section>
@@ -158,20 +158,20 @@
 
 
 <span class="badge error" title="Delivery failed: 550 mailbox unavailable">Failed</span>
- <span class="small muted">last attempt 30 Sep 2026, 22:51:03</span></p>
+ <span class="small muted">last attempt 1 Oct 2026, 01:08:26</span></p>
   <div class="alert error"><div>Delivery failed: 550 mailbox unavailable</div></div>
   
   
     <form method="post" action="/admin/invitations/voter/15/send" data-once>
       <input type="hidden" name="_csrf" value="">
-      <label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>Resend the invitation with the <strong>same</strong> voting code to not-an-email</span></label>
+      <label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>Resend the invitation with the <strong>same</strong> voting code to not an email</span></label>
       <button class="btn secondary" type="submit">Resend invitation</button>
     </form>
   
   
     <h3 class="mt-2">Send history</h3>
     <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
-    <tr><td class="small nowrap">30 Sep 2026, 22:51:03</td><td class="small">First invitation</td><td><span class="badge error" title="Delivery failed: 550 mailbox unavailable">failed</span></td><td class="small">not-an-email</td><td class="small">Demo Main Administrator</td></tr>
+    <tr><td class="small nowrap">1 Oct 2026, 01:08:26</td><td class="small">First invitation</td><td><span class="badge error" title="Delivery failed: 550 mailbox unavailable">failed</span></td><td class="small">not an email</td><td class="small">Demo Main Administrator</td></tr>
     </tbody></table></div>
   
 </section>

@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Election settings — Election Admin · MANAGE Alumni Association</title>
+<title>Election settings | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,7 +59,7 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
@@ -73,12 +73,12 @@
     <input type="hidden" name="_csrf" value="">
     <fieldset  style="border:0;padding:0;margin:0">
     <div class="field"><label for="name">Election name</label><input type="text" id="name" name="name" value="MANAGE Alumni Association Election 2026 (Demo)" required maxlength="200"></div>
-    <div class="field"><label for="term">Election term / year</label><input type="text" id="term" name="term" value="Term 2026–2028" maxlength="100" placeholder="e.g. 2026–2028"></div>
+    <div class="field"><label for="term">Election term / year</label><input type="text" id="term" name="term" value="Term 2026 to 2028" maxlength="100" placeholder="e.g. 2026 to 2028"></div>
     <div class="field"><label for="description">Description (shown on the welcome page)</label><textarea id="description" name="description" rows="4">Help choose the next team for our alumni association. Enter your personal voting code to vote for the contested positions. Posts already declared elected unopposed are shown for information. Please review your choices before submitting, as your ballot can be submitted only once.</textarea></div>
     <div class="form-grid">
-      <div class="field"><label for="opens_at">Opening date/time (IST)</label><input type="datetime-local" id="opens_at" name="opens_at" value="2026-09-30T22:36" readonly>
-        <div class="hint">Locked — voting has already opened.</div></div>
-      <div class="field"><label for="closes_at">Closing date/time (IST)</label><input type="datetime-local" id="closes_at" name="closes_at" value="2026-10-08T22:36" >
+      <div class="field"><label for="opens_at">Opening date/time (IST)</label><input type="datetime-local" id="opens_at" name="opens_at" value="2026-10-01T00:53" readonly>
+        <div class="hint">Locked, voting has already opened.</div></div>
+      <div class="field"><label for="closes_at">Closing date/time (IST)</label><input type="datetime-local" id="closes_at" name="closes_at" value="2026-10-09T00:53" >
         <div class="hint">Changing the closing time during voting is recorded in the audit log.</div></div>
     </div>
     <h3>Support contact</h3>
@@ -136,71 +136,71 @@
     <ul class="checklist">
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Election name is set<span class="sr-only"> — done</span></span>
+    <span class="grow">Election name is set<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Opening and closing date/time are set<span class="sr-only"> — done</span></span>
+    <span class="grow">Opening and closing date/time are set<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Closing time is after opening time<span class="sr-only"> — done</span></span>
+    <span class="grow">Closing time is after opening time<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Support contact details are set<span class="sr-only"> — done</span></span>
+    <span class="grow">Support contact details are set<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">At least one position has been created<span class="sr-only"> — done</span></span>
+    <span class="grow">At least one position has been created<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">At least one position is contested<span class="sr-only"> — done</span></span>
+    <span class="grow">At least one position is contested<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">President: has approved candidates<span class="sr-only"> — done</span></span>
+    <span class="grow">President: has approved candidates<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Vice President: has approved candidates<span class="sr-only"> — done</span></span>
+    <span class="grow">Vice President: has approved candidates<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">General Secretary: has approved candidates<span class="sr-only"> — done</span></span>
+    <span class="grow">General Secretary: has approved candidates<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Joint Secretary: has approved candidates<span class="sr-only"> — done</span></span>
+    <span class="grow">Joint Secretary: has approved candidates<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Treasurer: unopposed winner declared (approved candidate)<span class="sr-only"> — done</span></span>
+    <span class="grow">Treasurer: unopposed winner declared (approved candidate)<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Final eligible voter list approved<span class="sr-only"> — done</span></span>
+    <span class="grow">Final eligible voter list approved<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">There is at least one eligible voter<span class="sr-only"> — done</span></span>
+    <span class="grow">There is at least one eligible voter<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">All voters reviewed<span class="sr-only"> — done</span></span>
+    <span class="grow">All voters reviewed<span class="sr-only"> done</span></span>
     </li>
 
   <li class="ok"><span class="ic" aria-hidden="true">✓</span>
-    <span class="grow">Every eligible voter has a voting code<span class="sr-only"> — done</span></span>
+    <span class="grow">Every eligible voter has a voting code<span class="sr-only"> done</span></span>
     </li>
 
   <li class="warning"><span class="ic" aria-hidden="true">!</span>
-    <span class="grow">5 voter(s) with email have not yet received an invitation<span class="sr-only"> — warning</span></span>
+    <span class="grow">5 voter(s) with email have not yet received an invitation<span class="sr-only"> warning</span></span>
     <a class="small" href="/admin/invitations">Fix</a></li>
 
   <li class="warning"><span class="ic" aria-hidden="true">!</span>
-    <span class="grow">3 eligible voter(s) have no email — deliver their codes externally<span class="sr-only"> — warning</span></span>
+    <span class="grow">3 eligible voter(s) have no email, deliver their codes externally<span class="sr-only"> warning</span></span>
     <a class="small" href="/admin/voters?filter=no_email">Fix</a></li>
 
 </ul>

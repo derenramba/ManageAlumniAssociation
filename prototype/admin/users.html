@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Admin users — Election Admin · MANAGE Alumni Association</title>
+<title>Admin users | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,15 +59,15 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
-<div class="page-head"><div><h1>Admin users</h1><p>Access to individual ballots is controlled by the <strong>View individual votes</strong> and <strong>Export individual votes</strong> permissions — grant them only to authorised officials.</p></div></div>
+<div class="page-head"><div><h1>Admin users</h1><p>Access to individual ballots is controlled by the <strong>View individual votes</strong> and <strong>Export individual votes</strong> permissions, grant them only to authorised officials.</p></div></div>
 
 <div class="grid-2 mb-2">
 <section class="card"><h2>Roles</h2>
-  <dl class="kv"><dt>Main Administrator</dt><dd class="small">Full election access.</dd><dt>Election Administrator</dt><dd class="small">Manages the election, candidates, voters and invitations.</dd><dt>Election Officer</dt><dd class="small">Accesses results and voting records if authorised.</dd><dt>Read-only Auditor</dt><dd class="small">Read-only access according to permissions.</dd></dl>
+  <dl class="kv"><dt>Main Administrator</dt><dd class="small">Full election access.</dd><dt>Election Administrator</dt><dd class="small">Manages the election, candidates, voters and invitations.</dd><dt>Election Officer</dt><dd class="small">Accesses results and voting records if authorised.</dd><dt>Read only Auditor</dt><dd class="small">Read only access according to permissions.</dd></dl>
 </section>
 <section class="card"><h2>Add administrator</h2>
   <form method="post" action="/admin/users" data-once>
@@ -76,7 +76,7 @@
       <div class="field"><label for="nu">Username</label><input type="text" id="nu" name="username" required autocomplete="off"></div>
       <div class="field"><label for="nf">Full name</label><input type="text" id="nf" name="full_name" required></div>
       <div class="field"><label for="ne">Email</label><input type="email" id="ne" name="email"></div>
-      <div class="field"><label for="nr">Role</label><select id="nr" name="role"><option value="main_admin" >Main Administrator</option><option value="election_admin" >Election Administrator</option><option value="election_officer" selected>Election Officer</option><option value="auditor" >Read-only Auditor</option></select></div>
+      <div class="field"><label for="nr">Role</label><select id="nr" name="role"><option value="main_admin" >Main Administrator</option><option value="election_admin" >Election Administrator</option><option value="election_officer" selected>Election Officer</option><option value="auditor" >Read only Auditor</option></select></div>
       <div class="field"><label for="np">Initial password</label><input type="password" id="np" name="password" required minlength="10" autocomplete="new-password"><div class="hint">At least 10 characters with letters and numbers.</div></div>
     </div>
     <button class="btn" type="submit">Add administrator</button>
@@ -86,7 +86,7 @@
 
 
 <section class="card">
-  <div class="card-header"><div><h2 class="mb-0">Demo Auditor  <span class="badge warning">Demo account</span></h2><div class="small muted">demo.auditor · Read-only Auditor · last sign-in never</div></div></div>
+  <div class="card-header"><div><h2 class="mb-0">Demo Auditor  <span class="badge warning">Demo account</span></h2><div class="small muted">demo.auditor · Read only Auditor · last sign in never</div></div></div>
   <details>
     <summary class="btn secondary small">Edit role & permissions</summary>
     <form method="post" action="/admin/users/4" class="mt-2" data-once>
@@ -94,7 +94,7 @@
       <div class="form-grid">
         <div class="field"><label>Full name<input type="text" name="full_name" value="Demo Auditor"></label></div>
         <div class="field"><label>Email<input type="email" name="email" value=""></label></div>
-        <div class="field"><label>Role<select name="role"><option value="main_admin" >Main Administrator</option><option value="election_admin" >Election Administrator</option><option value="election_officer" >Election Officer</option><option value="auditor" selected>Read-only Auditor</option></select></label></div>
+        <div class="field"><label>Role<select name="role"><option value="main_admin" >Main Administrator</option><option value="election_admin" >Election Administrator</option><option value="election_officer" >Election Officer</option><option value="auditor" selected>Read only Auditor</option></select></label></div>
         <div class="field"><label>Account<select name="active"><option value="1" selected>Active</option><option value="0" >Disabled</option></select></label></div>
       </div>
       <fieldset><legend>Permissions</legend>
@@ -115,7 +115,7 @@
 </section>
 
 <section class="card">
-  <div class="card-header"><div><h2 class="mb-0">Demo Election Administrator  <span class="badge warning">Demo account</span></h2><div class="small muted">demo.manager · Election Administrator · last sign-in never</div></div></div>
+  <div class="card-header"><div><h2 class="mb-0">Demo Election Administrator  <span class="badge warning">Demo account</span></h2><div class="small muted">demo.manager · Election Administrator · last sign in never</div></div></div>
   <details>
     <summary class="btn secondary small">Edit role & permissions</summary>
     <form method="post" action="/admin/users/3" class="mt-2" data-once>
@@ -123,7 +123,7 @@
       <div class="form-grid">
         <div class="field"><label>Full name<input type="text" name="full_name" value="Demo Election Administrator"></label></div>
         <div class="field"><label>Email<input type="email" name="email" value=""></label></div>
-        <div class="field"><label>Role<select name="role"><option value="main_admin" >Main Administrator</option><option value="election_admin" selected>Election Administrator</option><option value="election_officer" >Election Officer</option><option value="auditor" >Read-only Auditor</option></select></label></div>
+        <div class="field"><label>Role<select name="role"><option value="main_admin" >Main Administrator</option><option value="election_admin" selected>Election Administrator</option><option value="election_officer" >Election Officer</option><option value="auditor" >Read only Auditor</option></select></label></div>
         <div class="field"><label>Account<select name="active"><option value="1" selected>Active</option><option value="0" >Disabled</option></select></label></div>
       </div>
       <fieldset><legend>Permissions</legend>
@@ -144,7 +144,7 @@
 </section>
 
 <section class="card">
-  <div class="card-header"><div><h2 class="mb-0">Demo Election Officer  <span class="badge warning">Demo account</span></h2><div class="small muted">demo.officer · Election Officer · last sign-in never</div></div></div>
+  <div class="card-header"><div><h2 class="mb-0">Demo Election Officer  <span class="badge warning">Demo account</span></h2><div class="small muted">demo.officer · Election Officer · last sign in never</div></div></div>
   <details>
     <summary class="btn secondary small">Edit role & permissions</summary>
     <form method="post" action="/admin/users/2" class="mt-2" data-once>
@@ -152,7 +152,7 @@
       <div class="form-grid">
         <div class="field"><label>Full name<input type="text" name="full_name" value="Demo Election Officer"></label></div>
         <div class="field"><label>Email<input type="email" name="email" value=""></label></div>
-        <div class="field"><label>Role<select name="role"><option value="main_admin" >Main Administrator</option><option value="election_admin" >Election Administrator</option><option value="election_officer" selected>Election Officer</option><option value="auditor" >Read-only Auditor</option></select></label></div>
+        <div class="field"><label>Role<select name="role"><option value="main_admin" >Main Administrator</option><option value="election_admin" >Election Administrator</option><option value="election_officer" selected>Election Officer</option><option value="auditor" >Read only Auditor</option></select></label></div>
         <div class="field"><label>Account<select name="active"><option value="1" selected>Active</option><option value="0" >Disabled</option></select></label></div>
       </div>
       <fieldset><legend>Permissions</legend>
@@ -173,7 +173,7 @@
 </section>
 
 <section class="card">
-  <div class="card-header"><div><h2 class="mb-0">Demo Main Administrator  <span class="badge warning">Demo account</span></h2><div class="small muted">demo.admin · Main Administrator · last sign-in 2 Oct 2026, 22:36:04</div></div></div>
+  <div class="card-header"><div><h2 class="mb-0">Demo Main Administrator  <span class="badge warning">Demo account</span></h2><div class="small muted">demo.admin · Main Administrator · last sign in 3 Oct 2026, 00:53:27</div></div></div>
   <details>
     <summary class="btn secondary small">Edit role & permissions</summary>
     <form method="post" action="/admin/users/1" class="mt-2" data-once>
@@ -181,7 +181,7 @@
       <div class="form-grid">
         <div class="field"><label>Full name<input type="text" name="full_name" value="Demo Main Administrator"></label></div>
         <div class="field"><label>Email<input type="email" name="email" value=""></label></div>
-        <div class="field"><label>Role<select name="role"><option value="main_admin" selected>Main Administrator</option><option value="election_admin" >Election Administrator</option><option value="election_officer" >Election Officer</option><option value="auditor" >Read-only Auditor</option></select></label></div>
+        <div class="field"><label>Role<select name="role"><option value="main_admin" selected>Main Administrator</option><option value="election_admin" >Election Administrator</option><option value="election_officer" >Election Officer</option><option value="auditor" >Read only Auditor</option></select></label></div>
         <div class="field"><label>Account<select name="active"><option value="1" selected>Active</option><option value="0" >Disabled</option></select></label></div>
       </div>
       <fieldset><legend>Permissions</legend>

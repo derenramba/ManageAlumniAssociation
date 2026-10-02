@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Duplicate &amp; incomplete records — Election Admin · MANAGE Alumni Association</title>
+<title>Duplicate &amp; incomplete records | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,35 +59,35 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
-<div class="page-head"><div><h1>Duplicate & incomplete records</h1><p>Possible duplicates are flagged for review only. Sharing contact details does not disqualify anyone — decide each case and mark records eligible or ineligible.</p></div><a class="btn secondary" href="/admin/voters">Back to register</a></div>
+<div class="page-head"><div><h1>Duplicate & incomplete records</h1><p>Possible duplicates are flagged for review only. Sharing contact details does not disqualify anyone, decide each case and mark records eligible or ineligible.</p></div><a class="btn secondary" href="/admin/voters">Back to register</a></div>
 
 <div class="stats">
-  <div class="stat"><div class="k">Possible duplicates — same email</div><div class="v">1</div></div><div class="stat"><div class="k">Possible duplicates — same mobile</div><div class="v">1</div></div><div class="stat"><div class="k">Possible duplicates — same name and batch</div><div class="v">0</div></div><div class="stat"><div class="k">Invalid email address</div><div class="v">1</div></div><div class="stat"><div class="k">Missing email (cannot receive email invitations)</div><div class="v">3</div></div><div class="stat"><div class="k">Missing mobile number</div><div class="v">1</div></div>
+  <div class="stat"><div class="k">Possible duplicates, same email</div><div class="v">1</div></div><div class="stat"><div class="k">Possible duplicates, same mobile</div><div class="v">1</div></div><div class="stat"><div class="k">Possible duplicates, same name and batch</div><div class="v">0</div></div><div class="stat"><div class="k">Invalid email address</div><div class="v">1</div></div><div class="stat"><div class="k">Missing email (cannot receive email invitations)</div><div class="v">3</div></div><div class="stat"><div class="k">Missing mobile number</div><div class="v">1</div></div>
 </div>
 
-<section class="card"><h2>Possible duplicates — same email (1 group)</h2>
+<section class="card"><h2>Possible duplicates, same email (1 group)</h2>
   
   
     <div class="table-wrap mb-1"><table class="data"><tbody>
-    <tr><td><a href="/admin/voters/33">Deepa Mishra</a> <span class="small muted mono">MAA-01033</span></td><td class="small">naveen.reddy@example.org</td><td class="small">+91 9327879697</td><td class="small">PGDAEM 2002</td><td><span class="badge success">eligible</span></td></tr><tr><td><a href="/admin/voters/6">Naveen Reddy</a> <span class="small muted mono">MAA-01006</span></td><td class="small">naveen.reddy@example.org</td><td class="small">+91 9093965828</td><td class="small">PGDAEM 2000</td><td><span class="badge success">eligible</span></td></tr>
+    <tr><td><a href="/admin/voters/33">Deepa Mishra</a> <span class="small muted mono">MAA01033</span></td><td class="small">naveen.reddy@example.org</td><td class="small">+91 9327879697</td><td class="small">PGDAEM 2002</td><td><span class="badge success">eligible</span></td></tr><tr><td><a href="/admin/voters/6">Naveen Reddy</a> <span class="small muted mono">MAA01006</span></td><td class="small">naveen.reddy@example.org</td><td class="small">+91 9093965828</td><td class="small">PGDAEM 2000</td><td><span class="badge success">eligible</span></td></tr>
     </tbody></table></div>
   
 </section>
 
-<section class="card"><h2>Possible duplicates — same mobile (1 group)</h2>
+<section class="card"><h2>Possible duplicates, same mobile (1 group)</h2>
   
   
     <div class="table-wrap mb-1"><table class="data"><tbody>
-    <tr><td><a href="/admin/voters/10">Meena Pillai</a> <span class="small muted mono">MAA-01010</span></td><td class="small">meena.pillai@example.org</td><td class="small">+91 9882197525</td><td class="small">PGDAEM 1998</td><td><span class="badge success">eligible</span></td></tr><tr><td><a href="/admin/voters/34">Suresh Mishra</a> <span class="small muted mono">MAA-01034</span></td><td class="small">suresh.mishra@example.org</td><td class="small">+91 9882197525</td><td class="small">PGDAEM 1998</td><td><span class="badge success">eligible</span></td></tr>
+    <tr><td><a href="/admin/voters/10">Meena Pillai</a> <span class="small muted mono">MAA01010</span></td><td class="small">meena.pillai@example.org</td><td class="small">+91 9882197525</td><td class="small">PGDAEM 1998</td><td><span class="badge success">eligible</span></td></tr><tr><td><a href="/admin/voters/34">Suresh Mishra</a> <span class="small muted mono">MAA01034</span></td><td class="small">suresh.mishra@example.org</td><td class="small">+91 9882197525</td><td class="small">PGDAEM 1998</td><td><span class="badge success">eligible</span></td></tr>
     </tbody></table></div>
   
 </section>
 
-<section class="card"><h2>Possible duplicates — same name and batch (0 groups)</h2>
+<section class="card"><h2>Possible duplicates, same name and batch (0 groups)</h2>
   <p class="muted mb-0">None found.</p>
   
 </section>
@@ -96,21 +96,21 @@
 <section class="card"><h2>Invalid email address (1)</h2>
   
   <div class="table-wrap"><table class="data"><tbody>
-  <tr><td><a href="/admin/voters/15">Bhavana Hegde</a> <span class="small muted mono">MAA-01015</span></td><td class="small">not-an-email</td><td class="small">+91 9661998391</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/15/edit">Edit</a></td></tr>
+  <tr><td><a href="/admin/voters/15">Bhavana Hegde</a> <span class="small muted mono">MAA01015</span></td><td class="small">not an email</td><td class="small">+91 9661998391</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/15/edit">Edit</a></td></tr>
   </tbody></table></div>
 </section>
 
 <section class="card"><h2>Missing email (cannot receive email invitations) (3)</h2>
   
   <div class="table-wrap"><table class="data"><tbody>
-  <tr><td><a href="/admin/voters/41">Anjali Das</a> <span class="small muted mono">MAA-01041</span></td><td class="small">—</td><td class="small">+91 9597130179</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/41/edit">Edit</a></td></tr><tr><td><a href="/admin/voters/7">Lakshmi Sharma</a> <span class="small muted mono">MAA-01007</span></td><td class="small">—</td><td class="small">+91 9424602206</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/7/edit">Edit</a></td></tr><tr><td><a href="/admin/voters/23">Venkatesh Das</a> <span class="small muted mono">MAA-01023</span></td><td class="small">—</td><td class="small">+91 9994600087</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/23/edit">Edit</a></td></tr>
+  <tr><td><a href="/admin/voters/41">Anjali Das</a> <span class="small muted mono">MAA01041</span></td><td class="small"></td><td class="small">+91 9597130179</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/41/edit">Edit</a></td></tr><tr><td><a href="/admin/voters/7">Lakshmi Sharma</a> <span class="small muted mono">MAA01007</span></td><td class="small"></td><td class="small">+91 9424602206</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/7/edit">Edit</a></td></tr><tr><td><a href="/admin/voters/23">Venkatesh Das</a> <span class="small muted mono">MAA01023</span></td><td class="small"></td><td class="small">+91 9994600087</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/23/edit">Edit</a></td></tr>
   </tbody></table></div>
 </section>
 
 <section class="card"><h2>Missing mobile number (1)</h2>
   
   <div class="table-wrap"><table class="data"><tbody>
-  <tr><td><a href="/admin/voters/52">Meena Joshi</a> <span class="small muted mono">MAA-01052</span></td><td class="small">meena.joshi@example.org</td><td class="small">—</td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/52/edit">Edit</a></td></tr>
+  <tr><td><a href="/admin/voters/52">Meena Joshi</a> <span class="small muted mono">MAA01052</span></td><td class="small">meena.joshi@example.org</td><td class="small"></td><td><span class="badge success">eligible</span></td><td><a class="btn secondary small" href="/admin/voters/52/edit">Edit</a></td></tr>
   </tbody></table></div>
 </section>
 

@@ -9,7 +9,7 @@
     <div class="form-grid">
       <div class="field"><label for="position_id">Position</label>
         <select id="position_id" name="position_id" required>
-          <option value="">— choose —</option>
+          <option value="">Choose…</option>
           <% positions.forEach(function (p) { %><option value="<%= p.id %>" <%= candidate.position_id === p.id ? 'selected' : '' %>><%= p.title %></option><% }) %>
         </select></div>
       <div class="field"><label for="batch">Batch / graduation year</label><input type="text" id="batch" name="batch" value="<%= candidate.batch || '' %>" placeholder="e.g. PGDAEM 2008"></div>

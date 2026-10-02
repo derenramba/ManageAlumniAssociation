@@ -14,13 +14,13 @@ const normMobile = (m) => {
 const normName = (n) => String(n || '').toLowerCase().replace(/^(dr|mr|mrs|ms|prof|shri|smt)\.?\s+/, '').replace(/[^a-z]/g, '');
 
 function nextVoterRef(electionId) {
-  const rows = db.get().prepare("SELECT voter_ref FROM voters WHERE election_id = ? AND voter_ref LIKE 'MAA-%'").all(electionId);
+  const rows = db.get().prepare("SELECT voter_ref FROM voters WHERE election_id = ? AND voter_ref LIKE 'MAA%'").all(electionId);
   let max = 0;
   for (const r of rows) {
-    const n = parseInt(r.voter_ref.slice(4), 10);
+    const n = parseInt(r.voter_ref.replace(/^MAA\D*/, ''), 10);
     if (n > max) max = n;
   }
-  return (n = 1) => `MAA-${String(max + n).padStart(5, '0')}`;
+  return (n = 1) => `MAA${String(max + n).padStart(5, '0')}`;
 }
 
 const VOTER_LIST_SQL = `SELECT v.*,

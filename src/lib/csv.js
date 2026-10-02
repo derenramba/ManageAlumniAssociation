@@ -1,8 +1,10 @@
 'use strict';
 
+const { cleanText } = require('./nodash');
+
 function csvCell(v) {
   if (v === null || v === undefined) return '';
-  let s = String(v);
+  let s = cleanText(String(v));
   // Neutralise spreadsheet formula injection.
   if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
   return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;

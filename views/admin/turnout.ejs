@@ -7,7 +7,7 @@
   <div class="stat"><div class="k">Turnout</div><div class="v"><%= t.pctLabel %></div></div>
 </div>
 <section class="card"><div class="progress" style="height:22px" role="progressbar" aria-valuenow="<%= t.pct.toFixed(1) %>" aria-valuemin="0" aria-valuemax="100"><span style="width: <%= Math.min(100, t.pct).toFixed(1) %>%"></span></div>
-  <p class="mt-1 mb-0"><strong><%= t.voted %></strong> of <strong><%= t.eligible %></strong> eligible alumni have voted — <strong><%= t.pctLabel %></strong> turnout</p></section>
+  <p class="mt-1 mb-0"><strong><%= t.voted %></strong> of <strong><%= t.eligible %></strong> eligible alumni have voted (<strong><%= t.pctLabel %></strong> turnout)</p></section>
 
 <div class="grid-2 mt-2">
 <section class="card"><h2>By batch</h2>

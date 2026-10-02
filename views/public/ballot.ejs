@@ -47,7 +47,7 @@
         <% const abst = selections[p.id] === 'abstain'; %>
         <label class="choice abstain<%= abst ? ' is-checked' : '' %>">
           <input type="radio" name="pos_<%= p.id %>" value="abstain" <%= abst ? 'checked' : '' %>>
-          <span class="icon" aria-hidden="true">—</span>
+          <span class="icon" aria-hidden="true">⊘</span>
           <span><span class="name">Abstain for this post</span><span class="meta">Do not vote for any candidate for <%= p.title %></span><span class="state">Selected</span></span>
           <span class="tick" aria-hidden="true"></span>
         </label>
@@ -58,7 +58,7 @@
       <header><h2><%= p.title %></h2><div class="muted small">Declared elected unopposed — for information only, no vote needed.</div></header>
       <div class="unopposed-card">
         <%- include('../partials/photo', { cand: p.unopposedCandidate, cls: 'photo' }) %>
-        <div><strong><%= p.unopposedCandidate.full_name %></strong> — Elected unopposed as <%= p.title %><% if (p.unopposedCandidate.batch) { %><div class="small muted"><%= p.unopposedCandidate.batch %></div><% } %></div>
+        <div><strong><%= p.unopposedCandidate.full_name %></strong> is elected unopposed as <%= p.title %><% if (p.unopposedCandidate.batch) { %><div class="small muted"><%= p.unopposedCandidate.batch %></div><% } %></div>
       </div>
     </section>
     <% } %>

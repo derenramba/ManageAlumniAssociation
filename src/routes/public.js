@@ -77,7 +77,7 @@ router.post('/vote', noStore, (req, res) => {
     notOpenMessage: notOpenMessage(e),
     error: errorKind === 'not_open' ? notOpenMessage(e) : MESSAGES[errorKind],
     errorKind,
-    codeValue: errorKind === 'invalid' ? String(req.body.code || '').slice(0, 40) : '',
+    codeValue: errorKind === 'invalid' ? String(req.body.code || '').replace(/[^A-Za-z0-9 ]+/g, ' ').trim().slice(0, 40) : '',
     unopposed: election.ballotDefinition(e.id).filter((p) => !p.contested && p.unopposedCandidate),
   });
 

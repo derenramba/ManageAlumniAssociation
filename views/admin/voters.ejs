@@ -7,7 +7,7 @@
 <section class="card mb-2">
   <% if (listApproved) { %>
     <div class="row between">
-      <div><span class="badge success">Final voter list approved</span> <span class="small muted"><%= fmtShort(election.voter_list_approved_at) %> — <%= counts.eligible %> eligible voters form the official electorate. Further changes require a recorded reason.</span></div>
+      <div><span class="badge success">Final voter list approved</span> <span class="small muted">Approved <%= fmtShort(election.voter_list_approved_at) %>. The <%= counts.eligible %> eligible voters form the official electorate. Further changes require a recorded reason.</span></div>
       <% if (!everOpened) { %><form method="post" action="/admin/voters/unlock-list" class="inline-form" data-confirm="Withdraw approval so the voter list can be edited freely? You must re-approve it before voting opens."><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn secondary small">Withdraw approval to edit</button></form><% } %>
     </div>
   <% } else { %>
@@ -68,7 +68,7 @@
   <div class="row">
     <% if (manage) { %>
     <div class="field mb-0"><label for="bulk_action" class="small">Set eligibility of selected voters</label>
-      <select id="bulk_action" name="bulk_action"><option value="">— choose —</option><option value="eligible">Eligible</option><option value="ineligible">Ineligible</option><option value="pending">Pending review</option></select></div>
+      <select id="bulk_action" name="bulk_action"><option value="">Choose…</option><option value="eligible">Eligible</option><option value="ineligible">Ineligible</option><option value="pending">Pending review</option></select></div>
     <% if (listApproved) { %><div class="field mb-0 grow"><label for="amend_reason" class="small">Reason for amendment (required — list approved)</label><input type="text" id="amend_reason" name="amend_reason"></div><% } %>
     <button class="btn secondary" type="submit" formaction="/admin/voters/bulk" style="align-self:flex-end">Apply to selected</button>
     <% if (counts.pending) { %><button class="btn secondary" type="submit" formaction="/admin/voters/bulk" name="scope" value="all_pending" style="align-self:flex-end" data-confirm-scope>Apply to all <%= counts.pending %> pending voters</button><% } %>

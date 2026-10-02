@@ -86,7 +86,7 @@ function submitBallot({ electionId, codeId, selections, submissionToken }) {
     if (v.contestedCount === 0) throw new SubmissionError('incomplete', 'There are no contested positions on this ballot.');
 
     const now = nowIso();
-    const receipt = crypto.randomBytes(6).toString('hex').toUpperCase().match(/.{4}/g).join('-');
+    const receipt = crypto.randomBytes(6).toString('hex').toUpperCase().match(/.{4}/g).join(' ');
     const info = d.prepare('INSERT INTO ballots (election_id, voter_id, code_id, submission_token, submitted_at, receipt) VALUES (?, ?, ?, ?, ?, ?)')
       .run(electionId, code.voter_id, code.id, submissionToken || crypto.randomUUID(), now, receipt);
     const ballotId = info.lastInsertRowid;

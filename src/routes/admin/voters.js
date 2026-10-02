@@ -375,7 +375,7 @@ router.post('/import/:id/apply', numericId, requirePerm('manage_voters'), (req, 
 router.get('/import/template.csv', requirePerm('manage_voters'), (req, res) => {
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', 'attachment; filename="voter-import-template.csv"');
-  res.send('﻿Voter ID,Full Name,Email,Mobile,WhatsApp,Batch\nMAA-10001,Dr. Example Name,example@example.org,+91 98765 43210,+91 98765 43210,PGDAEM 2012\n');
+  res.send('﻿Voter ID,Full Name,Email,Mobile,WhatsApp,Batch\nMAA10001,Dr. Example Name,example@example.org,+91 98765 43210,+91 98765 43210,PGDAEM 2012\n');
 });
 
 module.exports = router;

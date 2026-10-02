@@ -123,7 +123,7 @@ test('voter flow: code entry, review, single submission, locked afterwards', asy
   assert.equal(r.status, 422);
   assert.match(r.text, /Please make a choice for every contested position/);
   // Unopposed shown, no voting control for it
-  assert.match(r.text, /Treasurer Person<\/strong> — Elected unopposed as Treasurer/);
+  assert.match(r.text, /Treasurer Person<\/strong> is elected unopposed as Treasurer/);
   assert.doesNotMatch(r.text, /Draft Person/);
 
   const { client, token } = await vote(code, (p, c) => (p.sort_order === 2 ? 'abstain' : String(c[0].id)));
@@ -136,7 +136,7 @@ test('voter flow: code entry, review, single submission, locked afterwards', asy
   assert.equal(one('SELECT COUNT(*) n FROM ballots').n, 1);
   r = await client.get('/thank-you');
   assert.match(r.text, /Thank you for voting/);
-  assert.match(r.text, /1<\/strong> of <strong data-eligible>5<\/strong> eligible alumni have voted — <strong data-pct>20.0%/);
+  assert.match(r.text, /1<\/strong> of <strong data-eligible>5<\/strong> eligible alumni have voted \(<strong data-pct>20.0%/);
   const ballot = one('SELECT * FROM ballots');
   assert.equal(q('SELECT * FROM ballot_choices WHERE ballot_id = ?', ballot.id).length, 4);
   assert.equal(one('SELECT COUNT(*) n FROM ballot_choices WHERE candidate_id IS NULL').n, 1);
@@ -216,7 +216,7 @@ test('permissions and audited ballot access', async () => {
   assert.equal(r.status, 403);
   r = await admin.get(`/admin/records/${voter1}`);
   assert.equal(r.status, 200);
-  assert.match(r.text, /Submitted ballot — locked/);
+  assert.match(r.text, /Submitted ballot, locked/);
   assert.match(r.text, /Abstain/);
   const log = one("SELECT * FROM audit_log WHERE category = 'ballot_access' ORDER BY id DESC LIMIT 1");
   assert.match(log.action, /Chief Admin viewed submitted ballot for Voter 1/);
@@ -249,7 +249,7 @@ test('close, reconcile, export and publish', async () => {
   r = await admin.get('/admin/results/export.csv');
   assert.match(r.text, /Accepted ballots,2/);
   r = await admin.get('/admin/records/export.csv');
-  assert.match(r.text, /CONFIDENTIAL — INDIVIDUAL VOTING RECORDS/);
+  assert.match(r.text, /CONFIDENTIAL, INDIVIDUAL VOTING RECORDS/);
 
   // Publication requires explicit confirmation
   r = await admin.post('/admin/election/transition', { action: 'publish' });

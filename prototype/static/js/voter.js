@@ -70,7 +70,7 @@
     code.addEventListener('input', function () {
       var raw = code.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 16);
       var grouped = raw.match(/.{1,4}/g);
-      var next = grouped ? grouped.join('-') : '';
+      var next = grouped ? grouped.join(' ') : '';
       if (next !== code.value) code.value = next;
     });
   }

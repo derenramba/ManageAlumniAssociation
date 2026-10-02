@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Edit Shri Harish Chowdary — Election Admin · MANAGE Alumni Association</title>
+<title>Edit Shri Harish Chowdary | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,7 +59,7 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
@@ -73,7 +73,7 @@
     <div class="form-grid">
       <div class="field"><label for="position_id">Position</label>
         <select id="position_id" name="position_id" required>
-          <option value="">— choose —</option>
+          <option value="">Choose…</option>
           <option value="1" >President</option><option value="2" >Vice President</option><option value="3" >General Secretary</option><option value="4" selected>Joint Secretary</option><option value="5" >Treasurer</option>
         </select></div>
       <div class="field"><label for="batch">Batch / graduation year</label><input type="text" id="batch" name="batch" value="PGDAEM 2013" placeholder="e.g. PGDAEM 2008"></div>
@@ -82,9 +82,9 @@
       <label for="photo">Photograph</label>
       
       <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp">
-      <div class="hint">JPEG, PNG or WebP, up to 4 MB. A square, head-and-shoulders photo works best. Candidates without a photo are shown with their initials.</div>
+      <div class="hint">JPEG, PNG or WebP, up to 4 MB. A square, head and shoulders photo works best. Candidates without a photo are shown with their initials.</div>
     </div>
-    <p class="small muted">Status: <strong>approved</strong> — change it from the candidates list.</p>
+    <p class="small muted">Status: <strong>approved</strong> change it from the candidates list.</p>
     
   </form>
 </section>

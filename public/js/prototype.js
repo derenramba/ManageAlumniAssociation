@@ -82,7 +82,7 @@
     btn.parentNode.replaceChild(clone, btn);
     clone.addEventListener('click', function () {
       var t = document.getElementById(clone.getAttribute('data-target'));
-      if (t) t.textContent = 'DEMO-CODE-XXXX-XXXX';
+      if (t) t.textContent = 'DEMO CODE XXXX XXXX';
       toast('Prototype: real codes are only shown in the real app.');
     });
   });

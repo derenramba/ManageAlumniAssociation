@@ -20,8 +20,8 @@
       <div class="field">
         <label for="code">Enter your personal voting code</label>
         <input class="code-input" type="text" id="code" name="code" inputmode="text" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false"
-               placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="40" required value="<%= codeValue %>" <% if (error) { %>aria-describedby="code-error" aria-invalid="true"<% } %>>
-        <div class="hint">Your code is in your invitation email. You can paste it — spaces and dashes are optional.</div>
+               placeholder="XXXX XXXX XXXX XXXX" maxlength="40" required value="<%= codeValue %>" <% if (error) { %>aria-describedby="code-error" aria-invalid="true"<% } %>>
+        <div class="hint">Your code is in your invitation email. You can paste it. Spaces are optional.</div>
       </div>
       <button type="submit" class="btn large block" data-busy="Checking your code…">Enter to vote</button>
     </form>
@@ -41,7 +41,7 @@
   <% unopposed.forEach(function (p) { %>
     <div class="unopposed-card">
       <%- include('../partials/photo', { cand: p.unopposedCandidate, cls: 'photo' }) %>
-      <div><strong><%= p.unopposedCandidate.full_name %></strong> — Elected unopposed as <%= p.title %><% if (p.unopposedCandidate.batch) { %><div class="small muted"><%= p.unopposedCandidate.batch %></div><% } %></div>
+      <div><strong><%= p.unopposedCandidate.full_name %></strong> is elected unopposed as <%= p.title %><% if (p.unopposedCandidate.batch) { %><div class="small muted"><%= p.unopposedCandidate.batch %></div><% } %></div>
     </div>
   <% }) %>
   </div>

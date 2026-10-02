@@ -20,7 +20,7 @@ function generateCode() {
   return out;
 }
 
-// Accepts user input such as "k7np 4xqm-9twr h6cj" and returns "K7NP4XQM9TWRH6CJ".
+// Accepts user input such as "k7np 4xqm 9twr h6cj" and returns "K7NP4XQM9TWRH6CJ".
 function normalizeCode(input) {
   if (!input) return '';
   return String(input).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 64);
@@ -28,7 +28,7 @@ function normalizeCode(input) {
 
 function formatCode(code) {
   if (!code) return '';
-  return code.match(/.{1,4}/g).join('-');
+  return code.match(/.{1,4}/g).join(' ');
 }
 
 function looksValid(normalized) {

@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Import voters — Election Admin · MANAGE Alumni Association</title>
+<title>Import voters | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,7 +59,7 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
@@ -78,7 +78,7 @@
   <h2>How repeat imports work</h2>
   <ul class="mb-0">
     <li>Each person keeps one stable voter record. Rows are matched to existing voters by <strong>Voter ID</strong>, or by the same name with the same email (or mobile).</li>
-    <li>Matched rows <strong>update</strong> contact details — they never create a second voter or a second voting entitlement.</li>
+    <li>Matched rows <strong>update</strong> contact details, they never create a second voter or a second voting entitlement.</li>
     <li>Shared emails or phone numbers are flagged as <em>possible duplicates</em> for review, but nobody is disqualified automatically.</li>
     <li>Missing email or phone is allowed and reported.</li>
   </ul>

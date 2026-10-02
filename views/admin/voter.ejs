@@ -50,7 +50,7 @@
   <h2>Voting code</h2>
   <p>Status: <%- include('../partials/voter-badges', { v, which: 'code' }) %></p>
   <% if (v.code_status_raw === 'active' && can('manage_codes')) { %>
-    <p class="row"><span class="code-mask" id="code-<%= v.id %>">••••-••••-••••-••••</span> <button type="button" class="btn secondary small" data-reveal-code="/admin/codes/voter/<%= v.id %>/reveal" data-target="code-<%= v.id %>">Copy</button></p>
+    <p class="row"><span class="code-mask" id="code-<%= v.id %>">•••• •••• •••• ••••</span> <button type="button" class="btn secondary small" data-reveal-code="/admin/codes/voter/<%= v.id %>/reveal" data-target="code-<%= v.id %>">Copy</button></p>
     <p class="small muted">Revealing or copying a code is recorded in the audit log.</p>
   <% } %>
   <% if (can('manage_codes') && !voted && !closed) { %>

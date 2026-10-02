@@ -13,7 +13,7 @@
   <h2><%= p.title %></h2>
   <% if (p.unopposed) { %>
     <% if (p.unopposedCandidate) { %>
-    <div class="unopposed-card"><%- include('../partials/photo', { cand: p.unopposedCandidate, cls: 'photo' }) %><div><strong><%= p.unopposedCandidate.full_name %></strong> — Elected unopposed as <%= p.title %></div></div>
+    <div class="unopposed-card"><%- include('../partials/photo', { cand: p.unopposedCandidate, cls: 'photo' }) %><div><strong><%= p.unopposedCandidate.full_name %></strong> is elected unopposed as <%= p.title %></div></div>
     <% } %>
   <% } else { %>
     <% if (p.tie) { %><div class="alert warning"><div><p>Tie for the highest total — subject to the election committee's decision.</p></div></div>

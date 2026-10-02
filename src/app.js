@@ -5,6 +5,7 @@ const config = require('./config');
 const db = require('./db');
 const sessions = require('./lib/sessions');
 const { verifyCsrf } = require('./lib/csrf');
+const { cleanHtml } = require('./lib/nodash');
 const time = require('./lib/time');
 const codes = require('./lib/codes');
 const election = require('./lib/election');
@@ -37,6 +38,17 @@ function createApp() {
   app.use(express.urlencoded({ extended: true, limit: '2mb', parameterLimit: 20000 }));
   app.use(express.json({ limit: '1mb' }));
   app.use(sessions.middleware);
+
+  // No dashes anywhere in visible text (client requirement).
+  app.use((req, res, next) => {
+    const send = res.send.bind(res);
+    res.send = (body) => {
+      const type = String(res.get('Content-Type') || '');
+      if (typeof body === 'string' && (type.includes('text/html') || (!type && /^\s*<!doctype html/i.test(body)))) body = cleanHtml(body);
+      return send(body);
+    };
+    next();
+  });
 
   // Shared view helpers
   app.use((req, res, next) => {

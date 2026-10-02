@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Elections — Election Admin · MANAGE Alumni Association</title>
+<title>Elections | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,7 +59,7 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
@@ -70,9 +70,9 @@
   <tbody>
   
     <tr>
-      <td><strong>MANAGE Alumni Association Election 2026 (Demo)</strong><div class="small muted">Term 2026–2028</div> <span class="badge warning">Demo</span></td>
+      <td><strong>MANAGE Alumni Association Election 2026 (Demo)</strong><div class="small muted">Term 2026 to 2028</div> <span class="badge warning">Demo</span></td>
       <td><span class="badge dot success">Voting open</span></td>
-      <td class="small">30 Sep 2026, 22:36:03</td><td class="small">8 Oct 2026, 22:36:03</td>
+      <td class="small">1 Oct 2026, 00:53:26</td><td class="small">9 Oct 2026, 00:53:26</td>
       <td class="num">58</td><td class="num">29</td>
       <td><span class="badge success">Current</span></td>
     </tr>
@@ -87,7 +87,7 @@
     <input type="hidden" name="_csrf" value="">
     <div class="form-grid">
       <div class="field"><label for="name">Election name</label><input type="text" id="name" name="name" required value="MANAGE Alumni Association Election"></div>
-      <div class="field"><label for="term">Term / year</label><input type="text" id="term" name="term" placeholder="e.g. 2026–2028"></div>
+      <div class="field"><label for="term">Term / year</label><input type="text" id="term" name="term" placeholder="e.g. 2026 to 2028"></div>
       <div class="field"><label for="copy">Positions</label><select id="copy" name="copy_positions_from"><option value="">Standard positions (President … Treasurer)</option><option value="1">Copy positions from: MANAGE Alumni Association Election 2026 (Demo)</option></select></div>
     </div>
     <button class="btn" type="submit">Create election</button>

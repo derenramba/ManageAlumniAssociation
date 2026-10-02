@@ -1,7 +1,7 @@
 <% if (turnout) { %>
 <section class="card" data-live-turnout aria-labelledby="turnout-h">
   <h2 id="turnout-h" class="mb-1">Live turnout</h2>
-  <p class="turnout-figure mb-1"><strong data-voted><%= turnout.voted.toLocaleString('en-IN') %></strong> of <strong data-eligible><%= turnout.eligible.toLocaleString('en-IN') %></strong> eligible alumni have voted — <strong data-pct><%= turnout.pctLabel %></strong> turnout</p>
+  <p class="turnout-figure mb-1"><strong data-voted><%= turnout.voted.toLocaleString('en-IN') %></strong> of <strong data-eligible><%= turnout.eligible.toLocaleString('en-IN') %></strong> eligible alumni have voted (<strong data-pct><%= turnout.pctLabel %></strong> turnout)</p>
   <div class="progress" role="progressbar" aria-label="Turnout" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<%= turnout.pct.toFixed(1) %>"><span data-bar style="width: <%= Math.min(100, turnout.pct).toFixed(1) %>%"></span></div>
   <p class="small muted mt-1 mb-0">Turnout counts accepted ballots only. Candidate totals are not shown while voting is open.</p>
 </section>

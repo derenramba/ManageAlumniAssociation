@@ -9,6 +9,7 @@ const voting = require('../../lib/voting');
 const { computeResults } = require('../../lib/results');
 const { formatDateTime, formatShort } = require('../../lib/time');
 const { sendCsv } = require('../../lib/csv');
+const { cleanText } = require('../../lib/nodash');
 const { flash, clean, asInt, httpError } = require('../../lib/http');
 const { requirePerm, requireElection } = require('./guards');
 
@@ -69,7 +70,7 @@ async function sendXlsx(res, filename, sheets) {
   wb.creator = 'MANAGE Alumni Association Voting Platform';
   for (const s of sheets) {
     const ws = wb.addWorksheet(s.name);
-    s.rows.forEach((r) => ws.addRow(r));
+    s.rows.forEach((r) => ws.addRow(r.map((c) => (typeof c === 'string' ? cleanText(c) : c))));
     if (s.boldRows) s.boldRows.forEach((i) => { ws.getRow(i).font = { bold: true }; });
     ws.columns.forEach((c) => { c.width = 22; });
   }

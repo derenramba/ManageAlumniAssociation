@@ -13,7 +13,7 @@
     </li>
   <% }) %>
   <% unopposed.forEach(function (p) { if (!p.unopposedCandidate) return; %>
-    <li><span class="pos"><%= p.title %></span><span class="muted"><%= p.unopposedCandidate.full_name %> — elected unopposed</span></li>
+    <li><span class="pos"><%= p.title %></span><span class="muted"><%= p.unopposedCandidate.full_name %>, elected unopposed</span></li>
   <% }) %>
   </ul>
 </section>

@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 
-<title>Voting codes — Election Admin · MANAGE Alumni Association</title>
+<title>Voting codes | Election Admin · MANAGE Alumni Association</title>
 <link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
 </head>
 <body>
-<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>
+<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
@@ -59,11 +59,11 @@
         <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn secondary small" type="submit">Sign out</button></form>
       </div>
     </header>
-    <div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div>
+    <div class="demo-banner">DEMONSTRATION ELECTION, all voters, candidates and ballots here are sample data, not real production data.</div>
     <main class="admin-content" id="main">
       
 
-<div class="page-head"><div><h1>Voting codes</h1><p>One eligible voter = one voting entitlement = one active voting code. Codes are random 16-character values and cannot be derived from voter details.</p></div>
+<div class="page-head"><div><h1>Voting codes</h1><p>One eligible voter = one voting entitlement = one active voting code. Codes are random 16 character values and cannot be derived from voter details.</p></div>
   <div class="row"><a class="btn secondary" href="/admin/codes/export.csv">Export active codes (CSV)</a><a class="btn secondary" href="/admin/codes/export.csv?filter=no_email">Export codes for voters without email</a></div></div>
 
 <div class="stats">
@@ -91,9 +91,9 @@
   <tbody>
   
     <tr>
-      <td><a href="/admin/voters/32">Amit Das</a><div class="small muted mono">MAA-01032</div></td>
+      <td><a href="/admin/voters/32">Amit Das</a><div class="small muted mono">MAA01032</div></td>
       <td class="small">amit.das@example.org</td>
-      <td><span class="code-mask" id="code-32">••••-••••-••••-3AJD</span></td>
+      <td><span class="code-mask" id="code-32">•••• •••• •••• EY2G</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -113,7 +113,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/37">Anjali Chowdary</a><div class="small muted mono">MAA-01037</div></td>
+      <td><a href="/admin/voters/37">Anjali Chowdary</a><div class="small muted mono">MAA01037</div></td>
       <td class="small">anjali.chowdary@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -135,9 +135,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/41">Anjali Das</a><div class="small muted mono">MAA-01041</div></td>
-      <td class="small">—</td>
-      <td><span class="code-mask" id="code-41">••••-••••-••••-V2BW</span></td>
+      <td><a href="/admin/voters/41">Anjali Das</a><div class="small muted mono">MAA01041</div></td>
+      <td class="small"></td>
+      <td><span class="code-mask" id="code-41">•••• •••• •••• B7ZP</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -157,7 +157,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/1">Anjali Verma</a><div class="small muted mono">MAA-01001</div></td>
+      <td><a href="/admin/voters/1">Anjali Verma</a><div class="small muted mono">MAA01001</div></td>
       <td class="small">anjali.verma@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -179,7 +179,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/21">Aparna Sharma</a><div class="small muted mono">MAA-01021</div></td>
+      <td><a href="/admin/voters/21">Aparna Sharma</a><div class="small muted mono">MAA01021</div></td>
       <td class="small">aparna.sharma@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -201,9 +201,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/25">Arjun Iyer</a><div class="small muted mono">MAA-01025</div></td>
+      <td><a href="/admin/voters/25">Arjun Iyer</a><div class="small muted mono">MAA01025</div></td>
       <td class="small">arjun.iyer@example.org</td>
-      <td><span class="code-mask" id="code-25">••••-••••-••••-CT2P</span></td>
+      <td><span class="code-mask" id="code-25">•••• •••• •••• R9GP</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -223,9 +223,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/15">Bhavana Hegde</a><div class="small muted mono">MAA-01015</div></td>
-      <td class="small">not-an-email</td>
-      <td><span class="code-mask" id="code-15">••••-••••-••••-9AMS</span></td>
+      <td><a href="/admin/voters/15">Bhavana Hegde</a><div class="small muted mono">MAA01015</div></td>
+      <td class="small">not an email</td>
+      <td><span class="code-mask" id="code-15">•••• •••• •••• DP5R</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -245,7 +245,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/2">Bhavana Patel</a><div class="small muted mono">MAA-01002</div></td>
+      <td><a href="/admin/voters/2">Bhavana Patel</a><div class="small muted mono">MAA01002</div></td>
       <td class="small">bhavana.patel@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -267,9 +267,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/33">Deepa Mishra</a><div class="small muted mono">MAA-01033</div></td>
+      <td><a href="/admin/voters/33">Deepa Mishra</a><div class="small muted mono">MAA01033</div></td>
       <td class="small">naveen.reddy@example.org</td>
-      <td><span class="code-mask" id="code-33">••••-••••-••••-YKFV</span></td>
+      <td><span class="code-mask" id="code-33">•••• •••• •••• W5ZR</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -289,7 +289,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/49">Divya Verma</a><div class="small muted mono">MAA-01049</div></td>
+      <td><a href="/admin/voters/49">Divya Verma</a><div class="small muted mono">MAA01049</div></td>
       <td class="small">divya.verma@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -311,7 +311,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/4">Geetha Mishra</a><div class="small muted mono">MAA-01004</div></td>
+      <td><a href="/admin/voters/4">Geetha Mishra</a><div class="small muted mono">MAA01004</div></td>
       <td class="small">geetha.mishra@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -333,7 +333,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/3">Gopal Hegde</a><div class="small muted mono">MAA-01003</div></td>
+      <td><a href="/admin/voters/3">Gopal Hegde</a><div class="small muted mono">MAA01003</div></td>
       <td class="small">gopal.hegde@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -355,7 +355,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/57">Gopal Joshi</a><div class="small muted mono">MAA-01057</div></td>
+      <td><a href="/admin/voters/57">Gopal Joshi</a><div class="small muted mono">MAA01057</div></td>
       <td class="small">gopal.joshi@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -377,7 +377,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/38">Harish Hegde</a><div class="small muted mono">MAA-01038</div></td>
+      <td><a href="/admin/voters/38">Harish Hegde</a><div class="small muted mono">MAA01038</div></td>
       <td class="small">harish.hegde@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -399,7 +399,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/31">Harish Sharma</a><div class="small muted mono">MAA-01031</div></td>
+      <td><a href="/admin/voters/31">Harish Sharma</a><div class="small muted mono">MAA01031</div></td>
       <td class="small">harish.sharma@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -421,9 +421,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/9">Kavitha Das</a><div class="small muted mono">MAA-01009</div></td>
+      <td><a href="/admin/voters/9">Kavitha Das</a><div class="small muted mono">MAA01009</div></td>
       <td class="small">kavitha.das@example.org</td>
-      <td><span class="code-mask" id="code-9">••••-••••-••••-STTJ</span></td>
+      <td><span class="code-mask" id="code-9">•••• •••• •••• YTYZ</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -443,9 +443,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/42">Kavitha Patel</a><div class="small muted mono">MAA-01042</div></td>
+      <td><a href="/admin/voters/42">Kavitha Patel</a><div class="small muted mono">MAA01042</div></td>
       <td class="small">kavitha.patel@example.org</td>
-      <td><span class="code-mask" id="code-42">••••-••••-••••-GKGX</span></td>
+      <td><span class="code-mask" id="code-42">•••• •••• •••• WVR5</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -465,9 +465,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/24">Kavitha Verma</a><div class="small muted mono">MAA-01024</div></td>
+      <td><a href="/admin/voters/24">Kavitha Verma</a><div class="small muted mono">MAA01024</div></td>
       <td class="small">kavitha.verma@example.org</td>
-      <td><span class="code-mask" id="code-24">••••-••••-••••-89JJ</span></td>
+      <td><span class="code-mask" id="code-24">•••• •••• •••• JN9T</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -487,9 +487,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/7">Lakshmi Sharma</a><div class="small muted mono">MAA-01007</div></td>
-      <td class="small">—</td>
-      <td><span class="code-mask" id="code-7">••••-••••-••••-PXQG</span></td>
+      <td><a href="/admin/voters/7">Lakshmi Sharma</a><div class="small muted mono">MAA01007</div></td>
+      <td class="small"></td>
+      <td><span class="code-mask" id="code-7">•••• •••• •••• 34HA</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -509,9 +509,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/52">Meena Joshi</a><div class="small muted mono">MAA-01052</div></td>
+      <td><a href="/admin/voters/52">Meena Joshi</a><div class="small muted mono">MAA01052</div></td>
       <td class="small">meena.joshi@example.org</td>
-      <td><span class="code-mask" id="code-52">••••-••••-••••-ZEU5</span></td>
+      <td><span class="code-mask" id="code-52">•••• •••• •••• 8Q4T</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -531,7 +531,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/10">Meena Pillai</a><div class="small muted mono">MAA-01010</div></td>
+      <td><a href="/admin/voters/10">Meena Pillai</a><div class="small muted mono">MAA01010</div></td>
       <td class="small">meena.pillai@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -553,9 +553,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/43">Meena Sharma</a><div class="small muted mono">MAA-01043</div></td>
+      <td><a href="/admin/voters/43">Meena Sharma</a><div class="small muted mono">MAA01043</div></td>
       <td class="small">meena.sharma@example.org</td>
-      <td><span class="code-mask" id="code-43">••••-••••-••••-AMV3</span></td>
+      <td><span class="code-mask" id="code-43">•••• •••• •••• DUXN</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -575,9 +575,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/51">Nandini Kumar</a><div class="small muted mono">MAA-01051</div></td>
+      <td><a href="/admin/voters/51">Nandini Kumar</a><div class="small muted mono">MAA01051</div></td>
       <td class="small">nandini.kumar@example.org</td>
-      <td><span class="code-mask" id="code-51">••••-••••-••••-MX5U</span></td>
+      <td><span class="code-mask" id="code-51">•••• •••• •••• 25M3</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -597,9 +597,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/17">Nandini Sharma</a><div class="small muted mono">MAA-01017</div></td>
+      <td><a href="/admin/voters/17">Nandini Sharma</a><div class="small muted mono">MAA01017</div></td>
       <td class="small">nandini.sharma@example.org</td>
-      <td><span class="code-mask" id="code-17">••••-••••-••••-PQRM</span></td>
+      <td><span class="code-mask" id="code-17">•••• •••• •••• V7FX</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -619,9 +619,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/36">Naveen Gupta</a><div class="small muted mono">MAA-01036</div></td>
+      <td><a href="/admin/voters/36">Naveen Gupta</a><div class="small muted mono">MAA01036</div></td>
       <td class="small">naveen.gupta@example.org</td>
-      <td><span class="code-mask" id="code-36">••••-••••-••••-ZBXU</span></td>
+      <td><span class="code-mask" id="code-36">•••• •••• •••• EWR8</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -641,7 +641,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/5">Naveen Nair</a><div class="small muted mono">MAA-01005</div></td>
+      <td><a href="/admin/voters/5">Naveen Nair</a><div class="small muted mono">MAA01005</div></td>
       <td class="small">naveen.nair@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -663,9 +663,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/6">Naveen Reddy</a><div class="small muted mono">MAA-01006</div></td>
+      <td><a href="/admin/voters/6">Naveen Reddy</a><div class="small muted mono">MAA01006</div></td>
       <td class="small">naveen.reddy@example.org</td>
-      <td><span class="code-mask" id="code-6">••••-••••-••••-PYVY</span></td>
+      <td><span class="code-mask" id="code-6">•••• •••• •••• CM7D</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -685,7 +685,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/46">Priya Hegde</a><div class="small muted mono">MAA-01046</div></td>
+      <td><a href="/admin/voters/46">Priya Hegde</a><div class="small muted mono">MAA01046</div></td>
       <td class="small">priya.hegde@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -707,9 +707,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/44">Priya Joshi</a><div class="small muted mono">MAA-01044</div></td>
+      <td><a href="/admin/voters/44">Priya Joshi</a><div class="small muted mono">MAA01044</div></td>
       <td class="small">priya.joshi@example.org</td>
-      <td><span class="code-mask" id="code-44">••••-••••-••••-F8CD</span></td>
+      <td><span class="code-mask" id="code-44">•••• •••• •••• Y24W</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -729,9 +729,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/50">Priya Reddy</a><div class="small muted mono">MAA-01050</div></td>
+      <td><a href="/admin/voters/50">Priya Reddy</a><div class="small muted mono">MAA01050</div></td>
       <td class="small">priya.reddy@example.org</td>
-      <td><span class="code-mask" id="code-50">••••-••••-••••-PEGY</span></td>
+      <td><span class="code-mask" id="code-50">•••• •••• •••• ZPE8</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -751,9 +751,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/53">Rajesh Joshi</a><div class="small muted mono">MAA-01053</div></td>
+      <td><a href="/admin/voters/53">Rajesh Joshi</a><div class="small muted mono">MAA01053</div></td>
       <td class="small">rajesh.joshi@example.org</td>
-      <td><span class="code-mask" id="code-53">••••-••••-••••-V7KA</span></td>
+      <td><span class="code-mask" id="code-53">•••• •••• •••• V44P</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -773,9 +773,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/14">Ravi Gupta</a><div class="small muted mono">MAA-01014</div></td>
+      <td><a href="/admin/voters/14">Ravi Gupta</a><div class="small muted mono">MAA01014</div></td>
       <td class="small">ravi.gupta@example.org</td>
-      <td><span class="code-mask" id="code-14">••••-••••-••••-HZCR</span></td>
+      <td><span class="code-mask" id="code-14">•••• •••• •••• 5C4B</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -795,9 +795,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/26">Ravi Pillai</a><div class="small muted mono">MAA-01026</div></td>
+      <td><a href="/admin/voters/26">Ravi Pillai</a><div class="small muted mono">MAA01026</div></td>
       <td class="small">ravi.pillai@example.org</td>
-      <td><span class="code-mask" id="code-26">••••-••••-••••-2RQY</span></td>
+      <td><span class="code-mask" id="code-26">•••• •••• •••• HQ6Q</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -817,7 +817,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/11">Ravi Rao</a><div class="small muted mono">MAA-01011</div></td>
+      <td><a href="/admin/voters/11">Ravi Rao</a><div class="small muted mono">MAA01011</div></td>
       <td class="small">ravi.rao@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -839,7 +839,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/30">Ravi Reddy</a><div class="small muted mono">MAA-01030</div></td>
+      <td><a href="/admin/voters/30">Ravi Reddy</a><div class="small muted mono">MAA01030</div></td>
       <td class="small">ravi.reddy@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -861,9 +861,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/16">Shalini Reddy</a><div class="small muted mono">MAA-01016</div></td>
+      <td><a href="/admin/voters/16">Shalini Reddy</a><div class="small muted mono">MAA01016</div></td>
       <td class="small">shalini.reddy@example.org</td>
-      <td><span class="code-mask" id="code-16">••••-••••-••••-B4M7</span></td>
+      <td><span class="code-mask" id="code-16">•••• •••• •••• FTTY</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -883,9 +883,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/18">Sneha Hegde</a><div class="small muted mono">MAA-01018</div></td>
+      <td><a href="/admin/voters/18">Sneha Hegde</a><div class="small muted mono">MAA01018</div></td>
       <td class="small">sneha.hegde@example.org</td>
-      <td><span class="code-mask" id="code-18">••••-••••-••••-TJFE</span></td>
+      <td><span class="code-mask" id="code-18">•••• •••• •••• 9MSE</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -905,7 +905,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/13">Sneha Kumar</a><div class="small muted mono">MAA-01013</div></td>
+      <td><a href="/admin/voters/13">Sneha Kumar</a><div class="small muted mono">MAA01013</div></td>
       <td class="small">sneha.kumar@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -927,7 +927,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/20">Sneha Menon</a><div class="small muted mono">MAA-01020</div></td>
+      <td><a href="/admin/voters/20">Sneha Menon</a><div class="small muted mono">MAA01020</div></td>
       <td class="small">sneha.menon@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -949,7 +949,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/48">Srinivas Das</a><div class="small muted mono">MAA-01048</div></td>
+      <td><a href="/admin/voters/48">Srinivas Das</a><div class="small muted mono">MAA01048</div></td>
       <td class="small">srinivas.das@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -971,9 +971,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/35">Srinivas Hegde</a><div class="small muted mono">MAA-01035</div></td>
+      <td><a href="/admin/voters/35">Srinivas Hegde</a><div class="small muted mono">MAA01035</div></td>
       <td class="small">srinivas.hegde@example.org</td>
-      <td><span class="code-mask" id="code-35">••••-••••-••••-8GAH</span></td>
+      <td><span class="code-mask" id="code-35">•••• •••• •••• F769</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -993,7 +993,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/29">Srinivas Nair</a><div class="small muted mono">MAA-01029</div></td>
+      <td><a href="/admin/voters/29">Srinivas Nair</a><div class="small muted mono">MAA01029</div></td>
       <td class="small">srinivas.nair@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1015,9 +1015,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/45">Srinivas Verma</a><div class="small muted mono">MAA-01045</div></td>
+      <td><a href="/admin/voters/45">Srinivas Verma</a><div class="small muted mono">MAA01045</div></td>
       <td class="small">srinivas.verma@example.org</td>
-      <td><span class="code-mask" id="code-45">••••-••••-••••-RK88</span></td>
+      <td><span class="code-mask" id="code-45">•••• •••• •••• A7FK</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -1037,7 +1037,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/60">Suresh Chowdary</a><div class="small muted mono">MAA-01060</div></td>
+      <td><a href="/admin/voters/60">Suresh Chowdary</a><div class="small muted mono">MAA01060</div></td>
       <td class="small">suresh.chowdary@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1059,7 +1059,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/12">Suresh Das</a><div class="small muted mono">MAA-01012</div></td>
+      <td><a href="/admin/voters/12">Suresh Das</a><div class="small muted mono">MAA01012</div></td>
       <td class="small">suresh.das@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1081,7 +1081,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/19">Suresh Gupta</a><div class="small muted mono">MAA-01019</div></td>
+      <td><a href="/admin/voters/19">Suresh Gupta</a><div class="small muted mono">MAA01019</div></td>
       <td class="small">suresh.gupta@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1103,9 +1103,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/34">Suresh Mishra</a><div class="small muted mono">MAA-01034</div></td>
+      <td><a href="/admin/voters/34">Suresh Mishra</a><div class="small muted mono">MAA01034</div></td>
       <td class="small">suresh.mishra@example.org</td>
-      <td><span class="code-mask" id="code-34">••••-••••-••••-J3B7</span></td>
+      <td><span class="code-mask" id="code-34">•••• •••• •••• 2XEU</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -1125,9 +1125,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/8">Suresh Naidu</a><div class="small muted mono">MAA-01008</div></td>
+      <td><a href="/admin/voters/8">Suresh Naidu</a><div class="small muted mono">MAA01008</div></td>
       <td class="small">suresh.naidu@example.org</td>
-      <td><span class="code-mask" id="code-8">••••-••••-••••-45WX</span></td>
+      <td><span class="code-mask" id="code-8">•••• •••• •••• MCXF</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -1147,7 +1147,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/47">Swathi Joshi</a><div class="small muted mono">MAA-01047</div></td>
+      <td><a href="/admin/voters/47">Swathi Joshi</a><div class="small muted mono">MAA01047</div></td>
       <td class="small">swathi.joshi@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1169,7 +1169,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/39">Swathi Rao</a><div class="small muted mono">MAA-01039</div></td>
+      <td><a href="/admin/voters/39">Swathi Rao</a><div class="small muted mono">MAA01039</div></td>
       <td class="small">swathi.rao@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1191,9 +1191,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/23">Venkatesh Das</a><div class="small muted mono">MAA-01023</div></td>
-      <td class="small">—</td>
-      <td><span class="code-mask" id="code-23">••••-••••-••••-BFCJ</span></td>
+      <td><a href="/admin/voters/23">Venkatesh Das</a><div class="small muted mono">MAA01023</div></td>
+      <td class="small"></td>
+      <td><span class="code-mask" id="code-23">•••• •••• •••• UXY3</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -1213,9 +1213,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/54">Venkatesh Nair</a><div class="small muted mono">MAA-01054</div></td>
+      <td><a href="/admin/voters/54">Venkatesh Nair</a><div class="small muted mono">MAA01054</div></td>
       <td class="small">venkatesh.nair@example.org</td>
-      <td><span class="code-mask" id="code-54">••••-••••-••••-692S</span></td>
+      <td><span class="code-mask" id="code-54">•••• •••• •••• EKRD</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -1235,7 +1235,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/22">Vikram Das</a><div class="small muted mono">MAA-01022</div></td>
+      <td><a href="/admin/voters/22">Vikram Das</a><div class="small muted mono">MAA01022</div></td>
       <td class="small">vikram.das@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1257,9 +1257,9 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/27">Vikram Gupta</a><div class="small muted mono">MAA-01027</div></td>
+      <td><a href="/admin/voters/27">Vikram Gupta</a><div class="small muted mono">MAA01027</div></td>
       <td class="small">vikram.gupta@example.org</td>
-      <td><span class="code-mask" id="code-27">••••-••••-••••-MVK6</span></td>
+      <td><span class="code-mask" id="code-27">•••• •••• •••• MV9F</span></td>
       <td>
 
 <span class="badge info">Active</span>
@@ -1279,7 +1279,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/40">Vikram Joshi</a><div class="small muted mono">MAA-01040</div></td>
+      <td><a href="/admin/voters/40">Vikram Joshi</a><div class="small muted mono">MAA01040</div></td>
       <td class="small">vikram.joshi@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1301,7 +1301,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/55">Vikram Kumar</a><div class="small muted mono">MAA-01055</div></td>
+      <td><a href="/admin/voters/55">Vikram Kumar</a><div class="small muted mono">MAA01055</div></td>
       <td class="small">vikram.kumar@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1323,7 +1323,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/28">Vikram Mishra</a><div class="small muted mono">MAA-01028</div></td>
+      <td><a href="/admin/voters/28">Vikram Mishra</a><div class="small muted mono">MAA01028</div></td>
       <td class="small">vikram.mishra@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>
@@ -1345,7 +1345,7 @@
     </tr>
   
     <tr>
-      <td><a href="/admin/voters/56">Vikram Patel</a><div class="small muted mono">MAA-01056</div></td>
+      <td><a href="/admin/voters/56">Vikram Patel</a><div class="small muted mono">MAA01056</div></td>
       <td class="small">vikram.patel@example.org</td>
       <td><span class="muted small">used</span></td>
       <td>

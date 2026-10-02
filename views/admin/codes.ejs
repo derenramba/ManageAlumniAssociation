@@ -37,7 +37,7 @@
     <tr>
       <td><a href="/admin/voters/<%= v.id %>"><%= v.full_name %></a><div class="small muted mono"><%= v.voter_ref %></div></td>
       <td class="small"><%= v.email || '—' %></td>
-      <td><% if (v.code_status_raw === 'active') { %><span class="code-mask" id="code-<%= v.id %>">••••-••••-••••-<%= v.code.slice(-4) %></span><% } else if (v.code_status_raw === 'used') { %><span class="muted small">used</span><% } else { %>—<% } %></td>
+      <td><% if (v.code_status_raw === 'active') { %><span class="code-mask" id="code-<%= v.id %>">•••• •••• •••• <%= v.code.slice(-4) %></span><% } else if (v.code_status_raw === 'used') { %><span class="muted small">used</span><% } else { %>—<% } %></td>
       <td><%- include('../partials/voter-badges', { v, which: 'code' }) %></td>
       <td><%- include('../partials/voter-badges', { v, which: 'inv' }) %></td>
       <td><div class="actions">

@@ -85,7 +85,7 @@ function main() {
       show_turnout_publicly, public_results_show_totals, voter_list_approved_at, voter_list_approved_by, opened_at, closed_at, is_demo,
       email_subject, email_intro, email_instructions, email_closing, email_support)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?)`).run(
-      'MANAGE Alumni Association Election 2026 (Demo)', 'Term 2026–2028',
+      'MANAGE Alumni Association Election 2026 (Demo)', 'Term 2026 to 2028',
       'Help choose the next team for our alumni association. Enter your personal voting code to vote for the contested positions. Posts already declared elected unopposed are shown for information. Please review your choices before submitting, as your ballot can be submitted only once.',
       opensAt, closesAt, closed ? 'closed' : 'open', 'MANAGE Alumni Association Election Committee', 'elections@example.org', '+91 40 0000 0000',
       iso(now - 3 * 864e5), adminId, opensAt, closed ? closesAt : null,
@@ -126,13 +126,13 @@ function main() {
       let mobile = `+91 9${String(Math.floor(rand() * 1e9)).padStart(9, '0')}`;
       let elig = 'eligible';
       if (i === 7 || i === 23 || i === 41) email = null; // no email — must be delivered externally
-      if (i === 15) email = 'not-an-email';
+      if (i === 15) email = 'not an email';
       if (i === 33) email = voters[5].email; // shared family email: flagged as possible duplicate
       if (i === 34) mobile = voters[9].mobile;
       if (i === 58 || i === 59) elig = 'ineligible';
       if (i === 52) mobile = null;
       const id = d.prepare('INSERT INTO voters (election_id, voter_ref, full_name, email, mobile, whatsapp, batch, eligibility) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-        .run(eid, `MAA-${String(1000 + i).padStart(5, '0')}`, name, email, mobile, i % 3 === 0 ? mobile : null, batch, elig).lastInsertRowid;
+        .run(eid, `MAA${String(1000 + i).padStart(5, '0')}`, name, email, mobile, i % 3 === 0 ? mobile : null, batch, elig).lastInsertRowid;
       voters.push({ id, name, email, mobile, elig, idx: i });
     }
 
@@ -167,7 +167,7 @@ function main() {
     for (const [n, v] of voting.entries()) {
       const at = iso(now - 2 * 864e5 + (n + 1) * (closed ? 40 : 75) * 60e3);
       const ballotId = d.prepare('INSERT INTO ballots (election_id, voter_id, code_id, submission_token, submitted_at, receipt) VALUES (?, ?, ?, ?, ?, ?)')
-        .run(eid, v.id, v.codeId, crypto.randomUUID(), at, crypto.randomBytes(6).toString('hex').toUpperCase().match(/.{4}/g).join('-')).lastInsertRowid;
+        .run(eid, v.id, v.codeId, crypto.randomUUID(), at, crypto.randomBytes(6).toString('hex').toUpperCase().match(/.{4}/g).join(' ')).lastInsertRowid;
       for (const p of posIds.filter((x) => x.contested)) {
         const r = rand();
         const cand = r < 0.1 ? null : p.cids[Math.min(p.cids.length - 1, Math.floor(Math.pow(rand(), 1.3) * p.cids.length))];

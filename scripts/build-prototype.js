@@ -38,7 +38,7 @@ const db = require('../src/db');
 const { createApp } = require('../src/app');
 
 const phase = process.env.PROTO_PHASE;
-const BANNER = '<div class="proto-banner" role="note">PROTOTYPE — front-end preview with dummy data. Nothing you enter is saved.</div>';
+const BANNER = '<div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>';
 
 function save(urlPath, html) {
   let file = urlPath.split('?')[0].replace(/\/+$/, '');
@@ -96,7 +96,7 @@ class Client {
     // ----- Voter journey -----
     const voter = new Client(base);
     await grab(voter, '/');
-    let r = await voter.post('/vote', { code: 'AAAA-BBBB-CCCC-DDDD' });
+    let r = await voter.post('/vote', { code: 'AAAA BBBB CCCC DDDD' });
     save('/vote-invalid', r.text);
     const used = one("SELECT code FROM voting_codes WHERE status = 'used' LIMIT 1").code;
     r = await voter.post('/vote', { code: used });
