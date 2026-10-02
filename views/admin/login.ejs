@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>Administrator sign in | MANAGE Alumni Association Election</title>
-<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml"><link rel="stylesheet" href="/static/css/app.css"><script src="/static/js/admin.js" defer></script></head>
+<link rel="icon" href="/static/img/favicon.png" type="image/png"><link rel="stylesheet" href="/static/css/app.css"><script src="/static/js/admin.js" defer></script></head>
 <body>
 <div class="login-wrap">
   <div class="card login-card">
-    <div class="row mb-2"><img src="/static/img/emblem.svg" alt="" width="48" height="48"><div><strong>MANAGE Alumni Association</strong><div class="small muted">Election administration</div></div></div>
+    <div class="row mb-2"><img src="/static/img/logo.png" alt="" width="48" height="48"><div><strong>MANAGE Alumni Association</strong><div class="small muted">Election administration</div></div></div>
     <h1>Administrator sign in</h1>
     <% flash.forEach(function (f) { %><div class="alert <%= f.type %>"><div><%= f.message %></div></div><% }) %>
     <% if (error) { %><div class="alert error" role="alert"><div><%= error %></div></div><% } %>

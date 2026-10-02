@@ -83,7 +83,7 @@ router.get('/invitations/preview', requireElection, requirePerm('send_invitation
     res.type('text/plain').send(`To: ${msg.to}\nSubject: ${msg.subject}\n\n${msg.text}`);
     return;
   }
-  res.setHeader('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; img-src data:; frame-ancestors 'self'");
+  res.setHeader('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data: https:; frame-ancestors 'self'");
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.type('html').send(msg.html);
 });
@@ -191,7 +191,7 @@ router.get('/invitations/outbox', requireElection, requirePerm('send_invitations
 router.get('/invitations/outbox/:id', numericId, requireElection, requirePerm('send_invitations'), requirePerm('manage_codes'), (req, res) => {
   const row = db.get().prepare('SELECT o.* FROM email_outbox o JOIN invitations i ON i.id = o.invitation_id WHERE o.id = ? AND i.election_id = ?').get(asInt(req.params.id), req.election.id);
   if (!row) throw httpError(404, 'Message not found.');
-  res.setHeader('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; img-src data:; frame-ancestors 'self'");
+  res.setHeader('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data: https:; frame-ancestors 'self'");
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.type('html').send(row.body_html);
 });

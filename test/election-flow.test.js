@@ -123,7 +123,7 @@ test('voter flow: code entry, review, single submission, locked afterwards', asy
   assert.equal(r.status, 422);
   assert.match(r.text, /Please make a choice for every contested position/);
   // Unopposed shown, no voting control for it
-  assert.match(r.text, /Treasurer Person<\/strong> is elected unopposed as Treasurer/);
+  assert.match(r.text, /Treasurer Person<\/strong>[\s\S]{0,120}Elected unopposed/);
   assert.doesNotMatch(r.text, /Draft Person/);
 
   const { client, token } = await vote(code, (p, c) => (p.sort_order === 2 ? 'abstain' : String(c[0].id)));

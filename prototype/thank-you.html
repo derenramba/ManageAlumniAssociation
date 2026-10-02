@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b5ea8">
 <title>Thank you for voting | MANAGE Alumni Association Election</title>
-<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="icon" href="/static/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/static/img/logo.png">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/voter.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
@@ -13,49 +15,60 @@
 <body>
 <div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 <a class="sr-only" href="#main">Skip to content</a>
-<div class="demo-banner" role="note">DEMONSTRATION ELECTION, sample data for testing only</div>
+<div class="demo-banner" role="note">DEMONSTRATION ELECTION: sample data for testing only</div>
 <header class="pub-header">
   <div class="inner">
-    <img src="/static/img/emblem.svg" alt="" width="44" height="44">
-    <div>
-      <div class="org">MANAGE Alumni Association</div>
-      <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
-    </div>
+    <a href="/">
+      <img src="/static/img/logo.png" alt="MANAGE Alumni Association logo" width="52" height="52">
+      <div>
+        <div class="org">MANAGE Alumni Association</div>
+        <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
+      </div>
+    </a>
   </div>
 </header>
 <main id="main" class="pub-main">
+
+
+<ol class="steps" aria-label="Voting progress">
+  <li class="done">Enter code</li><li class="done">Choose</li><li class="done">Review</li><li class="done">Done</li>
+</ol>
 
 <section class="card center">
   <div class="success-mark" aria-hidden="true">✓</div>
   <h1>Thank you for voting</h1>
   <p class="turnout-figure">Your ballot has been successfully recorded in the MANAGE Alumni Association Election 2026 (Demo).</p>
-  <p class="muted small mb-0">Submitted 3 October 2026, 12:53 AM IST · Confirmation reference <span class="mono">CD9C 96FB 1375</span></p>
+  <div class="receipt">Confirmation reference <strong>C738 A651 686B</strong></div>
+  <p class="muted small mt-1 mb-0">Submitted 3 October 2026, 1:00 AM IST</p>
 </section>
-<div class="mt-2">
+
 <section class="card" data-live-turnout aria-labelledby="turnout-h">
   <h2 id="turnout-h" class="mb-1">Live turnout</h2>
   <p class="turnout-figure mb-1"><strong data-voted>29</strong> of <strong data-eligible>58</strong> eligible alumni have voted (<strong data-pct>50.0%</strong> turnout)</p>
   <div class="progress" role="progressbar" aria-label="Turnout" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50.0"><span data-bar style="width: 50.0%"></span></div>
-  <p class="small muted mt-1 mb-0">Turnout counts accepted ballots only. Candidate totals are not shown while voting is open.</p>
+  <p class="small muted mt-1 mb-0">Turnout counts submitted ballots only. Candidate totals stay hidden until the results are published.</p>
 </section>
 
-</div>
+
 <section class="card">
   <p class="mb-1">Your ballot is final and cannot be changed. Results will be published on this website after the election closes and the results have been reviewed.</p>
-  <form method="post" action="/exit"><input type="hidden" name="_csrf" value=""><button class="btn secondary" type="submit">Finish</button></form>
+  <form method="post" action="/exit"><input type="hidden" name="_csrf" value=""><button class="btn secondary block" type="submit">Finish</button></form>
 </section>
 </main>
 <footer class="pub-footer">
   <div class="inner">
     
-      <strong>Need help?</strong>
+    <div class="help">
+      <span class="help-ic" aria-hidden="true">?</span>
       <div>
+        <strong>Need help with voting?</strong><br>
         MANAGE Alumni Association Election Committee<br>
-        Email: <a href="mailto:elections@example.org">elections@example.org</a><br>
-        Phone: <a href="tel:+914000000000">+91 40 0000 0000</a>
+        Email <a href="mailto:elections@example.org">elections@example.org</a><br>
+        Call <a href="tel:+914000000000">+91 40 0000 0000</a>
       </div>
+    </div>
     
-    <p class="small muted mt-2 mb-0">© MANAGE Alumni Association · National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
+    <p class="small muted mb-0">© MANAGE Alumni Association, National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
   </div>
 </footer>
 </body>

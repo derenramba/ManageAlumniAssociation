@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="csrf-token" content="<%= csrfToken %>">
 <title><%= typeof title !== 'undefined' ? title + ' | ' : '' %>Election Admin · MANAGE Alumni Association</title>
-<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="icon" href="/static/img/favicon.png" type="image/png">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/admin.js" defer></script>
 </head>
@@ -14,7 +14,7 @@
 <% const nav = (href, label, perm) => { if (perm && !can(perm)) return ''; const active = href === '/admin' ? path === '/admin' || path === '/admin/' : (path === href || path.indexOf(href + '/') === 0); return `<a href="${href}" class="${active ? 'active' : ''}"${active ? ' aria-current="page"' : ''}>${label}</a>`; }; %>
 <div class="admin-shell">
   <aside class="sidebar" aria-label="Admin navigation">
-    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <a class="brand" href="/admin"><img src="/static/img/logo.png" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
     <nav>
       <%- nav('/admin', 'Dashboard') %>
       <h4>Election</h4>

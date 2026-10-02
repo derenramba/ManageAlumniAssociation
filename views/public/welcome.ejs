@@ -1,36 +1,55 @@
 <%- include('../partials/public-top') %>
 <% const si = statusInfo(election); %>
-<section class="hero card">
-  <span class="status-pill <%= si.publicKey %>">Election status: <%= si.publicLabel %></span>
-  <h1 class="mt-2">Welcome to the MANAGE Alumni Association Election</h1>
+<section class="card hero">
+  <img class="hero-logo" src="/static/img/logo.png" alt="" width="120" height="120">
+  <span class="status-pill <%= si.publicKey %>">Voting <%= si.publicKey === 'open' ? 'is open' : si.publicLabel.toLowerCase() %></span>
+  <h1>Welcome to the MANAGE Alumni Association Election</h1>
   <div class="term"><%= election.name %><% if (election.term) { %> · <%= election.term %><% } %></div>
-  <% if (election.description) { %><p><%= election.description %></p><% } %>
   <dl class="dates">
     <div><dt>Voting opens</dt><dd><%= fmt(election.opens_at) %></dd></div>
     <div><dt>Voting closes</dt><dd><%= fmt(election.closes_at) %></dd></div>
   </dl>
+</section>
 
+<% if (votingOpen) { %>
+<section class="card code-card" aria-labelledby="code-h">
+  <h2 id="code-h">Enter your voting code</h2>
+  <p class="muted">You will find your personal code in your invitation email.</p>
   <% if (error) { %>
     <div class="alert <%= errorKind === 'invalid' || errorKind === 'revoked' || errorKind === 'rate' ? 'error' : 'warning' %>" role="alert" id="code-error"><div><p><%= error %></p></div></div>
   <% } %>
+  <form method="post" action="/vote" class="code-entry" data-once autocomplete="off" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="field">
+      <label for="code" class="sr-only">Voting code</label>
+      <input class="code-input" type="text" id="code" name="code" inputmode="text" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false"
+             placeholder="XXXX XXXX XXXX XXXX" maxlength="40" required value="<%= codeValue %>" <% if (error) { %>aria-describedby="code-error" aria-invalid="true"<% } %>>
+      <div class="hint center">Tip: copy the code from the email and paste it here.</div>
+    </div>
+    <button type="submit" class="btn large block" data-busy="Checking your code…">Enter to vote →</button>
+  </form>
+</section>
+<% } else if (si.publicKey === 'published') { %>
+<section class="card">
+  <div class="alert info"><div><p>Voting has closed and the official results have been published.</p></div></div>
+  <a class="btn large block" href="/results">View official results</a>
+</section>
+<% } else { %>
+<section class="card"><div class="alert <%= si.publicKey === 'suspended' ? 'warning' : 'info' %> mb-0" role="status"><div><p><%= notOpenMessage %></p></div></div></section>
+<% } %>
 
-  <% if (votingOpen) { %>
-    <form method="post" action="/vote" class="code-entry" data-once autocomplete="off" novalidate>
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-      <div class="field">
-        <label for="code">Enter your personal voting code</label>
-        <input class="code-input" type="text" id="code" name="code" inputmode="text" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false"
-               placeholder="XXXX XXXX XXXX XXXX" maxlength="40" required value="<%= codeValue %>" <% if (error) { %>aria-describedby="code-error" aria-invalid="true"<% } %>>
-        <div class="hint">Your code is in your invitation email. You can paste it. Spaces are optional.</div>
-      </div>
-      <button type="submit" class="btn large block" data-busy="Checking your code…">Enter to vote</button>
-    </form>
-  <% } else if (si.publicKey === 'published') { %>
-    <div class="alert info"><div><p>Voting has closed and the official results have been published.</p></div></div>
-    <a class="btn large block" href="/results">View official results</a>
-  <% } else { %>
-    <div class="alert <%= si.publicKey === 'suspended' ? 'warning' : 'info' %>"><div><p><%= notOpenMessage %></p></div></div>
-  <% } %>
+<% if (election.description) { %><section class="card">
+  <h2>About this election</h2>
+  <p class="mb-0"><%= election.description %></p>
+</section><% } %>
+
+<section class="card">
+  <h2>How to vote</h2>
+  <ol class="how">
+    <li><span class="n">1</span><div><strong>Enter your code</strong><span class="t">Use the personal code from your invitation email.</span></div></li>
+    <li><span class="n">2</span><div><strong>Make your choices</strong><span class="t">For each contested post, tap one candidate or choose to abstain.</span></div></li>
+    <li><span class="n">3</span><div><strong>Review and submit</strong><span class="t">Check your choices, then submit. Your ballot can be submitted only once.</span></div></li>
+  </ol>
 </section>
 
 <% if (unopposed.length) { %>
@@ -41,21 +60,12 @@
   <% unopposed.forEach(function (p) { %>
     <div class="unopposed-card">
       <%- include('../partials/photo', { cand: p.unopposedCandidate, cls: 'photo' }) %>
-      <div><strong><%= p.unopposedCandidate.full_name %></strong> is elected unopposed as <%= p.title %><% if (p.unopposedCandidate.batch) { %><div class="small muted"><%= p.unopposedCandidate.batch %></div><% } %></div>
+      <div><strong><%= p.unopposedCandidate.full_name %></strong><div class="small muted"><%= p.title %><% if (p.unopposedCandidate.batch) { %> · <%= p.unopposedCandidate.batch %><% } %></div><span class="badge success">Elected unopposed</span></div>
     </div>
   <% }) %>
   </div>
 </section>
 <% } %>
 
-<div class="mt-2"><%- include('../partials/turnout', { turnout }) %></div>
-
-<section class="card">
-  <h2>How to vote</h2>
-  <ol class="mb-0">
-    <li>Enter the personal voting code from your invitation email.</li>
-    <li>For each contested post, select one candidate or choose to abstain.</li>
-    <li>Review your choices, then submit. Your ballot can be submitted only once.</li>
-  </ol>
-</section>
+<%- include('../partials/turnout', { turnout }) %>
 <%- include('../partials/public-bottom') %>

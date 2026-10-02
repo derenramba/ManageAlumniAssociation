@@ -2,23 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b5ea8">
 <title><%= typeof title !== 'undefined' ? title + ' | ' : '' %>MANAGE Alumni Association Election</title>
-<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="icon" href="/static/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/static/img/logo.png">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/voter.js" defer></script>
 </head>
 <body>
 <a class="sr-only" href="#main">Skip to content</a>
-<% if (election && election.is_demo) { %><div class="demo-banner" role="note">DEMONSTRATION ELECTION — sample data for testing only</div><% } %>
+<% if (election && election.is_demo) { %><div class="demo-banner" role="note">DEMONSTRATION ELECTION: sample data for testing only</div><% } %>
 <header class="pub-header">
   <div class="inner">
-    <img src="/static/img/emblem.svg" alt="" width="44" height="44">
-    <div>
-      <div class="org">MANAGE Alumni Association</div>
-      <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
-    </div>
+    <a href="/">
+      <img src="/static/img/logo.png" alt="MANAGE Alumni Association logo" width="52" height="52">
+      <div>
+        <div class="org">MANAGE Alumni Association</div>
+        <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
+      </div>
+    </a>
   </div>
 </header>
 <main id="main" class="pub-main">

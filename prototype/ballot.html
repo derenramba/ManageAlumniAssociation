@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b5ea8">
 <title>Your ballot | MANAGE Alumni Association Election</title>
-<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="icon" href="/static/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/static/img/logo.png">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/voter.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
@@ -13,23 +15,32 @@
 <body>
 <div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 <a class="sr-only" href="#main">Skip to content</a>
-<div class="demo-banner" role="note">DEMONSTRATION ELECTION, sample data for testing only</div>
+<div class="demo-banner" role="note">DEMONSTRATION ELECTION: sample data for testing only</div>
 <header class="pub-header">
   <div class="inner">
-    <img src="/static/img/emblem.svg" alt="" width="44" height="44">
-    <div>
-      <div class="org">MANAGE Alumni Association</div>
-      <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
-    </div>
+    <a href="/">
+      <img src="/static/img/logo.png" alt="MANAGE Alumni Association logo" width="52" height="52">
+      <div>
+        <div class="org">MANAGE Alumni Association</div>
+        <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
+      </div>
+    </a>
   </div>
 </header>
 <main id="main" class="pub-main">
 
-<div class="row between mb-1">
-  <h1 class="mb-0">Your ballot</h1>
-  <form method="post" action="/exit" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn ghost small" type="submit">Exit without voting</button></form>
+
+<ol class="steps" aria-label="Voting progress">
+  <li class="done">Enter code</li><li class="current" aria-current="step">Choose</li><li class="">Review</li><li class="">Done</li>
+</ol>
+
+<div class="ballot-intro">
+  <div class="row between">
+    <h1 class="mb-0">Your ballot</h1>
+    <form method="post" action="/exit" class="inline-form"><input type="hidden" name="_csrf" value=""><button class="btn ghost small" type="submit">Exit</button></form>
+  </div>
+  <p class="muted mt-1">For each post, tap <strong>one candidate</strong> or choose <strong>Abstain</strong>. Nothing is submitted until you confirm on the next screen.</p>
 </div>
-<p class="muted">MANAGE Alumni Association Election 2026 (Demo). For each contested post, select <strong>one candidate</strong> or choose <strong>Abstain</strong>. You will be able to review your choices before submitting.</p>
 
 
 <div class="alert error" role="alert" id="incomplete-msg" hidden><div><p>Please make a choice for every contested position. Choosing “Abstain for this post” counts as a choice.</p></div></div>
@@ -37,18 +48,18 @@
 
 <form method="post" action="/ballot" id="ballot-form" novalidate>
   <input type="hidden" name="_csrf" value="">
-  <div class="ballot-progress" aria-live="polite">
-    <div class="label"><span id="progress-label">0 of 4 contested positions completed</span></div>
-    <div class="progress"><span id="progress-bar" style="width: 0%"></span></div>
-  </div>
 
   
     
-    <fieldset class="position" data-position="1" id="pos-1" style="border:0;padding:0;margin:0 0 1.75rem">
+    <fieldset class="position" data-position="1" id="pos-1">
       <legend class="sr-only">President</legend>
       <header>
-        <h2 aria-hidden="true">President</h2>
-        <div class="muted small">Select one candidate, or abstain.</div>
+        <div>
+          <div class="post-no">Post 1 of 4</div>
+          <h2 aria-hidden="true">President</h2>
+          
+        </div>
+        <span class="chip" data-chip>Choose one</span>
       </header>
       <p class="position-error" role="alert">Please select a candidate or choose to abstain for President.</p>
       <div class="choices multi">
@@ -106,11 +117,15 @@
     
   
     
-    <fieldset class="position" data-position="2" id="pos-2" style="border:0;padding:0;margin:0 0 1.75rem">
+    <fieldset class="position" data-position="2" id="pos-2">
       <legend class="sr-only">Vice President</legend>
       <header>
-        <h2 aria-hidden="true">Vice President</h2>
-        <div class="muted small">Select one candidate, or abstain.</div>
+        <div>
+          <div class="post-no">Post 2 of 4</div>
+          <h2 aria-hidden="true">Vice President</h2>
+          
+        </div>
+        <span class="chip" data-chip>Choose one</span>
       </header>
       <p class="position-error" role="alert">Please select a candidate or choose to abstain for Vice President.</p>
       <div class="choices multi">
@@ -155,11 +170,15 @@
     
   
     
-    <fieldset class="position" data-position="3" id="pos-3" style="border:0;padding:0;margin:0 0 1.75rem">
+    <fieldset class="position" data-position="3" id="pos-3">
       <legend class="sr-only">General Secretary</legend>
       <header>
-        <h2 aria-hidden="true">General Secretary</h2>
-        <div class="muted small">Select one candidate, or abstain.</div>
+        <div>
+          <div class="post-no">Post 3 of 4</div>
+          <h2 aria-hidden="true">General Secretary</h2>
+          
+        </div>
+        <span class="chip" data-chip>Choose one</span>
       </header>
       <p class="position-error" role="alert">Please select a candidate or choose to abstain for General Secretary.</p>
       <div class="choices multi">
@@ -217,11 +236,15 @@
     
   
     
-    <fieldset class="position" data-position="4" id="pos-4" style="border:0;padding:0;margin:0 0 1.75rem">
+    <fieldset class="position" data-position="4" id="pos-4">
       <legend class="sr-only">Joint Secretary</legend>
       <header>
-        <h2 aria-hidden="true">Joint Secretary</h2>
-        <div class="muted small">Select one candidate, or abstain.</div>
+        <div>
+          <div class="post-no">Post 4 of 4</div>
+          <h2 aria-hidden="true">Joint Secretary</h2>
+          
+        </div>
+        <span class="chip" data-chip>Choose one</span>
       </header>
       <p class="position-error" role="alert">Please select a candidate or choose to abstain for Joint Secretary.</p>
       <div class="choices multi">
@@ -266,34 +289,40 @@
     
   
     
-    <section class="position" aria-label="Treasurer (unopposed)">
-      <header><h2>Treasurer</h2><div class="muted small">Declared elected unopposed, for information only, no vote needed.</div></header>
+    <section class="position info" aria-label="Treasurer (unopposed)">
+      <header><div><div class="post-no">For information</div><h2>Treasurer</h2></div><span class="chip">No vote needed</span></header>
       <div class="unopposed-card">
         
 <span class="photo photo-ph" aria-hidden="true">MG</span>
 
-        <div><strong>Dr. Meena Gupta</strong> is elected unopposed as Treasurer<div class="small muted">PGDAEM 2004</div></div>
+        <div><strong>Dr. Meena Gupta</strong><div class="small muted">PGDAEM 2004</div><span class="badge success">Elected unopposed</span></div>
       </div>
     </section>
     
   
 
-  <button type="submit" id="review-btn" class="btn large block">Review my choices</button>
-  <p class="small muted center mt-1">Nothing is submitted yet. You will confirm on the next screen.</p>
+  <div class="action-bar" aria-live="polite">
+    <div class="bar-top"><span id="progress-label"><strong>0 of 4</strong> posts completed</span><span class="small muted">Not submitted yet</span></div>
+    <div class="progress"><span id="progress-bar" style="width: 0%"></span></div>
+    <button type="submit" id="review-btn" class="btn large block">Review my choices →</button>
+  </div>
 </form>
 
 </main>
 <footer class="pub-footer">
   <div class="inner">
     
-      <strong>Need help?</strong>
+    <div class="help">
+      <span class="help-ic" aria-hidden="true">?</span>
       <div>
+        <strong>Need help with voting?</strong><br>
         MANAGE Alumni Association Election Committee<br>
-        Email: <a href="mailto:elections@example.org">elections@example.org</a><br>
-        Phone: <a href="tel:+914000000000">+91 40 0000 0000</a>
+        Email <a href="mailto:elections@example.org">elections@example.org</a><br>
+        Call <a href="tel:+914000000000">+91 40 0000 0000</a>
       </div>
+    </div>
     
-    <p class="small muted mt-2 mb-0">© MANAGE Alumni Association · National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
+    <p class="small muted mb-0">© MANAGE Alumni Association, National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
   </div>
 </footer>
 </body>

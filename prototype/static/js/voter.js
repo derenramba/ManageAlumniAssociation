@@ -1,29 +1,46 @@
 (function () {
   'use strict';
 
-  // ----- Ballot progress & selected state -----
+  // ----- Ballot progress, selected state and guided scrolling -----
   var form = document.getElementById('ballot-form');
   if (form) {
-    var positions = form.querySelectorAll('[data-position]');
+    var positions = Array.prototype.slice.call(form.querySelectorAll('[data-position]'));
     var label = document.getElementById('progress-label');
     var bar = document.getElementById('progress-bar');
     var total = positions.length;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var update = function () {
       var done = 0;
       positions.forEach(function (p) {
         var checked = p.querySelector('input[type=radio]:checked');
         if (checked) { done++; p.classList.remove('has-error'); }
+        p.classList.toggle('answered', !!checked);
+        var chip = p.querySelector('[data-chip]');
+        if (chip) chip.textContent = checked ? '✓ Done' : 'Choose one';
         p.querySelectorAll('.choice').forEach(function (c) {
           var input = c.querySelector('input');
           c.classList.toggle('is-checked', !!(input && input.checked));
         });
       });
-      if (label) label.textContent = done + ' of ' + total + ' contested position' + (total === 1 ? '' : 's') + ' completed';
+      if (label) label.innerHTML = '<strong>' + done + ' of ' + total + '</strong> posts completed';
       if (bar) bar.style.width = (total ? (done / total) * 100 : 0) + '%';
       var btn = document.getElementById('review-btn');
-      if (btn) btn.setAttribute('aria-describedby', 'progress-label');
+      if (btn) btn.textContent = done === total ? 'Review my choices →' : 'Review my choices (' + done + '/' + total + ')';
+      return done;
     };
-    form.addEventListener('change', update);
+    form.addEventListener('change', function (ev) {
+      var pos = ev.target.closest('[data-position]');
+      var wasAnswered = pos && pos.dataset.seen === '1';
+      if (pos) pos.dataset.seen = '1';
+      update();
+      // After the first answer for a post, bring the next unanswered post into view.
+      if (pos && !wasAnswered) {
+        var next = positions.filter(function (p) { return !p.querySelector('input[type=radio]:checked'); })[0];
+        var target = next || document.getElementById('review-btn');
+        if (target) setTimeout(function () { target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: next ? 'start' : 'center' }); }, 250);
+      }
+    });
+    positions.forEach(function (p) { if (p.querySelector('input[type=radio]:checked')) p.dataset.seen = '1'; });
     update();
     form.addEventListener('submit', function (ev) {
       var firstMissing = null;
@@ -37,7 +54,7 @@
         ev.preventDefault();
         var msg = document.getElementById('incomplete-msg');
         if (msg) msg.hidden = false;
-        firstMissing.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        firstMissing.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
         var r = firstMissing.querySelector('input[type=radio]');
         if (r) r.focus({ preventScroll: true });
       }

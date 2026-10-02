@@ -104,19 +104,19 @@ function renderInvitation(e, voter, code) {
   ].join('\n');
 
   const para = (s) => String(s).split(/\n{2,}/).map((x) => `<p style="margin:0 0 16px">${escapeHtml(x).replace(/\n/g, '<br>')}</p>`).join('');
-  const html = `<!doctype html><html><body style="margin:0;padding:0;background:#f3f5f4;font-family:'Times New Roman',Times,serif;color:#1d2b25">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f5f4;padding:24px 12px"><tr><td align="center">
+  const html = `<!doctype html><html><body style="margin:0;padding:0;background:#f4f7fa;font-family:'Times New Roman',Times,serif;color:#17212b">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7fa;padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;border:1px solid #dfe5e2">
-<tr><td style="background:#14532d;color:#ffffff;padding:20px 28px;border-radius:8px 8px 0 0">
-<div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;opacity:.85">MANAGE Alumni Association</div>
-<div style="font-size:20px;font-weight:bold;margin-top:4px">${escapeHtml(e.name)}</div></td></tr>
+<tr><td style="background:#ffffff;padding:20px 28px;border-radius:8px 8px 0 0;border-bottom:4px solid #6aad3d" align="center">
+<img src="${escapeHtml(config.publicBaseUrl)}/static/img/logo.png" width="96" height="96" alt="MANAGE Alumni Association" style="display:block;margin:0 auto 8px">
+<div style="font-size:20px;font-weight:bold;color:#0b5ea8">${escapeHtml(e.name)}</div></td></tr>
 <tr><td style="padding:28px;font-size:16px;line-height:1.55">
 <p style="margin:0 0 16px">Dear ${escapeHtml(vars.first_name)},</p>
 ${para(intro)}
 <p style="margin:0 0 8px">You can vote using the following link:</p>
-<p style="margin:0 0 20px"><a href="${escapeHtml(vars.voting_link)}" style="display:inline-block;background:#14532d;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:6px;font-weight:bold">Go to the voting website</a><br><span style="font-size:13px;color:#4b5b54">${escapeHtml(vars.voting_link)}</span></p>
+<p style="margin:0 0 20px"><a href="${escapeHtml(vars.voting_link)}" style="display:inline-block;background:#0b5ea8;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:6px;font-weight:bold">Go to the voting website</a><br><span style="font-size:13px;color:#4b5b54">${escapeHtml(vars.voting_link)}</span></p>
 <p style="margin:0 0 8px">Your personal voting code is:</p>
-<p style="margin:0 0 20px;font-family:'Times New Roman',Times,serif;font-size:24px;font-weight:bold;letter-spacing:.08em;background:#f0f6f2;border:1px dashed #14532d;padding:14px;text-align:center">${escapeHtml(vars.voting_code)}</p>
+<p style="margin:0 0 20px;font-family:'Times New Roman',Times,serif;font-size:24px;font-weight:bold;letter-spacing:.08em;background:#eaf3fb;border:1px dashed #0b5ea8;padding:14px;text-align:center">${escapeHtml(vars.voting_code)}</p>
 <p style="margin:0 0 4px">Voting is open from:</p><p style="margin:0 0 12px"><strong>${escapeHtml(vars.opening_date)}</strong></p>
 <p style="margin:0 0 4px">until:</p><p style="margin:0 0 20px"><strong>${escapeHtml(vars.closing_date)}</strong></p>
 ${para(instructions)}

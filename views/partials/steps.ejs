@@ -1,0 +1,4 @@
+<% const _steps = ['Enter code', 'Choose', 'Review', 'Done']; %>
+<ol class="steps" aria-label="Voting progress">
+  <% _steps.forEach(function (s, i) { %><li class="<%= i < step ? 'done' : i === step ? 'current' : '' %>"<%- i === step ? ' aria-current="step"' : '' %>><%= s %></li><% }) %>
+</ol>

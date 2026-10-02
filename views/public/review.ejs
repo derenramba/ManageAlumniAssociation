@@ -1,6 +1,7 @@
 <%- include('../partials/public-top') %>
+<%- include('../partials/steps', { step: 2 }) %>
 <h1>Review your choices</h1>
-<p class="muted"><%= election.name %></p>
+<p class="muted"><%= election.name %>. Please check each choice carefully.</p>
 
 <% if (error) { %><div class="alert error" role="alert"><div><p><%= error %></p></div></div><% } %>
 
@@ -8,24 +9,29 @@
   <ul class="review-list">
   <% contested.forEach(function (p) { const sel = selections[p.id]; const cand = sel && sel !== 'abstain' ? p.candidates.find(c => String(c.id) === String(sel)) : null; %>
     <li>
-      <span class="pos"><%= p.title %></span>
-      <% if (cand) { %><span class="sel"><%= cand.full_name %></span><% } else { %><span class="sel abstain">Abstain</span><% } %>
+      <div>
+        <span class="pos"><%= p.title %></span>
+        <% if (cand) { %><span class="sel"><%= cand.full_name %></span><% } else { %><span class="sel abstain">Abstain</span><% } %>
+      </div>
+      <a class="change" href="/ballot#pos-<%= p.id %>">Change</a>
     </li>
   <% }) %>
   <% unopposed.forEach(function (p) { if (!p.unopposedCandidate) return; %>
-    <li><span class="pos"><%= p.title %></span><span class="muted"><%= p.unopposedCandidate.full_name %>, elected unopposed</span></li>
+    <li><div><span class="pos"><%= p.title %></span><span class="sel" style="font-weight:400"><%= p.unopposedCandidate.full_name %></span></div><span class="badge success">Unopposed</span></li>
   <% }) %>
   </ul>
 </section>
 
-<p class="final-note mt-2">Once submitted, your choices cannot be changed.</p>
+<p class="final-note">Once submitted, your choices cannot be changed.</p>
 
-<div class="button-row mt-2">
-  <a class="btn secondary large" href="/ballot">Edit choices</a>
-  <form method="post" action="/ballot/submit" data-once style="flex:1 1 200px;display:flex">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-    <input type="hidden" name="submission_token" value="<%= submissionToken %>">
-    <button type="submit" class="btn large block" data-busy="Submitting your vote…" data-label="Submit my vote">Submit my vote</button>
-  </form>
+<div class="action-bar">
+  <div class="row-btns">
+    <a class="btn secondary large" href="/ballot">Edit</a>
+    <form method="post" action="/ballot/submit" data-once style="flex:2;display:flex">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="submission_token" value="<%= submissionToken %>">
+      <button type="submit" class="btn large block" data-busy="Submitting…" data-label="Submit my vote">Submit my vote</button>
+    </form>
+  </div>
 </div>
 <%- include('../partials/public-bottom') %>

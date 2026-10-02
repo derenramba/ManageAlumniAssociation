@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b5ea8">
 <title>MANAGE Alumni Association Election 2026 (Demo) | MANAGE Alumni Association Election</title>
-<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="icon" href="/static/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/static/img/logo.png">
 <link rel="stylesheet" href="/static/css/app.css">
 <script src="/static/js/voter.js" defer></script>
 <script src="/static/js/prototype.js" defer></script>
@@ -13,45 +15,64 @@
 <body>
 <div class="proto-banner" role="note">PROTOTYPE: front end preview with dummy data. Nothing you enter is saved.</div>
 <a class="sr-only" href="#main">Skip to content</a>
-<div class="demo-banner" role="note">DEMONSTRATION ELECTION, sample data for testing only</div>
+<div class="demo-banner" role="note">DEMONSTRATION ELECTION: sample data for testing only</div>
 <header class="pub-header">
   <div class="inner">
-    <img src="/static/img/emblem.svg" alt="" width="44" height="44">
-    <div>
-      <div class="org">MANAGE Alumni Association</div>
-      <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
-    </div>
+    <a href="/">
+      <img src="/static/img/logo.png" alt="MANAGE Alumni Association logo" width="52" height="52">
+      <div>
+        <div class="org">MANAGE Alumni Association</div>
+        <div class="sub">National Institute of Agricultural Extension Management, Hyderabad</div>
+      </div>
+    </a>
   </div>
 </header>
 <main id="main" class="pub-main">
 
 
-<section class="hero card">
-  <span class="status-pill open">Election status: Open</span>
-  <h1 class="mt-2">Welcome to the MANAGE Alumni Association Election</h1>
+<section class="card hero">
+  <img class="hero-logo" src="/static/img/logo.png" alt="" width="120" height="120">
+  <span class="status-pill open">Voting is open</span>
+  <h1>Welcome to the MANAGE Alumni Association Election</h1>
   <div class="term">MANAGE Alumni Association Election 2026 (Demo) · Term 2026 to 2028</div>
-  <p>Help choose the next team for our alumni association. Enter your personal voting code to vote for the contested positions. Posts already declared elected unopposed are shown for information. Please review your choices before submitting, as your ballot can be submitted only once.</p>
   <dl class="dates">
-    <div><dt>Voting opens</dt><dd>1 October 2026, 12:53 AM IST</dd></div>
-    <div><dt>Voting closes</dt><dd>9 October 2026, 12:53 AM IST</dd></div>
+    <div><dt>Voting opens</dt><dd>1 October 2026, 1:00 AM IST</dd></div>
+    <div><dt>Voting closes</dt><dd>9 October 2026, 1:00 AM IST</dd></div>
   </dl>
+</section>
 
+
+<section class="card code-card" aria-labelledby="code-h">
+  <h2 id="code-h">Enter your voting code</h2>
+  <p class="muted">You will find your personal code in your invitation email.</p>
   
     <div class="alert error" role="alert" id="code-error"><div><p>The voting code you entered is not valid. Please check the code and try again.</p></div></div>
   
+  <form method="post" action="/vote" class="code-entry" data-once autocomplete="off" novalidate>
+    <input type="hidden" name="_csrf" value="">
+    <div class="field">
+      <label for="code" class="sr-only">Voting code</label>
+      <input class="code-input" type="text" id="code" name="code" inputmode="text" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false"
+             placeholder="XXXX XXXX XXXX XXXX" maxlength="40" required value="AAAA BBBB CCCC DDDD" aria-describedby="code-error" aria-invalid="true">
+      <div class="hint center">Tip: copy the code from the email and paste it here.</div>
+    </div>
+    <button type="submit" class="btn large block" data-busy="Checking your code…">Enter to vote →</button>
+  </form>
+</section>
 
-  
-    <form method="post" action="/vote" class="code-entry" data-once autocomplete="off" novalidate>
-      <input type="hidden" name="_csrf" value="">
-      <div class="field">
-        <label for="code">Enter your personal voting code</label>
-        <input class="code-input" type="text" id="code" name="code" inputmode="text" autocapitalize="characters" autocomplete="one-time-code" spellcheck="false"
-               placeholder="XXXX XXXX XXXX XXXX" maxlength="40" required value="AAAA BBBB CCCC DDDD" aria-describedby="code-error" aria-invalid="true">
-        <div class="hint">Your code is in your invitation email. You can paste it. Spaces are optional.</div>
-      </div>
-      <button type="submit" class="btn large block" data-busy="Checking your code…">Enter to vote</button>
-    </form>
-  
+
+<section class="card">
+  <h2>About this election</h2>
+  <p class="mb-0">Help choose the next team for our alumni association. Enter your personal voting code to vote for the contested positions. Posts already declared elected unopposed are shown for information. Please review your choices before submitting, as your ballot can be submitted only once.</p>
+</section>
+
+<section class="card">
+  <h2>How to vote</h2>
+  <ol class="how">
+    <li><span class="n">1</span><div><strong>Enter your code</strong><span class="t">Use the personal code from your invitation email.</span></div></li>
+    <li><span class="n">2</span><div><strong>Make your choices</strong><span class="t">For each contested post, tap one candidate or choose to abstain.</span></div></li>
+    <li><span class="n">3</span><div><strong>Review and submit</strong><span class="t">Check your choices, then submit. Your ballot can be submitted only once.</span></div></li>
+  </ol>
 </section>
 
 
@@ -64,43 +85,37 @@
       
 <span class="photo photo-ph" aria-hidden="true">MG</span>
 
-      <div><strong>Dr. Meena Gupta</strong> is elected unopposed as Treasurer<div class="small muted">PGDAEM 2004</div></div>
+      <div><strong>Dr. Meena Gupta</strong><div class="small muted">Treasurer · PGDAEM 2004</div><span class="badge success">Elected unopposed</span></div>
     </div>
   
   </div>
 </section>
 
 
-<div class="mt-2">
+
 <section class="card" data-live-turnout aria-labelledby="turnout-h">
   <h2 id="turnout-h" class="mb-1">Live turnout</h2>
   <p class="turnout-figure mb-1"><strong data-voted>28</strong> of <strong data-eligible>58</strong> eligible alumni have voted (<strong data-pct>48.3%</strong> turnout)</p>
   <div class="progress" role="progressbar" aria-label="Turnout" aria-valuemin="0" aria-valuemax="100" aria-valuenow="48.3"><span data-bar style="width: 48.3%"></span></div>
-  <p class="small muted mt-1 mb-0">Turnout counts accepted ballots only. Candidate totals are not shown while voting is open.</p>
+  <p class="small muted mt-1 mb-0">Turnout counts submitted ballots only. Candidate totals stay hidden until the results are published.</p>
 </section>
 
-</div>
 
-<section class="card">
-  <h2>How to vote</h2>
-  <ol class="mb-0">
-    <li>Enter the personal voting code from your invitation email.</li>
-    <li>For each contested post, select one candidate or choose to abstain.</li>
-    <li>Review your choices, then submit. Your ballot can be submitted only once.</li>
-  </ol>
-</section>
 </main>
 <footer class="pub-footer">
   <div class="inner">
     
-      <strong>Need help?</strong>
+    <div class="help">
+      <span class="help-ic" aria-hidden="true">?</span>
       <div>
+        <strong>Need help with voting?</strong><br>
         MANAGE Alumni Association Election Committee<br>
-        Email: <a href="mailto:elections@example.org">elections@example.org</a><br>
-        Phone: <a href="tel:+914000000000">+91 40 0000 0000</a>
+        Email <a href="mailto:elections@example.org">elections@example.org</a><br>
+        Call <a href="tel:+914000000000">+91 40 0000 0000</a>
       </div>
+    </div>
     
-    <p class="small muted mt-2 mb-0">© MANAGE Alumni Association · National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
+    <p class="small muted mb-0">© MANAGE Alumni Association, National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
   </div>
 </footer>
 </body>
