@@ -1,0 +1,6 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Results</h1></div></div>
+<div class="alert info"><div><strong>Results are available after the election closes.</strong> Candidate totals are deliberately hidden while voting is in progress. Current status: <%= statusInfo(election).label %>.</div></div>
+<% if (can('view_turnout')) { %><a class="btn secondary" href="/admin/turnout">View turnout</a><% } %>
+<% if (can('export_individual_votes')) { %><p class="mt-2"><a href="/admin/records/export.xlsx">Export individual voting records (confidential)</a></p><% } %>
+<%- include('../partials/admin-bottom') %>

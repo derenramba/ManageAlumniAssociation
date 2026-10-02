@@ -1,0 +1,20 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1><%= v.full_name %></h1><p class="mono"><%= v.voter_ref %> · <%= v.email || 'no email' %> · <%= v.batch || '' %></p></div><a class="btn secondary" href="/admin/records">Back to voting records</a></div>
+<% if (!ballot) { %>
+  <div class="alert info"><div>Status: <strong>Not voted</strong>. This voter has not submitted a ballot.</div></div>
+<% } else { %>
+<section class="card" style="max-width:760px">
+  <div class="card-header"><div><p class="mb-0">Status: <span class="badge success dot">Voted</span></p><p class="mb-0">Submitted: <strong><%= fmt(ballot.submitted_at) %></strong></p><p class="small muted mb-0">Receipt <span class="mono"><%= ballot.receipt %></span></p></div><span class="ballot-locked">Submitted ballot — locked</span></div>
+  <h2>Submitted Ballot</h2>
+  <ul class="review-list">
+    <% ballot.choices.forEach(function (c) { %><li><span class="pos"><%= c.position_title %></span><% if (c.candidate_id) { %><span class="sel"><%= c.candidate_name %></span><% } else { %><span class="sel abstain">Abstain</span><% } %></li><% }) %>
+    <% unopposed.forEach(function (p) { if (!p.unopposedCandidate) return; %><li><span class="pos"><%= p.title %></span><span class="muted"><%= p.unopposedCandidate.full_name %> — elected unopposed (not voted on)</span></li><% }) %>
+  </ul>
+  <p class="small muted mt-2 mb-0">This ballot is view-only. Submitted ballots cannot be modified, deleted or reset through this platform. Your viewing of this ballot has been recorded in the audit log.</p>
+</section>
+<% } %>
+<% if (accessHistory.length) { %>
+<section class="card mt-2" style="max-width:760px"><h2>Access history for this ballot</h2>
+  <ul class="mb-0 small"><% accessHistory.forEach(function (a) { %><li><%= fmtShort(a.at) %> — <%= a.action %></li><% }) %></ul></section>
+<% } %>
+<%- include('../partials/admin-bottom') %>

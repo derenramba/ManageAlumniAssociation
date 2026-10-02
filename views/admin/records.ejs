@@ -1,0 +1,20 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Voting records</h1><p><%= t.voted %> of <%= t.eligible %> eligible voters have voted (<%= t.pctLabel %>).<% if (can('view_individual_votes')) { %> Opening a submitted ballot is recorded in the audit log.<% } %></p></div>
+  <% if (can('export_individual_votes')) { %><a class="btn danger secondary" href="/admin/records/export.xlsx">Export confidential records</a><% } %></div>
+<form method="get" class="filters" role="search">
+  <div class="field search"><label for="q">Search voter</label><input type="search" id="q" name="q" value="<%= q.q %>"></div>
+  <div class="field"><label for="vote">Status</label><select id="vote" name="vote"><option value="">All</option><option value="voted" <%= q.vote === 'voted' ? 'selected' : '' %>>Voted</option><option value="not_voted" <%= q.vote === 'not_voted' ? 'selected' : '' %>>Not voted</option></select></div>
+  <button class="btn secondary" type="submit">Filter</button>
+</form>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Voter</th><th>Email</th><th>Batch</th><th>Status</th><th>Submitted at</th><th>Ballot</th></tr></thead>
+  <tbody>
+  <% rows.forEach(function (v) { %>
+    <tr><td><strong><%= v.full_name %></strong><div class="small muted mono"><%= v.voter_ref %></div></td><td class="small"><%= v.email || '—' %></td><td class="small"><%= v.batch || '—' %></td>
+      <td><%- include('../partials/voter-badges', { v, which: 'vote' }) %></td><td class="small nowrap"><%= v.submitted_at ? fmtShort(v.submitted_at) : '—' %></td>
+      <td><% if (v.ballot_id && can('view_individual_votes')) { %><a class="btn small" href="/admin/records/<%= v.id %>">View ballot</a><% } else if (v.ballot_id) { %><span class="small muted">Restricted</span><% } else { %>—<% } %></td></tr>
+  <% }) %>
+  <% if (!rows.length) { %><tr><td colspan="6" class="muted">No records.</td></tr><% } %>
+  </tbody></table></div>
+<%- include('../partials/pager') %>
+<%- include('../partials/admin-bottom') %>

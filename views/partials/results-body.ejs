@@ -1,0 +1,24 @@
+<% if (!r.reconciled) { %><div class="alert error" role="alert"><div><strong>Reconciliation warning.</strong><ul class="mb-0"><% r.warnings.forEach(function (w) { %><li><%= w %></li><% }) %></ul></div></div>
+<% } else { %><div class="alert success"><div>All contested positions reconcile: candidate votes + abstentions = <%= r.ballots %> accepted ballots.</div></div><% } %>
+<% r.positions.forEach(function (p) { %>
+<section class="card">
+  <div class="card-header"><h2><%= p.title %></h2>
+    <% if (p.unopposed) { %><span class="badge info">Unopposed</span><% } else if (p.tie) { %><span class="badge warning">Tie detected — administrator review required</span><% } else if (p.reconciled) { %><span class="badge success">Reconciled</span><% } else { %><span class="badge error">Does not reconcile</span><% } %></div>
+  <% if (p.unopposed) { %>
+    <p class="mb-0"><% if (p.unopposedCandidate) { %><strong><%= p.unopposedCandidate.full_name %></strong> — Elected unopposed as <%= p.title %><% } else { %>No candidate declared.<% } %></p>
+  <% } else { %>
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Candidate</th><th class="num">Votes</th><th class="num">Share</th><th>Outcome</th></tr></thead>
+      <tbody>
+      <% p.rows.forEach(function (c) { const lead = p.leaders.some(l => l.id === c.id); %>
+        <tr><td><strong><%= c.name %></strong><% if (c.batch) { %> <span class="small muted"><%= c.batch %></span><% } %><% if (c.status && c.status !== 'approved') { %> <span class="badge warning"><%= c.status %></span><% } %></td>
+          <td class="num"><strong><%= c.votes.toLocaleString('en-IN') %></strong></td><td class="num"><%= c.pct.toFixed(1) %>%</td>
+          <td><% if (p.tie && lead) { %><span class="badge warning">Tied for highest</span><% } else if (p.winner && p.winner.id === c.id) { %><span class="badge success">Highest total</span><% } %></td></tr>
+      <% }) %>
+        <tr><td class="muted">Abstain</td><td class="num"><%= p.abstain.toLocaleString('en-IN') %></td><td class="num"><%= p.abstainPct.toFixed(1) %>%</td><td></td></tr>
+        <tr><td><strong>Total</strong></td><td class="num"><strong><%= p.total.toLocaleString('en-IN') %></strong></td><td class="num small muted">ballots: <%= r.ballots %></td><td></td></tr>
+      </tbody></table></div>
+    <% if (p.tie) { %><div class="alert warning mt-1 mb-0"><div><strong>Tie detected — administrator review required.</strong> The platform does not choose a winner automatically when the highest totals are equal.</div></div><% } %>
+  <% } %>
+</section>
+<% }) %>

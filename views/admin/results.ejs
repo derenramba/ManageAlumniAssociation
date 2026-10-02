@@ -1,0 +1,26 @@
+<%- include('../partials/admin-top') %>
+<% const si = statusInfo(election); %>
+<div class="page-head"><div><h1>Results</h1><p><%= election.name %> · <span class="badge dot <%= si.tone %>"><%= si.label %></span><% if (election.status !== 'published') { %> · <strong>Not yet public</strong><% } else { %> · Published <%= fmt(election.published_at) %><% } %></p></div>
+  <div class="row no-print">
+  <% if (can('publish_results') && ['closed','results_review'].includes(election.status)) { %><a class="btn" href="/admin/results/publish">Publish Results…</a><% } %></div></div>
+<div class="stats">
+  <div class="stat"><div class="k">Eligible voters</div><div class="v"><%= r.turnout.eligible.toLocaleString('en-IN') %></div></div>
+  <div class="stat"><div class="k">Accepted ballots</div><div class="v"><%= r.ballots.toLocaleString('en-IN') %></div></div>
+  <div class="stat"><div class="k">Turnout</div><div class="v"><%= r.turnout.pctLabel %></div></div>
+</div>
+<%- include('../partials/results-body') %>
+
+<section class="card mt-2" id="export">
+  <h2>Export</h2>
+  <div class="row">
+    <% if (can('export_results')) { %><a class="btn secondary" href="/admin/results/export.xlsx">Aggregate results (Excel)</a><a class="btn secondary" href="/admin/results/export.csv">Aggregate results (CSV)</a><% } %>
+  </div>
+  <% if (can('export_individual_votes')) { %>
+  <div class="confirm-box danger mt-2">
+    <span class="confidential">Confidential — Individual Voting Records</span>
+    <p class="mt-1">This export links each named voter to their choices. Every export is recorded in the audit log.</p>
+    <div class="row"><a class="btn danger" href="/admin/records/export.xlsx">Export individual records (Excel)</a><a class="btn danger secondary" href="/admin/records/export.csv">Export individual records (CSV)</a></div>
+  </div>
+  <% } %>
+</section>
+<%- include('../partials/admin-bottom') %>

@@ -1,0 +1,17 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>My account</h1><p><%= admin.full_name %> (<%= admin.username %>) · <%= ROLES[admin.role] ? ROLES[admin.role].label : admin.role %></p></div></div>
+<div class="grid-2">
+<section class="card"><h2>Change password</h2>
+  <form method="post" action="/admin/account/password" data-once>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="field"><label for="cur">Current password</label><input type="password" id="cur" name="current" required autocomplete="current-password"></div>
+    <div class="field"><label for="pw">New password</label><input type="password" id="pw" name="password" required minlength="10" autocomplete="new-password"></div>
+    <div class="field"><label for="pw2">Confirm new password</label><input type="password" id="pw2" name="confirm" required minlength="10" autocomplete="new-password"></div>
+    <button class="btn" type="submit">Change password</button>
+  </form>
+</section>
+<section class="card"><h2>My permissions</h2>
+  <ul class="mb-0"><% [...admin.perms].forEach(function (p) { %><li><%= PERMISSIONS[p] %></li><% }) %></ul>
+</section>
+</div>
+<%- include('../partials/admin-bottom') %>

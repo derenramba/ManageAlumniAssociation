@@ -1,0 +1,16 @@
+</main>
+<footer class="pub-footer">
+  <div class="inner">
+    <% if (election) { %>
+      <strong>Need help?</strong>
+      <div>
+        <% if (election.support_name) { %><%= election.support_name %><br><% } %>
+        <% if (election.support_email) { %>Email: <a href="mailto:<%= election.support_email %>"><%= election.support_email %></a><br><% } %>
+        <% if (election.support_phone) { %>Phone: <a href="tel:<%= election.support_phone.replace(/[^+0-9]/g, '') %>"><%= election.support_phone %></a><% } %>
+      </div>
+    <% } %>
+    <p class="small muted mt-2 mb-0">© MANAGE Alumni Association · National Institute of Agricultural Extension Management (MANAGE), Rajendranagar, Hyderabad. All times are Indian Standard Time (IST).</p>
+  </div>
+</footer>
+</body>
+</html>

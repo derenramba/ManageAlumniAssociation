@@ -1,0 +1,7 @@
+<% if (pages > 1) { %>
+<nav class="pager" aria-label="Pagination">
+  <span class="small muted">Page <%= page %> of <%= pages %></span>
+  <% if (page > 1) { %><a class="btn secondary small" href="<%= qs({ page: page - 1 }) %>">← Previous</a><% } %>
+  <% if (page < pages) { %><a class="btn secondary small" href="<%= qs({ page: page + 1 }) %>">Next →</a><% } %>
+</nav>
+<% } %>

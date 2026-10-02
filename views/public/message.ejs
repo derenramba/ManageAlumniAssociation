@@ -1,0 +1,14 @@
+<% if (typeof admin !== 'undefined' && admin && path && path.indexOf('/admin') === 0) { %>
+<%- include('../partials/admin-top') %>
+<div class="card"><div class="alert <%= typeof tone !== 'undefined' ? tone : 'info' %>"><div><p><strong><%= heading %></strong></p><p><%= message %></p></div></div>
+<a class="btn secondary" href="/admin">Back to dashboard</a></div>
+<%- include('../partials/admin-bottom') %>
+<% } else { %>
+<%- include('../partials/public-top') %>
+<section class="card">
+  <h1><%= heading %></h1>
+  <div class="alert <%= typeof tone !== 'undefined' ? tone : 'info' %>" role="<%= tone === 'error' ? 'alert' : 'status' %>"><div><p><%= message %></p></div></div>
+  <% if (typeof action !== 'undefined' && action) { %><a class="btn" href="<%= action.href %>"><%= action.label %></a><% } else { %><a class="btn secondary" href="/">Back to election page</a><% } %>
+</section>
+<%- include('../partials/public-bottom') %>
+<% } %>

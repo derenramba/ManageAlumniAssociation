@@ -1,0 +1,22 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Audit log</h1><p>Append-only record of administrative actions. Entries cannot be edited or deleted.</p></div></div>
+<form method="get" class="filters" role="search">
+  <div class="field search"><label for="q">Search</label><input type="search" id="q" name="q" value="<%= q %>" placeholder="Action, admin, voter…"></div>
+  <div class="field"><label for="category">Category</label><select id="category" name="category"><option value="">All</option><% categories.forEach(function (c) { %><option value="<%= c %>" <%= category === c ? 'selected' : '' %>><%= c === 'ballot_access' ? 'Individual ballot access' : c %></option><% }) %></select></div>
+  <button class="btn secondary" type="submit">Filter</button>
+  <a class="btn ghost" href="?category=ballot_access">Individual ballot access history</a>
+</form>
+<p class="small muted"><%= total %> entr<%= total === 1 ? 'y' : 'ies' %>.</p>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Date/time (IST)</th><th>Admin</th><th>Action</th><th>Record</th><th>Details</th></tr></thead>
+  <tbody>
+  <% rows.forEach(function (r) { %>
+    <tr><td class="small nowrap"><%= fmtShort(r.at) %></td><td class="small"><%= r.admin_name || 'System' %></td>
+      <td><%= r.action %><% if (r.category === 'ballot_access') { %> <span class="badge error">Sensitive</span><% } %></td>
+      <td class="small"><% if (r.entity_type === 'voter' && r.entity_id) { %><a href="/admin/voters/<%= r.entity_id %>"><%= r.entity_label %></a><% } else { %><%= r.entity_label || '' %><% } %></td>
+      <td class="small mono" style="max-width:380px;overflow-wrap:anywhere"><%= r.details || '' %></td></tr>
+  <% }) %>
+  <% if (!rows.length) { %><tr><td colspan="5" class="muted">No entries.</td></tr><% } %>
+  </tbody></table></div>
+<%- include('../partials/pager') %>
+<%- include('../partials/admin-bottom') %>

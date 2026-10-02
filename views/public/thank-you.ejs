@@ -1,0 +1,13 @@
+<%- include('../partials/public-top') %>
+<section class="card center">
+  <div class="success-mark" aria-hidden="true">✓</div>
+  <h1>Thank you for voting</h1>
+  <p class="turnout-figure">Your ballot has been successfully recorded in the <%= election.name %>.</p>
+  <p class="muted small mb-0">Submitted <%= fmt(ballot.submitted_at) %> · Confirmation reference <span class="mono"><%= ballot.receipt %></span></p>
+</section>
+<% if (showTurnout) { %><div class="mt-2"><%- include('../partials/turnout', { turnout }) %></div><% } %>
+<section class="card">
+  <p class="mb-1">Your ballot is final and cannot be changed. Results will be published on this website after the election closes and the results have been reviewed.</p>
+  <form method="post" action="/exit"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn secondary" type="submit">Finish</button></form>
+</section>
+<%- include('../partials/public-bottom') %>

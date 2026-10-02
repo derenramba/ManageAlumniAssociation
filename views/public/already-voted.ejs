@@ -1,0 +1,8 @@
+<%- include('../partials/public-top') %>
+<section class="card">
+  <div class="alert info" role="status"><div><p><strong>A ballot has already been submitted using this code.</strong></p><p>Each voting code can be used to submit only one ballot, and submitted ballots cannot be changed.</p></div></div>
+  <p>If you did not submit this ballot yourself, please contact election support using the details below.</p>
+  <a class="btn secondary" href="/">Back to election page</a>
+</section>
+<div class="mt-2"><%- include('../partials/turnout', { turnout }) %></div>
+<%- include('../partials/public-bottom') %>

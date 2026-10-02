@@ -1,0 +1,68 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Invitations</h1><p>Each eligible voter receives a personalised email with the common voting link and <strong>their own</strong> voting code. Resending always reuses the voter's existing code.</p></div></div>
+<% if (summary.queued) { %><div data-autorefresh="6"></div><% } %>
+<% if (mode !== 'smtp') { %>
+  <div class="alert warning"><div><strong>Outbox mode:</strong> no SMTP server is configured, so emails are stored in the <a href="/admin/invitations/outbox">Email outbox</a> instead of being delivered. Set <code>SMTP_HOST</code>, <code>SMTP_USER</code>, <code>SMTP_PASS</code> and <code>SMTP_FROM</code> to send real email.</div></div>
+<% } %>
+
+<div class="stats">
+  <div class="stat"><div class="k">Ready to send</div><div class="v"><%= counts.unsent %></div><div class="s">eligible · valid email · active code · not yet sent</div></div>
+  <div class="stat"><div class="k">Sent</div><div class="v"><%= summary.sentEver %></div></div>
+  <div class="stat"><div class="k">Queued</div><div class="v"><%= summary.queued %></div></div>
+  <div class="stat"><div class="k">Failed</div><div class="v"><%= summary.failed %></div></div>
+  <div class="stat"><div class="k">No email</div><div class="v"><%= counts.noEmail %></div><div class="s"><a href="/admin/voters?filter=no_email&eligibility=eligible">deliver externally</a></div></div>
+</div>
+
+<% if (counts.noCode) { %><div class="alert warning"><div><%= counts.noCode %> eligible voter(s) do not have a voting code yet. <a href="/admin/codes">Generate codes</a> first.</div></div><% } %>
+<% if (counts.invalidEmail) { %><div class="alert warning"><div><%= counts.invalidEmail %> eligible voter(s) have an invalid email address and will be skipped. <a href="/admin/voters/quality">Review</a>.</div></div><% } %>
+
+<section class="card">
+  <h2>Send</h2>
+  <div class="row">
+    <a class="btn large <%= counts.unsent ? '' : 'disabled' %>" href="/admin/invitations/confirm?mode=unsent" <%= counts.unsent ? '' : 'aria-disabled="true"' %>>Send Invitations (<%= counts.unsent %>)</a>
+    <a class="btn secondary <%= counts.failed ? '' : 'disabled' %>" href="/admin/invitations/confirm?mode=failed">Retry failed (<%= counts.failed %>)</a>
+    <a class="btn ghost" href="/admin/voters">Send / resend to selected voters…</a>
+    <% if (can('manage_codes')) { %><a class="btn ghost" href="/admin/invitations/outbox">Email outbox</a><% } %>
+  </div>
+  <p class="small muted mt-1 mb-0">You will see a confirmation with the exact number of recipients before anything is sent.</p>
+</section>
+
+<div class="grid-2 mt-2">
+<section class="card" id="template">
+  <h2>Email template</h2>
+  <form method="post" action="/admin/invitations/template" data-once>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="field"><label for="email_subject">Subject</label><input type="text" id="email_subject" name="email_subject" value="<%= tpl.email_subject %>"></div>
+    <div class="field"><label for="email_intro">Introduction</label><textarea id="email_intro" name="email_intro" rows="3"><%= tpl.email_intro %></textarea><div class="hint">Shown after “Dear {{first_name}},”. The voting link, personal code and dates are inserted automatically after this.</div></div>
+    <div class="field"><label for="email_instructions">Instructions</label><textarea id="email_instructions" name="email_instructions" rows="6"><%= tpl.email_instructions %></textarea></div>
+    <div class="field"><label for="email_support">Support information</label><textarea id="email_support" name="email_support" rows="3"><%= tpl.email_support %></textarea></div>
+    <div class="field"><label for="email_closing">Closing / signature</label><textarea id="email_closing" name="email_closing" rows="2"><%= tpl.email_closing %></textarea></div>
+    <p class="small var-list">Available variables: <% variables.forEach(function (v) { %><code>{{<%= v %>}}</code> <% }) %></p>
+    <div class="row"><button class="btn" type="submit">Save template</button><button class="btn ghost" type="submit" name="reset" value="yes" data-confirm="Restore the default template text?">Restore default</button></div>
+  </form>
+</section>
+<section class="card">
+  <div class="card-header"><h2>Preview</h2><a class="small" href="/admin/invitations/preview?format=text" target="_blank" rel="noopener">Plain-text version ↗</a></div>
+  <p class="small muted">Preview uses a real voter's name with a sample code. Each voter receives their own code.</p>
+  <iframe class="email-preview" src="/admin/invitations/preview" title="Invitation email preview" sandbox></iframe>
+</section>
+</div>
+
+<section class="card mt-2">
+  <div class="card-header"><h2>Invitation status by voter</h2>
+    <div class="tabs mb-0">
+      <% [['','All'],['not_sent','Not sent'],['queued','Queued'],['sent','Sent'],['failed','Failed']].forEach(function ([v,l]) { %><a href="?status=<%= v %>" class="<%= status === v ? 'active' : '' %>"><%= l %></a><% }) %>
+    </div></div>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Voter</th><th>Email</th><th>Status</th><th>Last attempt</th><th>Sends</th><th>Vote</th></tr></thead>
+    <tbody>
+    <% rows.forEach(function (v) { %>
+      <tr><td><a href="/admin/voters/<%= v.id %>#invite"><%= v.full_name %></a></td><td class="small"><%= v.email || '—' %></td>
+        <td><%- include('../partials/voter-badges', { v, which: 'inv' }) %><% if (v.inv_status === 'failed' && v.inv_error) { %><div class="small muted"><%= v.inv_error %></div><% } %></td>
+        <td class="small nowrap"><%= v.inv_at ? fmtShort(v.inv_at) : '—' %></td><td class="num"><%= v.inv_count %></td><td><%- include('../partials/voter-badges', { v, which: 'vote' }) %></td></tr>
+    <% }) %>
+    <% if (!rows.length) { %><tr><td colspan="6" class="muted">No voters in this view.</td></tr><% } %>
+    </tbody></table></div>
+  <%- include('../partials/pager') %>
+</section>
+<%- include('../partials/admin-bottom') %>

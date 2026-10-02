@@ -1,0 +1,7 @@
+<ul class="checklist">
+<% items.forEach(function (i) { %>
+  <li class="<%= i.level %>"><span class="ic" aria-hidden="true"><%= i.level === 'ok' ? '✓' : '!' %></span>
+    <span class="grow"><%= i.label %><span class="sr-only"> — <%= i.level === 'ok' ? 'done' : i.level %></span></span>
+    <% if (i.level !== 'ok' && i.link) { %><a class="small" href="<%= i.link %>">Fix</a><% } %></li>
+<% }) %>
+</ul>

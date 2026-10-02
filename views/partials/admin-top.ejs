@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="csrf-token" content="<%= csrfToken %>">
+<title><%= typeof title !== 'undefined' ? title + ' — ' : '' %>Election Admin · MANAGE Alumni Association</title>
+<link rel="icon" href="/static/img/emblem.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/app.css">
+<script src="/static/js/admin.js" defer></script>
+</head>
+<body>
+<% const nav = (href, label, perm) => { if (perm && !can(perm)) return ''; const active = href === '/admin' ? path === '/admin' || path === '/admin/' : (path === href || path.indexOf(href + '/') === 0); return `<a href="${href}" class="${active ? 'active' : ''}"${active ? ' aria-current="page"' : ''}>${label}</a>`; }; %>
+<div class="admin-shell">
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a class="brand" href="/admin"><img src="/static/img/emblem.svg" alt=""><div><strong>MANAGE Alumni Association</strong><span>Election administration</span></div></a>
+    <nav>
+      <%- nav('/admin', 'Dashboard') %>
+      <h4>Election</h4>
+      <%- nav('/admin/election', 'Election settings') %>
+      <%- nav('/admin/positions', 'Positions') %>
+      <%- nav('/admin/candidates', 'Candidates') %>
+      <%- nav('/admin/elections', 'All elections') %>
+      <% if (can('manage_voters') || can('manage_codes') || can('view_turnout')) { %><h4>Voters</h4><% } %>
+      <% if (can('manage_voters') || can('manage_codes') || can('view_turnout') || can('send_invitations')) { %><%- nav('/admin/voters', 'Voter register') %><% } %>
+      <%- nav('/admin/import', 'Import voters', 'manage_voters') %>
+      <%- nav('/admin/codes', 'Voting codes', 'manage_codes') %>
+      <% if (can('view_individual_votes') || can('view_turnout')) { %><%- nav('/admin/records', 'Voting records') %><% } %>
+      <% if (can('send_invitations')) { %><h4>Communications</h4><%- nav('/admin/invitations', 'Invitations') %><% } %>
+      <% if (can('view_turnout') || can('view_audit_log')) { %><h4>Monitoring</h4><% } %>
+      <%- nav('/admin/turnout', 'Turnout', 'view_turnout') %>
+      <%- nav('/admin/audit', 'Audit log', 'view_audit_log') %>
+      <% if (can('view_results') || can('export_individual_votes') || can('publish_results')) { %><h4>Results</h4><% } %>
+      <%- nav('/admin/results', 'Results', 'view_results') %>
+      <% if (can('view_individual_votes')) { %><a href="/admin/records?vote=voted" class="<%= path.indexOf('/admin/records/') === 0 ? 'active' : '' %>">Detailed voting records</a><% } %>
+      <% if (can('export_results') || can('export_individual_votes')) { %><a href="/admin/results#export">Export</a><% } %>
+      <%- nav('/admin/results/publish', 'Publish results', 'publish_results') %>
+      <h4>Administration</h4>
+      <%- nav('/admin/users', 'Admin users', 'manage_admins') %>
+      <%- nav('/admin/account', 'My account') %>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <header class="topbar">
+      <div class="row">
+        <button class="btn secondary small menu-toggle" type="button" aria-expanded="false" aria-label="Open navigation">☰ Menu</button>
+        <% if (election) { const si = statusInfo(election); %>
+          <span class="election-name"><%= election.name %></span>
+          <span class="badge dot <%= si.tone %>"><%= si.label %></span>
+          <% if (election.is_demo) { %><span class="badge warning">DEMO DATA</span><% } %>
+        <% } %>
+      </div>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Open voter portal ↗</a>
+        <span class="small muted"><%= admin.full_name %> · <%= ROLES[admin.role] ? ROLES[admin.role].label : admin.role %></span>
+        <form method="post" action="/admin/logout" class="inline-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn secondary small" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <% if (election && election.is_demo) { %><div class="demo-banner">DEMONSTRATION ELECTION — all voters, candidates and ballots here are sample data, not real production data.</div><% } %>
+    <main class="admin-content" id="main">
+      <% flash.forEach(function (f) { %><div class="alert <%= f.type %>" role="<%= f.type === 'error' ? 'alert' : 'status' %>"><div><%= f.message %></div></div><% }) %>

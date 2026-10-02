@@ -1,0 +1,113 @@
+<%- include('../partials/admin-top') %>
+<% const voted = !!v.ballot_id; const closed = ['closed','results_review','published','archived'].includes(election.status); %>
+<div class="page-head">
+  <div><h1><%= v.full_name %></h1><p class="mono"><%= v.voter_ref %></p></div>
+  <div class="row">
+    <% if (voted && can('view_individual_votes')) { %><a class="btn" href="/admin/records/<%= v.id %>">View vote</a><% } %>
+    <% if (can('manage_voters')) { %><a class="btn secondary" href="/admin/voters/<%= v.id %>/edit">Edit details</a><% } %>
+    <a class="btn ghost" href="/admin/voters">Back to register</a>
+  </div>
+</div>
+
+<% if (voted) { %>
+  <div class="alert success"><div><strong>Vote Status: Voted</strong> — submitted <%= fmt(v.submitted_at) %>.<br><span class="ballot-locked mt-1">Ballot already submitted — voting entitlement locked</span></div></div>
+<% } %>
+
+<div class="grid-2">
+<section class="card">
+  <h2>Voter information</h2>
+  <dl class="kv">
+    <dt>Voter ID</dt><dd class="mono"><%= v.voter_ref %></dd>
+    <dt>Full name</dt><dd><%= v.full_name %></dd>
+    <dt>Email</dt><dd><%= v.email || '—' %><% if (!v.email) { %> <span class="badge warning">No email</span><% } %></dd>
+    <dt>Mobile</dt><dd><%= v.mobile || '—' %></dd>
+    <dt>WhatsApp</dt><dd><%= v.whatsapp || '—' %></dd>
+    <dt>Batch / year</dt><dd><%= v.batch || '—' %></dd>
+    <dt>Eligibility</dt><dd><%- include('../partials/voter-badges', { v, which: 'elig' }) %></dd>
+    <dt>Vote status</dt><dd><%- include('../partials/voter-badges', { v, which: 'vote' }) %></dd>
+    <dt>Voting timestamp</dt><dd><%= v.submitted_at ? fmt(v.submitted_at) : '—' %></dd>
+    <% if (v.notes) { %><dt>Notes</dt><dd><%= v.notes %></dd><% } %>
+  </dl>
+  <% if (can('manage_voters') && !voted) { %>
+    <h3 class="mt-3">Eligibility</h3>
+    <form method="post" action="/admin/voters/<%= v.id %>/eligibility" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="row">
+        <select name="eligibility" aria-label="Eligibility" style="max-width:200px"><% ['pending','eligible','ineligible'].forEach(function (o) { %><option value="<%= o %>" <%= v.eligibility === o ? 'selected' : '' %>><%= o %></option><% }) %></select>
+        <% if (listApproved) { %><input type="text" name="amend_reason" placeholder="Reason for amendment (required)" class="grow" style="max-width:340px" aria-label="Reason for amendment"><% } %>
+        <button class="btn secondary" type="submit">Update eligibility</button>
+      </div>
+      <p class="small muted mt-1">Making a voter ineligible immediately revokes any unused voting code.</p>
+    </form>
+    <% if (!listApproved && !v.code_id && !v.inv_status) { %>
+      <form method="post" action="/admin/voters/<%= v.id %>/delete" class="mt-2" data-confirm="Delete this voter record permanently?"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn danger secondary small">Delete voter record</button></form>
+    <% } %>
+  <% } %>
+</section>
+
+<div>
+<section class="card">
+  <h2>Voting code</h2>
+  <p>Status: <%- include('../partials/voter-badges', { v, which: 'code' }) %></p>
+  <% if (v.code_status_raw === 'active' && can('manage_codes')) { %>
+    <p class="row"><span class="code-mask" id="code-<%= v.id %>">••••-••••-••••-••••</span> <button type="button" class="btn secondary small" data-reveal-code="/admin/codes/voter/<%= v.id %>/reveal" data-target="code-<%= v.id %>">Copy</button></p>
+    <p class="small muted">Revealing or copying a code is recorded in the audit log.</p>
+  <% } %>
+  <% if (can('manage_codes') && !voted && !closed) { %>
+    <% if (v.code_status_raw === 'active') { %>
+      <details class="mt-1"><summary class="btn secondary small">Revoke or replace code…</summary>
+        <form method="post" class="mt-1" data-once>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="field"><label for="reason">Reason</label><input type="text" id="reason" name="reason" required placeholder="e.g. Voter reports code was shared"></div>
+          <% if (v.email && can('send_invitations')) { %><label class="check mb-1"><input type="checkbox" name="send_invitation" value="1" checked> <span>Email the new code to <%= v.email %> (replace only)</span></label><% } %>
+          <div class="row">
+            <button class="btn secondary" type="submit" formaction="/admin/codes/voter/<%= v.id %>/replace" data-confirm="Replace this code? The old code will stop working immediately.">Replace code</button>
+            <button class="btn danger secondary" type="submit" formaction="/admin/codes/voter/<%= v.id %>/revoke">Revoke only</button>
+          </div>
+        </form>
+      </details>
+    <% } else if (v.eligibility === 'eligible' && listApproved) { %>
+      <form method="post" action="/admin/codes/voter/<%= v.id %>/<%= v.code_status === 'revoked' ? 'replace' : 'generate' %>" data-once>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="reason" value="Re-issue after revocation">
+        <button class="btn" type="submit"><%= v.code_status === 'revoked' ? 'Issue replacement code' : 'Generate voting code' %></button>
+      </form>
+    <% } %>
+  <% } %>
+  <% if (codeHistory.length) { %>
+    <h3 class="mt-2">Code history</h3>
+    <ul class="small">
+      <% codeHistory.forEach(function (c) { %><li><%= fmtShort(c.created_at) %> — <%= c.status %><%= c.used_at ? ', used ' + fmtShort(c.used_at) : '' %><%= c.revoked_at ? ', revoked ' + fmtShort(c.revoked_at) + (c.revoked_reason ? ' (' + c.revoked_reason + ')' : '') : '' %></li><% }) %>
+    </ul>
+  <% } %>
+</section>
+
+<section class="card" id="invite">
+  <h2>Invitation</h2>
+  <p>Status: <%- include('../partials/voter-badges', { v, which: 'inv' }) %><% if (v.inv_at) { %> <span class="small muted">last attempt <%= fmtShort(v.inv_at) %></span><% } %></p>
+  <% if (v.inv_status === 'failed' && v.inv_error) { %><div class="alert error"><div><%= v.inv_error %></div></div><% } %>
+  <% if (!v.email && !voted) { %><div class="alert warning"><div>This voter has no email address. They remain eligible — add an email, or copy the code and deliver it externally (phone, SMS, WhatsApp, letter).</div></div><% } %>
+  <% if (can('send_invitations') && !voted && !closed && v.email && v.code_status_raw === 'active') { %>
+    <form method="post" action="/admin/invitations/voter/<%= v.id %>/send" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <% if (v.inv_count > 0) { %><label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>Resend the invitation with the <strong>same</strong> voting code to <%= v.email %></span></label><% } %>
+      <button class="btn <%= v.inv_count ? 'secondary' : '' %>" type="submit"><%= v.inv_count ? 'Resend invitation' : 'Send invitation' %></button>
+    </form>
+  <% } %>
+  <% if (invitations.length) { %>
+    <h3 class="mt-2">Send history</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
+    <% invitations.forEach(function (i) { %><tr><td class="small nowrap"><%= fmtShort(i.last_attempt_at || i.created_at) %></td><td class="small"><%= i.kind === 'initial' ? 'First invitation' : i.kind === 'resend' ? 'Resend' : 'Retry' %></td><td><span class="badge <%= i.status === 'failed' ? 'error' : i.status === 'sent' || i.status === 'delivered' ? 'success' : 'info' %>" title="<%= i.error || '' %>"><%= i.status %></span></td><td class="small"><%= i.to_email %></td><td class="small"><%= i.admin_name || 'System' %></td></tr><% }) %>
+    </tbody></table></div>
+  <% } %>
+</section>
+</div>
+</div>
+
+<% if (history.length) { %>
+<section class="card mt-2"><h2>Record history</h2>
+  <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Details</th></tr></thead><tbody>
+  <% history.forEach(function (h) { %><tr><td class="small nowrap"><%= fmtShort(h.at) %></td><td class="small"><%= h.admin_name %></td><td><%= h.action %></td><td class="small mono" style="max-width:420px;overflow-wrap:anywhere"><%= h.details || '' %></td></tr><% }) %>
+  </tbody></table></div>
+</section>
+<% } %>
+<%- include('../partials/admin-bottom') %>

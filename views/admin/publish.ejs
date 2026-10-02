@@ -1,0 +1,26 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Publish results</h1><p>Closing the election and publishing results are separate, deliberate steps. Publishing makes the official results visible on the public website.</p></div><a class="btn secondary" href="/admin/results">Back to results</a></div>
+<% if (election.status === 'published') { %>
+  <div class="alert success"><div>Results were published <%= fmt(election.published_at) %>. <a href="/results" target="_blank" rel="noopener">View public results ↗</a></div></div>
+  <%- include('../partials/status-actions', { back: '/admin/results/publish' }) %>
+<% } else { %>
+  <% if (election.status === 'closed') { %>
+    <div class="alert info"><div>Recommended: begin a formal results review before publishing.</div></div>
+    <%- include('../partials/status-actions', { back: '/admin/results/publish' }) %>
+  <% } %>
+  <% const ties = r.positions.filter(p => p.tie); %>
+  <% if (!r.reconciled) { %><div class="alert error"><div>Results do not reconcile. Investigate before publishing.</div></div><% } %>
+  <% if (ties.length) { %><div class="alert warning"><div>Tie detected for: <%= ties.map(p => p.title).join(', ') %>. The public page will state that a tie requires the committee's decision.</div></div><% } %>
+  <section class="confirm-box mt-2" style="max-width:820px">
+    <h2 class="mt-0">Publish official results?</h2>
+    <p><%= r.ballots %> accepted ballots from <%= r.turnout.eligible %> eligible voters (<%= r.turnout.pctLabel %> turnout). The public page will show winners, <%= election.public_results_show_totals ? 'candidate totals, abstentions, ' : '' %>turnout and unopposed declarations. Individual voting records are never published.</p>
+    <form method="post" action="/admin/election/transition" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="action" value="publish"><input type="hidden" name="back" value="/admin/results/publish">
+      <label class="check mb-2"><input type="checkbox" name="confirm" value="yes" required> <span>I confirm the results have been reviewed and should be published publicly.</span></label>
+      <div class="row"><a class="btn secondary" href="/admin/results">Cancel</a><button class="btn" type="submit">Publish Results</button></div>
+    </form>
+  </section>
+  <h2 class="mt-3">Results to be published</h2>
+  <%- include('../partials/results-body') %>
+<% } %>
+<%- include('../partials/admin-bottom') %>

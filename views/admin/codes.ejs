@@ -1,0 +1,52 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Voting codes</h1><p>One eligible voter = one voting entitlement = one active voting code. Codes are random 16-character values and cannot be derived from voter details.</p></div>
+  <div class="row"><a class="btn secondary" href="/admin/codes/export.csv">Export active codes (CSV)</a><a class="btn secondary" href="/admin/codes/export.csv?filter=no_email">Export codes for voters without email</a></div></div>
+
+<div class="stats">
+  <div class="stat"><div class="k">Eligible voters</div><div class="v"><%= stats.eligible %></div></div>
+  <div class="stat"><div class="k">Not generated</div><div class="v"><%= stats.missing %></div></div>
+  <div class="stat"><div class="k">Active (unused)</div><div class="v"><%= stats.active %></div></div>
+  <div class="stat"><div class="k">Used (voted)</div><div class="v"><%= stats.used %></div></div>
+  <div class="stat"><div class="k">Revoked</div><div class="v"><%= stats.revoked %></div></div>
+</div>
+
+<section class="card mb-2">
+  <% if (!listApproved) { %>
+    <div class="alert warning mb-0"><div>Approve the final eligible voter list in the <a href="/admin/voters">Voter register</a> before generating codes.</div></div>
+  <% } else if (stats.missing) { %>
+    <form method="post" action="/admin/codes/generate" class="row between" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div><strong>Generate codes for <%= stats.missing %> eligible voter(s) without a code.</strong><div class="small muted">Voters who already have a code (or have voted) are never given another one. Safe to run more than once.</div></div>
+      <button class="btn" type="submit">Generate <%= stats.missing %> code(s)</button>
+    </form>
+  <% } else { %>
+    <div class="alert success mb-0"><div>Every eligible voter has exactly one voting code. Next: <a href="/admin/invitations">preview and send invitations</a>.</div></div>
+  <% } %>
+</section>
+
+<form method="get" class="filters" role="search">
+  <div class="field search"><label for="q">Search</label><input type="search" id="q" name="q" value="<%= q.q %>" placeholder="Name, email, voter ID"></div>
+  <div class="field"><label for="code">Code status</label><select id="code" name="code"><option value="">All</option><% [['none','Not generated'],['active','Active'],['used','Used'],['revoked','Revoked']].forEach(function ([v,l]) { %><option value="<%= v %>" <%= q.code === v ? 'selected' : '' %>><%= l %></option><% }) %></select></div>
+  <div class="field"><label for="filter">Contact</label><select id="filter" name="filter"><option value="">All</option><option value="no_email" <%= q.filter === 'no_email' ? 'selected' : '' %>>Missing email</option></select></div>
+  <button class="btn secondary" type="submit">Filter</button>
+</form>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Voter</th><th>Email</th><th>Code</th><th>Status</th><th>Invitation</th><th>Actions</th></tr></thead>
+  <tbody>
+  <% rows.forEach(function (v) { %>
+    <tr>
+      <td><a href="/admin/voters/<%= v.id %>"><%= v.full_name %></a><div class="small muted mono"><%= v.voter_ref %></div></td>
+      <td class="small"><%= v.email || '—' %></td>
+      <td><% if (v.code_status_raw === 'active') { %><span class="code-mask" id="code-<%= v.id %>">••••-••••-••••-<%= v.code.slice(-4) %></span><% } else if (v.code_status_raw === 'used') { %><span class="muted small">used</span><% } else { %>—<% } %></td>
+      <td><%- include('../partials/voter-badges', { v, which: 'code' }) %></td>
+      <td><%- include('../partials/voter-badges', { v, which: 'inv' }) %></td>
+      <td><div class="actions">
+        <% if (v.code_status_raw === 'active') { %><button type="button" class="btn secondary small" data-reveal-code="/admin/codes/voter/<%= v.id %>/reveal" data-target="code-<%= v.id %>">Copy</button><% } %>
+        <a class="btn ghost small" href="/admin/voters/<%= v.id %>">Manage</a>
+      </div></td>
+    </tr>
+  <% }) %>
+  <% if (!rows.length) { %><tr><td colspan="6" class="muted">No voters match.</td></tr><% } %>
+  </tbody></table></div>
+<%- include('../partials/pager') %>
+<%- include('../partials/admin-bottom') %>

@@ -1,0 +1,73 @@
+<%- include('../partials/admin-top') %>
+<% const si = statusInfo(election); %>
+<div class="page-head">
+  <div>
+    <h1><%= election.name %></h1>
+    <p><%= election.term || '' %> · Status: <span class="badge dot <%= si.tone %>"><%= si.label %></span></p>
+  </div>
+  <div class="row">
+    <% if (can('view_turnout')) { %><a class="btn secondary" href="/admin/turnout">Turnout</a><% } %>
+    <% if (can('view_results') && ['closed','results_review','published','archived'].includes(election.status)) { %><a class="btn" href="/admin/results">View results</a><% } %>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="k">Eligible voters</div><div class="v"><%= t.eligible.toLocaleString('en-IN') %></div><div class="s"><%= counts.voters %> on register<%= counts.pending ? ` · ${counts.pending} pending review` : '' %></div></div>
+  <div class="stat"><div class="k">Ballots submitted</div><div class="v"><%= t.voted.toLocaleString('en-IN') %></div><div class="s"><%= t.remaining.toLocaleString('en-IN') %> yet to vote</div></div>
+  <div class="stat"><div class="k">Turnout</div><div class="v"><%= t.pctLabel %></div><div class="progress mt-1"><span style="width: <%= Math.min(100, t.pct).toFixed(1) %>%"></span></div></div>
+  <div class="stat"><div class="k">Invitations sent</div><div class="v"><%= inv.sentEver.toLocaleString('en-IN') %></div><div class="s"><%= inv.queued %> queued · <%= inv.failed %> failed</div></div>
+</div>
+
+<div class="grid-2">
+  <section class="card">
+    <h2>Election timetable</h2>
+    <dl class="kv">
+      <dt>Status</dt><dd><span class="badge dot <%= si.tone %>"><%= si.label %></span></dd>
+      <dt>Voting opens</dt><dd><%= fmt(election.opens_at) %></dd>
+      <dt>Voting closes</dt><dd><%= fmt(election.closes_at) %></dd>
+      <% if (election.opened_at) { %><dt>Actually opened</dt><dd><%= fmt(election.opened_at) %></dd><% } %>
+      <% if (election.closed_at) { %><dt>Closed</dt><dd><%= fmt(election.closed_at) %></dd><% } %>
+      <% if (election.published_at) { %><dt>Results published</dt><dd><%= fmt(election.published_at) %></dd><% } %>
+      <dt>Ballot</dt><dd><%= counts.positions %> positions · <%= counts.candidates %> approved candidates</dd>
+      <dt>Voter list</dt><dd><%= election.voter_list_approved_at ? 'Approved ' + fmtShort(election.voter_list_approved_at) : 'Not yet approved' %></dd>
+      <dt>Email delivery</dt><dd><%= mailMode === 'smtp' ? 'SMTP' : 'Outbox mode (SMTP not configured — emails are stored, not sent)' %></dd>
+    </dl>
+    <% if (can('manage_election') || can('publish_results')) { %>
+      <h3 class="mt-3">Status actions</h3>
+      <%- include('../partials/status-actions', { back: '/admin' }) %>
+    <% } %>
+  </section>
+
+  <section class="card">
+    <h2>Important issues</h2>
+    <% if (!issues.length) { %>
+      <div class="alert success mb-0"><div>No outstanding issues.</div></div>
+    <% } else { %>
+      <ul class="checklist">
+      <% issues.forEach(function (i) { %>
+        <li class="<%= i.level %>"><span class="ic" aria-hidden="true">!</span><span class="grow"><%= i.label %></span><% if (i.link) { %><a class="small" href="<%= i.link %>">Review</a><% } %></li>
+      <% }) %>
+      </ul>
+    <% } %>
+    <% if (recent.length && can('view_turnout')) { %>
+      <h3 class="mt-3">Most recent ballots</h3>
+      <ul class="checklist">
+      <% recent.forEach(function (r) { %><li class="ok"><span class="ic" aria-hidden="true">✓</span><span class="grow"><%= r.full_name %></span><span class="small muted nowrap"><%= fmtShort(r.submitted_at) %></span></li><% }) %>
+      </ul>
+    <% } %>
+  </section>
+</div>
+
+<section class="card mt-2">
+  <h2>Election workflow</h2>
+  <ol class="mb-0">
+    <li><a href="/admin/election">Configure election settings</a> (dates, support contact)</li>
+    <li><a href="/admin/positions">Create positions</a>, <a href="/admin/candidates">add & approve candidates</a>, mark unopposed posts</li>
+    <li><a href="/admin/import">Import</a> or <a href="/admin/voters/new">add voters</a>, review <a href="/admin/voters/quality">duplicates</a>, then approve the final voter list</li>
+    <li><a href="/admin/codes">Generate voting codes</a> — one per eligible voter</li>
+    <li><a href="/admin/invitations">Preview and send invitations</a></li>
+    <li>Open voting, monitor <a href="/admin/turnout">turnout</a>, then close the election</li>
+    <li>Review <a href="/admin/results">results</a>, export, and publish</li>
+  </ol>
+</section>
+<%- include('../partials/admin-bottom') %>

@@ -1,0 +1,47 @@
+<%- include('../partials/admin-top') %>
+<% const si = statusInfo(election); const editable = can('manage_election'); const opened = !!election.opened_at; const closedish = ['closed','results_review','published','archived'].includes(election.status); %>
+<div class="page-head"><div><h1>Election settings</h1><p>Status: <span class="badge dot <%= si.tone %>"><%= si.label %></span> · Voters see: <strong><%= si.publicLabel %></strong></p></div></div>
+
+<div class="grid-2">
+<section class="card">
+  <h2>Details</h2>
+  <form method="post" action="/admin/election" data-once>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <fieldset <%= editable ? '' : 'disabled' %> style="border:0;padding:0;margin:0">
+    <div class="field"><label for="name">Election name</label><input type="text" id="name" name="name" value="<%= election.name %>" required maxlength="200"></div>
+    <div class="field"><label for="term">Election term / year</label><input type="text" id="term" name="term" value="<%= election.term || '' %>" maxlength="100" placeholder="e.g. 2026–2028"></div>
+    <div class="field"><label for="description">Description (shown on the welcome page)</label><textarea id="description" name="description" rows="4"><%= election.description || '' %></textarea></div>
+    <div class="form-grid">
+      <div class="field"><label for="opens_at">Opening date/time (<%= tz %>)</label><input type="datetime-local" id="opens_at" name="opens_at" value="<%= toLocalInput(election.opens_at) %>" <%= opened || election.status === 'scheduled' ? 'readonly' : '' %>>
+        <% if (opened) { %><div class="hint">Locked — voting has already opened.</div><% } else if (election.status === 'scheduled') { %><div class="hint">Cancel the schedule to change.</div><% } %></div>
+      <div class="field"><label for="closes_at">Closing date/time (<%= tz %>)</label><input type="datetime-local" id="closes_at" name="closes_at" value="<%= toLocalInput(election.closes_at) %>" <%= closedish ? 'readonly' : '' %>>
+        <% if (['open','suspended'].includes(election.status)) { %><div class="hint">Changing the closing time during voting is recorded in the audit log.</div><% } %></div>
+    </div>
+    <h3>Support contact</h3>
+    <div class="form-grid">
+      <div class="field"><label for="support_name">Name / committee</label><input type="text" id="support_name" name="support_name" value="<%= election.support_name || '' %>"></div>
+      <div class="field"><label for="support_email">Support email</label><input type="email" id="support_email" name="support_email" value="<%= election.support_email || '' %>"></div>
+      <div class="field"><label for="support_phone">Support phone</label><input type="tel" id="support_phone" name="support_phone" value="<%= election.support_phone || '' %>"></div>
+    </div>
+    <h3>Public information</h3>
+    <label class="check mb-1"><input type="checkbox" name="show_turnout_publicly" value="1" <%= election.show_turnout_publicly ? 'checked' : '' %>> <span>Show live overall turnout to voters (never candidate totals)</span></label>
+    <label class="check mb-2"><input type="checkbox" name="public_results_show_totals" value="1" <%= election.public_results_show_totals ? 'checked' : '' %>> <span>Show candidate vote totals on the public results page once results are published</span></label>
+    <% if (editable) { %><button class="btn" type="submit">Save settings</button><% } %>
+    </fieldset>
+  </form>
+</section>
+
+<div>
+  <section class="card">
+    <h2>Election status</h2>
+    <p class="small muted">Draft → Ready → Scheduled/Open → (Suspended) → Closed → Results review → Results published → Archived</p>
+    <%- include('../partials/status-actions', { back: '/admin/election' }) %>
+  </section>
+  <section class="card">
+    <h2>Readiness checklist</h2>
+    <%- include('../partials/checklist', { items: readiness.items }) %>
+    <% if (!configEditable) { %><div class="locked-banner mt-2 mb-0">Ballot configuration is locked<%= opened ? ' because voting has opened' : '' %>.</div><% } %>
+  </section>
+</div>
+</div>
+<%- include('../partials/admin-bottom') %>

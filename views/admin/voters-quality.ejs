@@ -1,0 +1,36 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Duplicate & incomplete records</h1><p>Possible duplicates are flagged for review only. Sharing contact details does not disqualify anyone — decide each case and mark records eligible or ineligible.</p></div><a class="btn secondary" href="/admin/voters">Back to register</a></div>
+<%
+const groups = [
+  ['Possible duplicates — same email', report.duplicateEmail],
+  ['Possible duplicates — same mobile', report.duplicateMobile],
+  ['Possible duplicates — same name and batch', report.duplicateName],
+];
+const lists = [
+  ['Invalid email address', report.invalidEmail],
+  ['Missing email (cannot receive email invitations)', report.missingEmail],
+  ['Missing mobile number', report.missingMobile],
+];
+%>
+<div class="stats">
+  <% groups.concat(lists).forEach(function ([label, arr]) { %><div class="stat"><div class="k"><%= label %></div><div class="v"><%= arr.length %></div></div><% }) %>
+</div>
+<% groups.forEach(function ([label, arr]) { %>
+<section class="card"><h2><%= label %> (<%= arr.length %> group<%= arr.length === 1 ? '' : 's' %>)</h2>
+  <% if (!arr.length) { %><p class="muted mb-0">None found.</p><% } %>
+  <% arr.forEach(function (g) { %>
+    <div class="table-wrap mb-1"><table class="data"><tbody>
+    <% g.voters.forEach(function (v) { %><tr><td><a href="/admin/voters/<%= v.id %>"><%= v.full_name %></a> <span class="small muted mono"><%= v.voter_ref %></span></td><td class="small"><%= v.email || '—' %></td><td class="small"><%= v.mobile || '—' %></td><td class="small"><%= v.batch || '—' %></td><td><span class="badge <%= v.eligibility === 'eligible' ? 'success' : v.eligibility === 'pending' ? 'warning' : 'neutral' %>"><%= v.eligibility %></span></td></tr><% }) %>
+    </tbody></table></div>
+  <% }) %>
+</section>
+<% }) %>
+<% lists.forEach(function ([label, arr]) { %>
+<section class="card"><h2><%= label %> (<%= arr.length %>)</h2>
+  <% if (!arr.length) { %><p class="muted mb-0">None.</p><% } else { %>
+  <div class="table-wrap"><table class="data"><tbody>
+  <% arr.slice(0, 200).forEach(function (v) { %><tr><td><a href="/admin/voters/<%= v.id %>"><%= v.full_name %></a> <span class="small muted mono"><%= v.voter_ref %></span></td><td class="small"><%= v.email || '—' %></td><td class="small"><%= v.mobile || '—' %></td><td><span class="badge <%= v.eligibility === 'eligible' ? 'success' : v.eligibility === 'pending' ? 'warning' : 'neutral' %>"><%= v.eligibility %></span></td><td><a class="btn secondary small" href="/admin/voters/<%= v.id %>/edit">Edit</a></td></tr><% }) %>
+  </tbody></table></div><% } %>
+</section>
+<% }) %>
+<%- include('../partials/admin-bottom') %>

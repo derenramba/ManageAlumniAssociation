@@ -1,0 +1,11 @@
+<%
+const eligTone = { eligible: 'success', pending: 'warning', ineligible: 'neutral' };
+const codeTone = { active: 'info', used: 'success', revoked: 'error', none: 'neutral' };
+const codeLabel = { active: 'Active', used: 'Used', revoked: 'Revoked', none: 'Not generated' };
+const invTone = { queued: 'info', sending: 'info', sent: 'success', delivered: 'success', failed: 'error', cancelled: 'neutral' };
+const invLabel = { queued: 'Queued', sending: 'Sending', sent: 'Sent', delivered: 'Delivered', failed: 'Failed', cancelled: 'Cancelled' };
+%>
+<% if (which === 'elig') { %><span class="badge <%= eligTone[v.eligibility] %>"><%= v.eligibility.charAt(0).toUpperCase() + v.eligibility.slice(1) %></span><% } %>
+<% if (which === 'code') { %><span class="badge <%= codeTone[v.code_status] %>"><%= codeLabel[v.code_status] %></span><% } %>
+<% if (which === 'vote') { %><% if (v.ballot_id) { %><span class="badge success dot">Voted</span><% } else { %><span class="badge neutral">Not voted</span><% } %><% } %>
+<% if (which === 'inv') { %><% if (v.inv_status) { %><span class="badge <%= invTone[v.inv_status] %>" title="<%= v.inv_error || '' %>"><%= invLabel[v.inv_status] %><%= v.inv_kind && v.inv_kind !== 'initial' && v.inv_status !== 'failed' ? ' (' + v.inv_kind + ')' : '' %></span><% } else if (!v.email) { %><span class="badge warning">No email</span><% } else { %><span class="badge neutral">Not sent</span><% } %><% } %>

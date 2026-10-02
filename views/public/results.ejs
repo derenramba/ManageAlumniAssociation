@@ -1,0 +1,35 @@
+<%- include('../partials/public-top') %>
+<section class="card">
+  <span class="status-pill published">Official results</span>
+  <h1 class="mt-2"><%= election.name %></h1>
+  <% if (election.term) { %><p class="muted"><%= election.term %></p><% } %>
+  <p class="turnout-figure mb-1"><strong><%= r.ballots.toLocaleString('en-IN') %></strong> of <strong><%= r.turnout.eligible.toLocaleString('en-IN') %></strong> eligible alumni voted — <strong><%= r.turnout.pctLabel %></strong> turnout</p>
+  <div class="progress"><span style="width: <%= Math.min(100, r.turnout.pct).toFixed(1) %>%"></span></div>
+  <p class="small muted mt-1 mb-0">Published <%= fmt(election.published_at) %></p>
+</section>
+
+<% r.positions.forEach(function (p) { %>
+<section class="card">
+  <h2><%= p.title %></h2>
+  <% if (p.unopposed) { %>
+    <% if (p.unopposedCandidate) { %>
+    <div class="unopposed-card"><%- include('../partials/photo', { cand: p.unopposedCandidate, cls: 'photo' }) %><div><strong><%= p.unopposedCandidate.full_name %></strong> — Elected unopposed as <%= p.title %></div></div>
+    <% } %>
+  <% } else { %>
+    <% if (p.tie) { %><div class="alert warning"><div><p>Tie for the highest total — subject to the election committee's decision.</p></div></div>
+    <% } else if (p.winner) { %><p><span class="badge success">Elected</span> <strong><%= p.winner.name %></strong></p><% } %>
+    <% if (election.public_results_show_totals) { %>
+      <% p.rows.forEach(function (c) { %>
+      <div class="result-row<%= p.winner && p.winner.id === c.id ? ' winner' : '' %>">
+        <span class="who"><%= c.name %><% if (c.batch) { %> <span class="small muted">(<%= c.batch %>)</span><% } %></span>
+        <span class="nowrap"><strong><%= c.votes.toLocaleString('en-IN') %></strong> <span class="small muted"><%= c.pct.toFixed(1) %>%</span></span>
+        <span class="bar"><span style="width: <%= c.pct.toFixed(1) %>%"></span></span>
+      </div>
+      <% }) %>
+      <div class="result-row"><span class="who muted">Abstain</span><span><strong><%= p.abstain.toLocaleString('en-IN') %></strong></span></div>
+      <div class="result-row"><span class="who"><strong>Total</strong></span><span><strong><%= p.total.toLocaleString('en-IN') %></strong></span></div>
+    <% } %>
+  <% } %>
+</section>
+<% }) %>
+<%- include('../partials/public-bottom') %>

@@ -1,0 +1,53 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Admin users</h1><p>Access to individual ballots is controlled by the <strong>View individual votes</strong> and <strong>Export individual votes</strong> permissions — grant them only to authorised officials.</p></div></div>
+
+<div class="grid-2 mb-2">
+<section class="card"><h2>Roles</h2>
+  <dl class="kv"><% Object.entries(ROLES).forEach(function ([k, r]) { %><dt><%= r.label %></dt><dd class="small"><%= r.description %></dd><% }) %></dl>
+</section>
+<section class="card"><h2>Add administrator</h2>
+  <form method="post" action="/admin/users" data-once>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="form-grid">
+      <div class="field"><label for="nu">Username</label><input type="text" id="nu" name="username" required autocomplete="off"></div>
+      <div class="field"><label for="nf">Full name</label><input type="text" id="nf" name="full_name" required></div>
+      <div class="field"><label for="ne">Email</label><input type="email" id="ne" name="email"></div>
+      <div class="field"><label for="nr">Role</label><select id="nr" name="role"><% Object.entries(ROLES).forEach(function ([k, r]) { %><option value="<%= k %>" <%= k === 'election_officer' ? 'selected' : '' %>><%= r.label %></option><% }) %></select></div>
+      <div class="field"><label for="np">Initial password</label><input type="password" id="np" name="password" required minlength="10" autocomplete="new-password"><div class="hint">At least 10 characters with letters and numbers.</div></div>
+    </div>
+    <button class="btn" type="submit">Add administrator</button>
+  </form>
+</section>
+</div>
+
+<% users.forEach(function (u) { %>
+<section class="card">
+  <div class="card-header"><div><h2 class="mb-0"><%= u.full_name %> <% if (!u.active) { %><span class="badge neutral">Disabled</span><% } %><% if (u.is_demo) { %> <span class="badge warning">Demo account</span><% } %></h2><div class="small muted"><%= u.username %> · <%= ROLES[u.role] ? ROLES[u.role].label : u.role %> · last sign-in <%= u.last_login_at ? fmtShort(u.last_login_at) : 'never' %></div></div></div>
+  <details>
+    <summary class="btn secondary small">Edit role & permissions</summary>
+    <form method="post" action="/admin/users/<%= u.id %>" class="mt-2" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="form-grid">
+        <div class="field"><label>Full name<input type="text" name="full_name" value="<%= u.full_name %>"></label></div>
+        <div class="field"><label>Email<input type="email" name="email" value="<%= u.email || '' %>"></label></div>
+        <div class="field"><label>Role<select name="role"><% Object.entries(ROLES).forEach(function ([k, r]) { %><option value="<%= k %>" <%= u.role === k ? 'selected' : '' %>><%= r.label %></option><% }) %></select></label></div>
+        <div class="field"><label>Account<select name="active"><option value="1" <%= u.active ? 'selected' : '' %>>Active</option><option value="0" <%= !u.active ? 'selected' : '' %>>Disabled</option></select></label></div>
+      </div>
+      <fieldset><legend>Permissions</legend>
+        <div class="form-grid">
+        <% Object.entries(PERMISSIONS).forEach(function ([k, label]) { %><label class="check"><input type="checkbox" name="perms" value="<%= k %>" <%= u.perms.includes(k) ? 'checked' : '' %>> <span><%= label %><% if (k === 'view_individual_votes' || k === 'export_individual_votes') { %> <span class="badge error">Sensitive</span><% } %></span></label><% }) %>
+        </div>
+        <label class="check mt-2"><input type="checkbox" name="apply_role_defaults" value="yes"> <span>Reset permissions to the role's defaults</span></label>
+      </fieldset>
+      <button class="btn" type="submit">Save</button>
+    </form>
+    <form method="post" action="/admin/users/<%= u.id %>/password" class="row mt-2" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="field mb-0 grow"><label for="pw<%= u.id %>">Set new password</label><input type="password" id="pw<%= u.id %>" name="password" minlength="10" required autocomplete="new-password"></div>
+      <button class="btn secondary" type="submit" style="align-self:flex-end">Reset password</button>
+    </form>
+  </details>
+  <p class="small mt-1 mb-0"><% u.perms.forEach(function (p) { %><span class="badge <%= p.includes('individual') ? 'error' : 'neutral' %>"><%= PERMISSIONS[p] %></span> <% }) %></p>
+</section>
+<% }) %>
+<%- include('../partials/admin-bottom') %>

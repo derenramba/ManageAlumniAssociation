@@ -1,0 +1,39 @@
+<%- include('../partials/admin-top') %>
+<% const canEdit = editable && can('manage_candidates'); const tone = { approved: 'success', draft: 'warning', withdrawn: 'neutral' }; %>
+<div class="page-head"><div><h1>Candidates</h1><p>Only <strong>approved</strong> candidates appear on the ballot. All candidates are shown with equal prominence, in the order set here.</p></div>
+<% if (canEdit) { %><a class="btn" href="/admin/candidates/new">+ Add candidate</a><% } %></div>
+<% if (!editable) { %><div class="locked-banner">The ballot is locked. Candidates can only be changed while the election is in Draft or Ready status and has never been opened.</div><% } %>
+<% positions.forEach(function (p) { %>
+<section class="card" id="pos-<%= p.id %>">
+  <div class="card-header"><h2><%= p.title %> <% if (p.kind === 'unopposed') { %><span class="badge info">Unopposed</span><% } %></h2>
+    <% if (canEdit) { %><a class="btn secondary small" href="/admin/candidates/new?position=<%= p.id %>">+ Add to <%= p.title %></a><% } %></div>
+  <% if (!p.candidates.length) { %><p class="muted mb-0">No candidates yet.</p><% } else { %>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Candidate</th><th>Batch / year</th><th>Status</th><th>Order</th><% if (canEdit) { %><th>Actions</th><% } %></tr></thead>
+    <tbody>
+    <% p.candidates.forEach(function (c, i) { %>
+      <tr>
+        <td><div class="cand-row"><%- include('../partials/photo', { cand: c, cls: '' }) %><div><strong><%= c.full_name %></strong><% if (p.unopposed_candidate_id === c.id) { %><div class="small"><span class="badge info">Elected unopposed</span></div><% } %><% if (!c.photo_path) { %><div class="small muted">No photo</div><% } %></div></div></td>
+        <td><%= c.batch || '—' %></td>
+        <td><span class="badge <%= tone[c.status] %>"><%= c.status.charAt(0).toUpperCase() + c.status.slice(1) %></span></td>
+        <td class="nowrap"><% if (canEdit) { %>
+          <form method="post" action="/admin/candidates/<%= c.id %>/move" class="inline-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="dir" value="up"><button class="btn secondary small" <%= i === 0 ? 'disabled' : '' %> aria-label="Move up">↑</button></form>
+          <form method="post" action="/admin/candidates/<%= c.id %>/move" class="inline-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="dir" value="down"><button class="btn secondary small" <%= i === p.candidates.length - 1 ? 'disabled' : '' %> aria-label="Move down">↓</button></form>
+        <% } else { %><%= i + 1 %><% } %></td>
+        <% if (canEdit) { %>
+        <td><div class="actions">
+          <a class="btn secondary small" href="/admin/candidates/<%= c.id %>/edit">Edit</a>
+          <% if (c.status !== 'approved') { %><form method="post" action="/admin/candidates/<%= c.id %>/status" class="inline-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="status" value="approved"><button class="btn small">Approve</button></form><% } %>
+          <% if (c.status !== 'withdrawn') { %><form method="post" action="/admin/candidates/<%= c.id %>/status" class="inline-form" data-confirm="Withdraw <%= c.full_name %>? Withdrawn candidates do not appear on the ballot."><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="status" value="withdrawn"><button class="btn secondary small">Withdraw</button></form><% } %>
+          <% if (c.status === 'withdrawn') { %><form method="post" action="/admin/candidates/<%= c.id %>/status" class="inline-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="status" value="draft"><button class="btn secondary small">Restore to draft</button></form><% } %>
+          <form method="post" action="/admin/candidates/<%= c.id %>/delete" class="inline-form" data-confirm="Permanently delete <%= c.full_name %>?"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn danger secondary small">Delete</button></form>
+        </div></td>
+        <% } %>
+      </tr>
+    <% }) %>
+    </tbody></table></div>
+  <% } %>
+</section>
+<% }) %>
+<% if (!positions.length) { %><div class="alert info"><div>Create <a href="/admin/positions">positions</a> before adding candidates.</div></div><% } %>
+<%- include('../partials/admin-bottom') %>

@@ -1,0 +1,32 @@
+<%- include('../partials/admin-top') %>
+<% const isNew = !candidate.id; %>
+<div class="page-head"><div><h1><%= isNew ? 'Add candidate' : 'Edit candidate' %></h1></div><a class="btn secondary" href="/admin/candidates">Back to candidates</a></div>
+<% if (!editable) { %><div class="locked-banner">The ballot is locked; changes cannot be saved.</div><% } %>
+<section class="card" style="max-width:720px">
+  <form method="post" action="<%= isNew ? '/admin/candidates' : '/admin/candidates/' + candidate.id %>" enctype="multipart/form-data" data-once>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="field"><label for="full_name">Full name</label><input type="text" id="full_name" name="full_name" value="<%= candidate.full_name || '' %>" required maxlength="150"></div>
+    <div class="form-grid">
+      <div class="field"><label for="position_id">Position</label>
+        <select id="position_id" name="position_id" required>
+          <option value="">— choose —</option>
+          <% positions.forEach(function (p) { %><option value="<%= p.id %>" <%= candidate.position_id === p.id ? 'selected' : '' %>><%= p.title %></option><% }) %>
+        </select></div>
+      <div class="field"><label for="batch">Batch / graduation year</label><input type="text" id="batch" name="batch" value="<%= candidate.batch || '' %>" placeholder="e.g. PGDAEM 2008"></div>
+    </div>
+    <div class="field">
+      <label for="photo">Photograph</label>
+      <% if (candidate.photo_path) { %><div class="cand-row mb-1"><img src="/uploads/<%= candidate.photo_path %>" alt="Current photo" style="width:80px;height:80px;border-radius:10px;object-fit:cover"><label class="check"><input type="checkbox" name="remove_photo" value="1"> <span>Remove current photo</span></label></div><% } %>
+      <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp">
+      <div class="hint">JPEG, PNG or WebP, up to 4 MB. A square, head-and-shoulders photo works best. Candidates without a photo are shown with their initials.</div>
+    </div>
+    <% if (isNew) { %>
+    <fieldset><legend>Status</legend>
+      <label class="check"><input type="radio" name="status" value="draft" checked> <span>Draft — not shown on the ballot yet</span></label>
+      <label class="check mt-1"><input type="radio" name="status" value="approved"> <span>Approved — shown on the ballot</span></label>
+    </fieldset>
+    <% } else { %><p class="small muted">Status: <strong><%= candidate.status %></strong> — change it from the candidates list.</p><% } %>
+    <% if (editable) { %><button class="btn" type="submit"><%= isNew ? 'Add candidate' : 'Save candidate' %></button><% } %>
+  </form>
+</section>
+<%- include('../partials/admin-bottom') %>

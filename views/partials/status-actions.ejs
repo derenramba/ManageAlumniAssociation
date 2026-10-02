@@ -1,0 +1,24 @@
+<%
+const sensitive = { close: 'I confirm that voting should close now. No further ballots will be accepted.', open_now: 'I confirm that voting should open now. The ballot and positions will be locked.', suspend: 'I confirm that voting should be suspended. Voters will not be able to submit ballots until it is resumed.', publish: 'I confirm the results have been reviewed and should be published publicly.', unpublish: 'I confirm the public results page should be withdrawn.' };
+const available = Object.entries(transitions).filter(([k, t]) => t.from.includes(election.status) && can(t.perm) && k !== 'publish');
+const danger = ['close', 'suspend', 'back_to_draft', 'unpublish'];
+%>
+<% if (!available.length) { %><p class="muted mb-0">No status changes are available for your role at this stage.</p><% } %>
+<div class="stack">
+<% available.forEach(function ([key, t]) { %>
+  <form method="post" action="/admin/election/transition" class="<%= sensitive[key] ? 'confirm-box' + (danger.includes(key) ? ' danger' : '') : '' %>" data-once>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="action" value="<%= key %>">
+    <input type="hidden" name="back" value="<%= typeof back !== 'undefined' ? back : '/admin/election' %>">
+    <% if (sensitive[key]) { %>
+      <label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span><%= sensitive[key] %></span></label>
+      <% if (key === 'suspend' || key === 'close') { %><div class="field"><label for="reason-<%= key %>" class="small">Reason (recorded in audit log)</label><input type="text" id="reason-<%= key %>" name="reason" maxlength="500"></div><% } %>
+    <% } %>
+    <button class="btn <%= danger.includes(key) ? 'danger' : '' %> <%= sensitive[key] ? '' : 'secondary' %>" type="submit"><%= t.label %></button>
+    <% if (key === 'schedule') { %><span class="small muted">Voting will open automatically at <%= fmt(election.opens_at) %>.</span><% } %>
+  </form>
+<% }) %>
+<% if (['closed', 'results_review'].includes(election.status) && can('publish_results')) { %>
+  <a class="btn" href="/admin/results/publish">Publish results…</a>
+<% } %>
+</div>

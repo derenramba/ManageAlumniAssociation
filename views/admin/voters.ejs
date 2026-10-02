@@ -1,0 +1,81 @@
+<%- include('../partials/admin-top') %>
+<% const manage = can('manage_voters'); %>
+<div class="page-head"><div><h1>Voter register</h1><p><%= counts.eligible %> eligible · <%= counts.pending %> awaiting review · <%= counts.ineligible %> ineligible<% if (noEmail) { %> · <a href="/admin/voters?filter=no_email&eligibility=eligible"><%= noEmail %> eligible without email</a><% } %></p></div>
+  <% if (manage) { %><div class="row"><a class="btn secondary" href="/admin/voters/quality">Duplicates & issues</a><a class="btn secondary" href="/admin/import">Import</a><a class="btn" href="/admin/voters/new">+ Add voter</a></div><% } %></div>
+
+<% if (manage) { %>
+<section class="card mb-2">
+  <% if (listApproved) { %>
+    <div class="row between">
+      <div><span class="badge success">Final voter list approved</span> <span class="small muted"><%= fmtShort(election.voter_list_approved_at) %> — <%= counts.eligible %> eligible voters form the official electorate. Further changes require a recorded reason.</span></div>
+      <% if (!everOpened) { %><form method="post" action="/admin/voters/unlock-list" class="inline-form" data-confirm="Withdraw approval so the voter list can be edited freely? You must re-approve it before voting opens."><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn secondary small">Withdraw approval to edit</button></form><% } %>
+    </div>
+  <% } else { %>
+    <form method="post" action="/admin/voters/approve-list" class="row between" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div><strong>Approve final eligible voter list</strong><div class="small muted">Review every record first: <%= counts.pending %> voter(s) still awaiting an eligibility decision. Once approved, the <%= counts.eligible %> eligible voters become the official electorate and codes can be generated.</div>
+        <label class="check mt-1"><input type="checkbox" name="confirm" value="yes" required> <span>I have reviewed the register and approve <%= counts.eligible %> eligible voters.</span></label></div>
+      <button class="btn" type="submit" <%= counts.pending || !counts.eligible ? 'disabled' : '' %>>Approve voter list</button>
+    </form>
+  <% } %>
+</section>
+<% } %>
+
+<form method="get" class="filters" role="search">
+  <div class="field search"><label for="q">Search</label><input type="search" id="q" name="q" value="<%= q.q %>" placeholder="Name, email, mobile, voter ID, batch"></div>
+  <div class="field"><label for="eligibility">Eligibility</label><select id="eligibility" name="eligibility"><option value="">All</option><% ['pending','eligible','ineligible'].forEach(function (o) { %><option value="<%= o %>" <%= q.eligibility === o ? 'selected' : '' %>><%= o %></option><% }) %></select></div>
+  <div class="field"><label for="vote">Vote</label><select id="vote" name="vote"><option value="">All</option><option value="voted" <%= q.vote === 'voted' ? 'selected' : '' %>>Voted</option><option value="not_voted" <%= q.vote === 'not_voted' ? 'selected' : '' %>>Not voted</option></select></div>
+  <div class="field"><label for="code">Code</label><select id="code" name="code"><option value="">All</option><% [['none','Not generated'],['active','Active'],['used','Used'],['revoked','Revoked']].forEach(function ([v,l]) { %><option value="<%= v %>" <%= q.code === v ? 'selected' : '' %>><%= l %></option><% }) %></select></div>
+  <div class="field"><label for="invitation">Invitation</label><select id="invitation" name="invitation"><option value="">All</option><% [['not_sent','Not sent'],['queued','Queued'],['sent','Sent'],['failed','Failed']].forEach(function ([v,l]) { %><option value="<%= v %>" <%= q.invitation === v ? 'selected' : '' %>><%= l %></option><% }) %></select></div>
+  <div class="field"><label for="filter">Contact</label><select id="filter" name="filter"><option value="">All</option><option value="no_email" <%= q.filter === 'no_email' ? 'selected' : '' %>>Missing email</option><option value="no_mobile" <%= q.filter === 'no_mobile' ? 'selected' : '' %>>Missing mobile</option></select></div>
+  <button class="btn secondary" type="submit">Filter</button>
+  <% if (Object.values(q).some(Boolean)) { %><a class="btn ghost" href="/admin/voters">Clear</a><% } %>
+</form>
+
+<form method="post" id="bulk-form">
+<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<input type="hidden" name="back_qs" value="<%= qs({}) %>">
+<p class="small muted"><%= total %> voter(s) match.</p>
+<div class="table-wrap"><table class="data">
+  <thead><tr><% if (manage || can('send_invitations')) { %><th><input type="checkbox" data-select-all="ids" aria-label="Select all on this page"></th><% } %><th>Name</th><th>Email</th><th>Mobile</th><th>Batch</th><th>Eligibility</th><th>Code</th><th>Vote</th><th>Invitation</th><th>Submitted at</th><th>Actions</th></tr></thead>
+  <tbody>
+  <% rows.forEach(function (v) { %>
+    <tr>
+      <% if (manage || can('send_invitations')) { %><td><input type="checkbox" name="ids" value="<%= v.id %>" aria-label="Select <%= v.full_name %>"></td><% } %>
+      <td><a href="/admin/voters/<%= v.id %>"><strong><%= v.full_name %></strong></a><div class="small muted mono"><%= v.voter_ref %></div></td>
+      <td class="small"><%= v.email || '—' %></td>
+      <td class="small nowrap"><%= v.mobile || '—' %></td>
+      <td class="small"><%= v.batch || '—' %></td>
+      <td><%- include('../partials/voter-badges', { v, which: 'elig' }) %></td>
+      <td><%- include('../partials/voter-badges', { v, which: 'code' }) %></td>
+      <td><%- include('../partials/voter-badges', { v, which: 'vote' }) %></td>
+      <td><%- include('../partials/voter-badges', { v, which: 'inv' }) %></td>
+      <td class="small nowrap"><%= v.submitted_at ? fmtShort(v.submitted_at) : '—' %></td>
+      <td><div class="actions">
+        <% if (v.ballot_id && can('view_individual_votes')) { %><a class="btn small" href="/admin/records/<%= v.id %>">View vote</a><% } %>
+        <% if (manage) { %><a class="btn secondary small" href="/admin/voters/<%= v.id %>/edit">Edit</a><% } %>
+        <% if (!v.ballot_id && v.inv_status === 'failed' && can('send_invitations')) { %><a class="btn secondary small" href="/admin/voters/<%= v.id %>#invite">Resend</a><% } %>
+      </div></td>
+    </tr>
+  <% }) %>
+  <% if (!rows.length) { %><tr><td colspan="11" class="muted">No voters match these filters.</td></tr><% } %>
+  </tbody></table></div>
+<%- include('../partials/pager') %>
+
+<% if (manage || can('send_invitations')) { %>
+<section class="card mt-2">
+  <h3>Bulk actions <span class="small muted">(<span data-selected-count>0</span> selected)</span></h3>
+  <div class="row">
+    <% if (manage) { %>
+    <div class="field mb-0"><label for="bulk_action" class="small">Set eligibility of selected voters</label>
+      <select id="bulk_action" name="bulk_action"><option value="">— choose —</option><option value="eligible">Eligible</option><option value="ineligible">Ineligible</option><option value="pending">Pending review</option></select></div>
+    <% if (listApproved) { %><div class="field mb-0 grow"><label for="amend_reason" class="small">Reason for amendment (required — list approved)</label><input type="text" id="amend_reason" name="amend_reason"></div><% } %>
+    <button class="btn secondary" type="submit" formaction="/admin/voters/bulk" style="align-self:flex-end">Apply to selected</button>
+    <% if (counts.pending) { %><button class="btn secondary" type="submit" formaction="/admin/voters/bulk" name="scope" value="all_pending" style="align-self:flex-end" data-confirm-scope>Apply to all <%= counts.pending %> pending voters</button><% } %>
+    <% } %>
+    <% if (can('send_invitations')) { %><button class="btn secondary" type="submit" formaction="/admin/invitations/confirm" style="align-self:flex-end">Send / resend invitations to selected…</button><% } %>
+  </div>
+</section>
+<% } %>
+</form>
+<%- include('../partials/admin-bottom') %>

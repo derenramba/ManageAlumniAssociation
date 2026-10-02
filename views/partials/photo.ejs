@@ -1,0 +1,2 @@
+<% const _n = (cand && (cand.full_name || cand.name)) || ''; const _ini = _n.replace(/^(Dr|Mr|Mrs|Ms|Prof|Shri|Smt)\.?\s+/i, '').split(/\s+/).filter(Boolean).slice(0, 2).map(s => s[0]).join('').toUpperCase(); %>
+<% if (cand && cand.photo_path) { %><img class="<%= cls %>" src="/uploads/<%= cand.photo_path %>" alt="Photo of <%= _n %>" loading="lazy" width="64" height="64"><% } else { %><span class="<%= cls %> photo-ph" aria-hidden="true"><%= _ini %></span><% } %>

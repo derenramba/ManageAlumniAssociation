@@ -1,0 +1,57 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><div><h1>Positions</h1><p>Positions appear on the ballot in this order. Mark a position <strong>unopposed</strong> when a candidate has been officially declared elected unopposed — voters then see it for information only.</p></div></div>
+<% if (!editable) { %><div class="locked-banner">The ballot is locked. Positions can only be changed while the election is in Draft or Ready status and has never been opened.</div><% } %>
+<% const canEdit = editable && can('manage_positions'); %>
+<% positions.forEach(function (p, idx) { %>
+<section class="card">
+  <div class="card-header">
+    <h2><%= idx + 1 %>. <%= p.title %> <% if (p.kind === 'unopposed') { %><span class="badge info">Unopposed</span><% } else { %><span class="badge neutral">Contested</span><% } %></h2>
+    <% if (canEdit) { %>
+    <div class="actions">
+      <form method="post" action="/admin/positions/<%= p.id %>/move" class="inline-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="dir" value="up"><button class="btn secondary small" <%= idx === 0 ? 'disabled' : '' %> aria-label="Move <%= p.title %> up">↑</button></form>
+      <form method="post" action="/admin/positions/<%= p.id %>/move" class="inline-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="dir" value="down"><button class="btn secondary small" <%= idx === positions.length - 1 ? 'disabled' : '' %> aria-label="Move <%= p.title %> down">↓</button></form>
+      <form method="post" action="/admin/positions/<%= p.id %>/delete" class="inline-form" data-confirm="Remove the position <%= p.title %>?"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn danger secondary small">Remove</button></form>
+    </div>
+    <% } %>
+  </div>
+  <p class="small muted"><%= p.candidates.filter(c => c.status === 'approved').length %> approved · <%= p.candidates.filter(c => c.status === 'draft').length %> draft · <%= p.candidates.filter(c => c.status === 'withdrawn').length %> withdrawn candidate(s) — <a href="/admin/candidates#pos-<%= p.id %>">manage candidates</a></p>
+  <% if (p.kind === 'unopposed' && p.unopposedCandidate) { %><p><strong><%= p.unopposedCandidate.full_name %></strong> — Elected unopposed as <%= p.title %></p><% } %>
+  <% if (canEdit) { %>
+  <details>
+    <summary class="btn secondary small">Edit position</summary>
+    <form method="post" action="/admin/positions/<%= p.id %>" class="mt-2" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="form-grid">
+        <div class="field"><label for="t<%= p.id %>">Title</label><input type="text" id="t<%= p.id %>" name="title" value="<%= p.title %>" required></div>
+        <div class="field"><label for="d<%= p.id %>">Note for voters (optional)</label><input type="text" id="d<%= p.id %>" name="description" value="<%= p.description || '' %>"></div>
+      </div>
+      <fieldset><legend>Type</legend>
+        <label class="check"><input type="radio" name="kind" value="contested" <%= p.kind === 'contested' ? 'checked' : '' %>> <span>Contested — voters choose one candidate or abstain</span></label>
+        <label class="check mt-1"><input type="radio" name="kind" value="unopposed" <%= p.kind === 'unopposed' ? 'checked' : '' %>> <span>Unopposed — a candidate has been declared elected unopposed</span></label>
+        <div class="field mt-1" data-show-when="kind=unopposed">
+          <label for="u<%= p.id %>">Candidate declared elected unopposed</label>
+          <select id="u<%= p.id %>" name="unopposed_candidate_id">
+            <option value="">— choose an approved candidate —</option>
+            <% p.candidates.filter(c => c.status === 'approved').forEach(function (c) { %><option value="<%= c.id %>" <%= p.unopposed_candidate_id === c.id ? 'selected' : '' %>><%= c.full_name %></option><% }) %>
+          </select>
+          <div class="hint">Add and approve the candidate under Candidates first.</div>
+        </div>
+      </fieldset>
+      <button class="btn" type="submit">Save position</button>
+    </form>
+  </details>
+  <% } %>
+</section>
+<% }) %>
+<% if (!positions.length) { %><div class="alert info"><div>No positions yet.</div></div><% } %>
+<% if (canEdit) { %>
+<section class="card mt-2">
+  <h2>Add position</h2>
+  <form method="post" action="/admin/positions" class="row" data-once>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="field grow mb-0"><label for="newtitle">Position title</label><input type="text" id="newtitle" name="title" required placeholder="e.g. Executive Member"></div>
+    <button class="btn" type="submit" style="align-self:flex-end">Add position</button>
+  </form>
+</section>
+<% } %>
+<%- include('../partials/admin-bottom') %>

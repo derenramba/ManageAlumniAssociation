@@ -1,0 +1,27 @@
+{
+  "name": "manage-alumni-voting",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Online voting platform for the MANAGE Alumni Association (National Institute of Agricultural Extension Management, Hyderabad)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed:demo": "node scripts/seed-demo.js",
+    "create-admin": "node scripts/create-admin.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "csv-parse": "^7.0.3",
+    "ejs": "^6.0.1",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "multer": "^2.4.0",
+    "nodemailer": "^10.0.13"
+  }
+}
