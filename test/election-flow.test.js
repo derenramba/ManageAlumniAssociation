@@ -122,6 +122,9 @@ test('voter flow: code entry, review, single submission, locked afterwards', asy
   let r = await v0.post('/ballot', {});
   assert.equal(r.status, 422);
   assert.match(r.text, /Please make a choice for every contested position/);
+  // The voter's own name is shown for confirmation
+  assert.match(r.text, /Welcome, Voter 1/);
+  assert.match(r.text, /Chief Election Commissioner on WhatsApp/);
   // Unopposed shown, no voting control for it
   assert.match(r.text, /Treasurer Person<\/strong>[\s\S]{0,120}Elected unopposed/);
   assert.doesNotMatch(r.text, /Draft Person/);

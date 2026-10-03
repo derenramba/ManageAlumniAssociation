@@ -103,7 +103,7 @@ function requireVoter(req, res, next) {
   if (!e || !s || s.data.electionId !== e.id) {
     return res.status(401).render('public/message', { title: 'Session expired', heading: 'Please enter your voting code', message: MESSAGES.expired, tone: 'info', action: { href: '/', label: 'Enter voting code' } });
   }
-  const code = db.get().prepare('SELECT c.*, v.eligibility FROM voting_codes c JOIN voters v ON v.id = c.voter_id WHERE c.id = ?').get(s.data.codeId);
+  const code = db.get().prepare('SELECT c.*, v.eligibility, v.full_name AS voter_name, v.batch AS voter_batch FROM voting_codes c JOIN voters v ON v.id = c.voter_id WHERE c.id = ?').get(s.data.codeId);
   if (!code) return res.redirect('/');
   if (code.status === 'used') {
     const ballot = db.get().prepare('SELECT * FROM ballots WHERE code_id = ?').get(code.id);
@@ -141,7 +141,7 @@ function pickSelections(body, contested) {
 router.get('/ballot', noStore, requireVoter, (req, res) => {
   const e = req.election;
   const v = ballotView(e);
-  res.render('public/ballot', { title: 'Your ballot', ...v, selections: req.voterSession.data.selections || {}, errors: {} });
+  res.render('public/ballot', { title: 'Your ballot', voter: { name: req.voterCode.voter_name, batch: req.voterCode.voter_batch }, ...v, selections: req.voterSession.data.selections || {}, errors: {} });
 });
 
 router.post('/ballot', noStore, requireVoter, (req, res) => {
@@ -153,7 +153,7 @@ router.post('/ballot', noStore, requireVoter, (req, res) => {
   const check = voting.validateSelections(e.id, selections);
   if (!check.ok) {
     const errors = Object.fromEntries(check.errors.map((x) => [x.positionId, x.message]));
-    return res.status(422).render('public/ballot', { title: 'Your ballot', ...v, selections, errors, incomplete: true });
+    return res.status(422).render('public/ballot', { title: 'Your ballot', voter: { name: req.voterCode.voter_name, batch: req.voterCode.voter_batch }, ...v, selections, errors, incomplete: true });
   }
   res.redirect(303, '/ballot/review');
 });

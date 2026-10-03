@@ -527,3 +527,13 @@ table.data th { background: #f7f5f0; color: var(--ink-2); letter-spacing: .08em;
 .how li > div { padding-top: .15rem; }
 .how strong { display: block; font-size: 1.05rem; color: var(--ink); margin-bottom: .25rem; }
 .how span.t { display: block; line-height: 1.55; }
+
+/* Ballot: voter identity confirmation */
+.voter-welcome { border-top: 4px solid var(--gold); }
+.voter-welcome h1 { font-size: 1.6rem; color: var(--navy); line-height: 1.25; }
+.voter-welcome .voter-batch { margin: .3rem 0 0; font-size: 1.1rem; font-weight: 700; color: var(--brand); }
+.voter-welcome .voter-check { margin: .9rem 0 0; padding-top: .85rem; border-top: 1px solid var(--line-2); color: var(--ink-2); line-height: 1.55; }
+.voter-welcome .voter-check a { font-weight: 700; white-space: nowrap; }
+.ballot-intro { margin-top: 1.25rem; }
+.ballot-intro h2 { font-size: 1.4rem; color: var(--navy); }
+@media (max-width: 480px) { .voter-welcome h1 { font-size: 1.4rem; } }
