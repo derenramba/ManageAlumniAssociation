@@ -41,16 +41,20 @@
 <% } %>
 
 <% if (election.description) { %><section class="card">
-  <h2>About this election</h2>
-  <p class="mb-0"><%= election.description %></p>
+  <h2>About this Election</h2>
+  <div class="about-text">
+  <% String(election.description).replace(/\r\n?/g, '\n').trim().split(/\n\s*\n+/).forEach(function (para) { %>
+    <p><% para.split('\n').forEach(function (line, i) { %><% if (i) { %><br><% } %><%= line.trim() %><% }) %></p>
+  <% }) %>
+  </div>
 </section><% } %>
 
 <section class="card">
   <h2>How to vote</h2>
   <ol class="how">
-    <li><span class="n">1</span><div><strong>Enter your code</strong><span class="t">Use the personal code from your invitation email.</span></div></li>
-    <li><span class="n">2</span><div><strong>Make your choices</strong><span class="t">For each contested post, tap one candidate or choose to abstain.</span></div></li>
-    <li><span class="n">3</span><div><strong>Review and submit</strong><span class="t">Check your choices, then submit. Your ballot can be submitted only once.</span></div></li>
+    <li><span class="n" aria-hidden="true">1</span><div><strong>Enter your voting code</strong><span class="t">Enter the personal code sent to your registered email address or mobile number.</span></div></li>
+    <li><span class="n" aria-hidden="true">2</span><div><strong>Choose your candidates</strong><span class="t">Select one candidate for each contested post, or choose “Abstain for this post”. Posts marked “Elected unopposed” do not require a vote.</span></div></li>
+    <li><span class="n" aria-hidden="true">3</span><div><strong>Review and submit your ballot</strong><span class="t">Check your choices, then select “Submit my vote”. You can submit only once, and your choices cannot be changed afterwards.</span></div></li>
   </ol>
 </section>
 

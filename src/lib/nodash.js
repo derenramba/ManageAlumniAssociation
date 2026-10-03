@@ -2,19 +2,32 @@
 /**
  * Removes every dash (hyphen, en dash, em dash, minus) from user-visible text.
  * Email addresses and URLs are left intact because altering them would make them wrong.
+ * Exception requested by the association: batch ranges are shown with a hyphen, e.g. "2012-14".
  */
 const DASH = /[-‐‑‒–—―−]/;
 
+const KEEP = '\uE000'; // placeholder for a hyphen that must survive
+
+/** "2012-14", "2012–14", "1999-2001" → "2012-14" style batch range (kept with a hyphen). */
+function batchRanges(s) {
+  return s
+    .replace(/\b(\d{4})[-‐‑‒–—―−](\d{4})\b/g, (m, a, b) => {
+      const span = parseInt(b, 10) - parseInt(a, 10);
+      return span >= 1 && span <= 3 ? `${a}${KEEP}${b.slice(2)}` : m;
+    })
+    .replace(/\b(\d{4})[-‐‑‒–—―−](\d{2})(?!\d)/g, `$1${KEEP}$2`);
+}
+
 function cleanText(s) {
   if (!s || !DASH.test(s)) return s;
-  let out = s
-    .replace(/(\d)[–—](\d)/g, '$1 to $2')          // ranges: 2026–2028 → 2026 to 2028
+  let out = batchRanges(s)
+    .replace(/(\d)[–—](\d)/g, '$1 to $2')          // other ranges: 10–12 → 10 to 12
     .replace(/(^|\s)[-‐‑‒–—―−]+(?=\s|$)/g, (m, sp) => (sp ? ',' : '')); // spaced dashes → comma
   out = out.replace(/\S*[-‐‑‒–—―−]\S*/g, (tok) => {
     if (tok.includes('@') || tok.includes('://') || tok.startsWith('/')) return tok;
     return tok.replace(/[-‐‑‒–—―−]+/g, ' ').replace(/^ +| +$/g, '');
   });
-  return out.trim().replace(/ ,/g, ',').replace(/,\s*,/g, ',').replace(/^\s*,\s*/, '').replace(/,\s*$/, '').replace(/  +/g, ' ');
+  return out.split(KEEP).join('-').trim().replace(/ ,/g, ',').replace(/,\s*,/g, ',').replace(/^\s*,\s*/, '').replace(/,\s*$/, '').replace(/  +/g, ' ');
 }
 
 const ATTRS = /(\s(?:placeholder|title|aria-label|alt|data-confirm|data-busy|data-label)=")([^"]*)(")/g;

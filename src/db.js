@@ -258,7 +258,21 @@ function open(file = config.dbFile) {
   d.pragma('busy_timeout = 5000');
   d.pragma('synchronous = FULL');
   d.exec(SCHEMA);
+  migrate(d);
   return d;
+}
+
+// Idempotent data fixes applied at start-up.
+function migrate(d) {
+  // Batch ranges are displayed as "2012-14" (earlier imports stored "2012 to 2014").
+  for (const table of ['voters', 'candidates']) {
+    const rows = d.prepare(`SELECT id, batch FROM ${table} WHERE batch LIKE '____ to ____'`).all();
+    const upd = d.prepare(`UPDATE ${table} SET batch = ? WHERE id = ?`);
+    for (const r of rows) {
+      const m = r.batch.match(/^(\d{4}) to (\d{4})$/);
+      if (m) upd.run(`${m[1]}-${m[2].slice(2)}`, r.id);
+    }
+  }
 }
 
 function get() {

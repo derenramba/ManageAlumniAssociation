@@ -123,17 +123,12 @@ function splitPhones(raw) {
   return { primary: uniq[0] || '', others: uniq.slice(1) };
 }
 
-/** "1996-98" → "1996 to 1998" (no dashes; full years). */
+/** "1996-98", "1996 – 1998", "1996/98", "1996 to 1998" → "1996-98". */
 function normaliseBatch(raw) {
   const s = String(raw || '').trim();
-  const m = s.match(/^(\d{4})\s*[-–—\/]\s*(\d{2}|\d{4})$/);
+  const m = s.match(/^(\d{4})\s*(?:[-‐‑‒–—―−\/]|to)\s*(\d{2}|\d{4})$/i);
   if (!m) return s;
-  let end = m[2];
-  if (end.length === 2) {
-    const century = m[1].slice(0, 2);
-    end = (parseInt(end, 10) < parseInt(m[1].slice(2), 10) ? String(parseInt(century, 10) + 1) : century) + end;
-  }
-  return `${m[1]} to ${end}`;
+  return `${m[1]}-${m[2].slice(-2)}`;
 }
 
 

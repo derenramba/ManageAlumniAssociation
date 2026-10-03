@@ -261,3 +261,11 @@ test('close, reconcile, export and publish', async () => {
   assert.match(r.text, /Treasurer Person/);
   assert.doesNotMatch(r.text, /Voter 1/);
 });
+
+test('welcome page keeps description paragraphs', async () => {
+  db.get().prepare("UPDATE elections SET description = ? WHERE id = ?").run('First paragraph.\r\n\r\nSecond paragraph,\r\nsame paragraph line.', electionId);
+  const r = await new Client(srv.base).get('/');
+  assert.match(r.text, /About this Election/);
+  assert.match(r.text, /<p>First paragraph\.<\/p>\s*<p>Second paragraph,<br>same paragraph line\.<\/p>/);
+  assert.match(r.text, /Review and submit your ballot/);
+});

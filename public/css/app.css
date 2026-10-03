@@ -518,3 +518,12 @@ table.data th { background: #f7f5f0; color: var(--ink-2); letter-spacing: .08em;
 .ballot-locked { color: var(--ink); }
 .confidential { color: var(--error); text-transform: uppercase; letter-spacing: .08em; }
 .unopposed-card .badge { display: block; margin-top: .2rem; }
+
+/* About this Election: keep the description's paragraphs */
+.about-text p { margin: 0 0 1.1em; line-height: 1.65; }
+.about-text p:last-child { margin-bottom: 0; }
+/* How to vote: one number per step, title and explanation on separate lines */
+.how li { align-items: flex-start; }
+.how li > div { padding-top: .15rem; }
+.how strong { display: block; font-size: 1.05rem; color: var(--ink); margin-bottom: .25rem; }
+.how span.t { display: block; line-height: 1.55; }
