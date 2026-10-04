@@ -3,9 +3,10 @@
 <section class="card hero-premium">
   <div class="medallion"><img src="/static/img/logo.png" alt="MANAGE Alumni Association logo" width="112" height="112"></div>
   <span class="overline">Official election portal</span>
-  <h1>Welcome to the MANAGE Alumni Association Election</h1>
-  <div class="term"><%= election.name %><% if (election.term) { %> · <%= election.term %><% } %></div>
+  <h1><%= election.name %></h1>
+  <p class="tagline">Connecting MANAGE alumni worldwide to elect our association’s leadership.</p>
   <span class="status-pill <%= si.publicKey %>">Voting <%= si.publicKey === 'open' ? 'is open' : si.publicLabel.toLowerCase() %></span>
+  <p class="hero-message">Wherever life has taken us, MANAGE continues to connect us. Your vote helps shape the future of our alumni community.</p>
   <dl class="dates">
     <div><dt>Voting opens</dt><dd><%= fmt(election.opens_at) %></dd></div>
     <div><dt>Voting closes</dt><dd><%= fmt(election.closes_at) %></dd></div>

@@ -537,3 +537,14 @@ table.data th { background: #f7f5f0; color: var(--ink-2); letter-spacing: .08em;
 .ballot-intro { margin-top: 1.25rem; }
 .ballot-intro h2 { font-size: 1.4rem; color: var(--navy); }
 @media (max-width: 480px) { .voter-welcome h1 { font-size: 1.4rem; } }
+
+/* Welcome banner text (Oct 2026 revision) */
+.hero-premium .medallion { box-shadow: 0 10px 30px rgba(0, 0, 0, .3); }
+.hero-premium h1 { margin: .35rem auto .6rem; max-width: 30rem; }
+.hero-premium .tagline { color: #c9dcf0; font-style: italic; font-size: 1.1rem; line-height: 1.6; max-width: 30rem; margin: 0 auto 1.25rem; }
+.hero-premium .status-pill { margin-top: 0; }
+.hero-premium .hero-message { color: #e8eef5; font-size: 1.05rem; line-height: 1.65; max-width: 32rem; margin: .75rem auto 0; }
+@media (max-width: 480px) {
+  .hero-premium .tagline { font-size: 1.02rem; margin-bottom: 1rem; }
+  .hero-premium .hero-message { font-size: 1rem; }
+}
