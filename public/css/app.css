@@ -552,3 +552,4 @@ table.data th { background: #f7f5f0; color: var(--ink-2); letter-spacing: .08em;
 /* WhatsApp preview */
 .wa-preview { background: #e7f6dc; border: 1px solid #c9e7b4; border-radius: 12px 12px 12px 2px; padding: .85rem 1rem; max-width: 36rem; line-height: 1.55; white-space: pre-wrap; }
 .wa-template { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .75rem 1rem; white-space: pre-wrap; font-family: var(--mono); font-size: .95rem; }
+.sms-preview { background: #eef3f8; border-color: #d3e0ec; }

@@ -34,6 +34,13 @@ services:
         sync: false
       - key: SMTP_FROM
         sync: false
+      # Twilio SMS (optional; leave empty to keep SMS in test mode)
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM
+        sync: false
       # WhatsApp Business Platform (optional; leave empty to keep WhatsApp in test mode)
       - key: WHATSAPP_TOKEN
         sync: false

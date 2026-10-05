@@ -136,6 +136,11 @@ router.post('/codes/voter/:id/replace', numericId, requireElection, requirePerm(
     audit.log(req, 'WhatsApp message resent', { category: 'invitations', entityType: 'voter', entityId: v.id, entityLabel: `${v.full_name} (${v.voter_ref})`, details: { reason: 'New code after replacement' } });
     setImmediate(() => mailer.processQueue(10).catch(() => {}));
   }
+  if (req.body.send_sms && require('../../lib/sms').voterPhone(v) && req.admin.perms.has('send_invitations')) {
+    mailer.queueInvitation({ electionId: e.id, voter: v, codeId: newId, kind: 'resend', adminId: req.admin.id, channel: 'sms' });
+    audit.log(req, 'SMS resent', { category: 'invitations', entityType: 'voter', entityId: v.id, entityLabel: `${v.full_name} (${v.voter_ref})`, details: { reason: 'New code after replacement' } });
+    setImmediate(() => mailer.processQueue(10).catch(() => {}));
+  }
   if (req.body.send_invitation && v.email && mailer.isValidEmail(v.email) && req.admin.perms.has('send_invitations')) {
     mailer.queueInvitation({ electionId: e.id, voter: v, codeId: newId, kind: 'resend', adminId: req.admin.id });
     audit.log(req, 'Invitation resent', { category: 'invitations', entityType: 'voter', entityId: v.id, entityLabel: `${v.full_name} (${v.voter_ref})`, details: { reason: 'New code after replacement' } });

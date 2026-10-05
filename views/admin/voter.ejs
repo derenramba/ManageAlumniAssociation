@@ -61,6 +61,7 @@
           <div class="field"><label for="reason">Reason</label><input type="text" id="reason" name="reason" required placeholder="e.g. Voter reports code was shared"></div>
           <% if (v.email && can('send_invitations')) { %><label class="check mb-1"><input type="checkbox" name="send_invitation" value="1" checked> <span>Email the new code to <%= v.email %> (replace only)</span></label><% } %>
           <% if (waPhone && can('send_invitations')) { %><label class="check mb-1"><input type="checkbox" name="send_whatsapp" value="1"> <span>WhatsApp the new code to <%= waPhone %> (replace only)</span></label><% } %>
+          <% if (smsPhone && can('send_invitations')) { %><label class="check mb-1"><input type="checkbox" name="send_sms" value="1"> <span>SMS the new code to <%= smsPhone %> (replace only)</span></label><% } %>
           <div class="row">
             <button class="btn secondary" type="submit" formaction="/admin/codes/voter/<%= v.id %>/replace" data-confirm="Replace this code? The old code will stop working immediately.">Replace code</button>
             <button class="btn danger secondary" type="submit" formaction="/admin/codes/voter/<%= v.id %>/revoke">Revoke only</button>
@@ -108,10 +109,23 @@
       <button class="btn <%= v.wa_count ? 'secondary' : '' %>" type="submit"><%= v.wa_count ? 'Resend WhatsApp message' : 'Send WhatsApp message' %></button>
     </form>
   <% } %>
+  <h3 class="mt-2">SMS</h3>
+  <p>Status: <%- include('../partials/voter-badges', { v, which: 'sms' }) %><% if (v.sms_at) { %> <span class="small muted">last attempt <%= fmtShort(v.sms_at) %></span><% } %>
+    <% if (smsPhone) { %><br><span class="small muted">Sends to <%= smsPhone %><%= v.mobile ? ' (mobile number)' : ' (WhatsApp number)' %></span><% } %></p>
+  <% if (v.sms_status === 'failed' && v.sms_error) { %><div class="alert error"><div><%= v.sms_error %></div></div><% } %>
+  <% if (!smsPhone && !voted) { %><div class="alert warning"><div>No usable mobile number. Add one under Edit details to send the code by SMS.</div></div><% } %>
+  <% if (can('send_invitations') && !voted && !closed && smsPhone && v.code_status_raw === 'active') { %>
+    <form method="post" action="/admin/invitations/voter/<%= v.id %>/send" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="channel" value="sms">
+      <% if (v.sms_count > 0) { %><label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>Resend the SMS with the <strong>same</strong> voting code to <%= smsPhone %></span></label><% } %>
+      <button class="btn <%= v.sms_count ? 'secondary' : '' %>" type="submit"><%= v.sms_count ? 'Resend SMS' : 'Send SMS' %></button>
+    </form>
+  <% } %>
   <% if (invitations.length) { %>
     <h3 class="mt-2">Send history</h3>
     <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Channel</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
-    <% invitations.forEach(function (i) { %><tr><td class="small nowrap"><%= fmtShort(i.last_attempt_at || i.created_at) %></td><td class="small"><%= i.channel === 'whatsapp' ? 'WhatsApp' : 'Email' %></td><td class="small"><%= i.kind === 'initial' ? 'First invitation' : i.kind === 'resend' ? 'Resend' : 'Retry' %></td><td><span class="badge <%= i.status === 'failed' ? 'error' : i.status === 'sent' || i.status === 'delivered' ? 'success' : 'info' %>" title="<%= i.error || '' %>"><%= i.status %></span></td><td class="small"><%= i.to_email %></td><td class="small"><%= i.admin_name || 'System' %></td></tr><% }) %>
+    <% invitations.forEach(function (i) { %><tr><td class="small nowrap"><%= fmtShort(i.last_attempt_at || i.created_at) %></td><td class="small"><%= i.channel === 'whatsapp' ? 'WhatsApp' : i.channel === 'sms' ? 'SMS' : 'Email' %></td><td class="small"><%= i.kind === 'initial' ? 'First invitation' : i.kind === 'resend' ? 'Resend' : 'Retry' %></td><td><span class="badge <%= i.status === 'failed' ? 'error' : i.status === 'sent' || i.status === 'delivered' ? 'success' : 'info' %>" title="<%= i.error || '' %>"><%= i.status %></span></td><td class="small"><%= i.to_email %></td><td class="small"><%= i.admin_name || 'System' %></td></tr><% }) %>
     </tbody></table></div>
   <% } %>
 </section>

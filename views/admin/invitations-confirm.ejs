@@ -1,17 +1,17 @@
 <%- include('../partials/admin-top') %>
 <div class="page-head"><div><h1><%= labels.title %></h1></div><a class="btn secondary" href="/admin/invitations">Cancel</a></div>
 <% if (!list.length) { %>
-  <div class="alert info"><div>There are no voters to send to in this selection. Voters are only included if they are eligible, have a valid <%= channel === 'whatsapp' ? 'mobile or WhatsApp number' : 'email' %> and an active (unused) voting code, and are not already queued.</div></div>
+  <div class="alert info"><div>There are no voters to send to in this selection. Voters are only included if they are eligible, have a valid <%= channel === 'email' ? 'email' : 'mobile number' %> and an active (unused) voting code, and are not already queued.</div></div>
   <a class="btn secondary" href="/admin/invitations">Back to invitations</a>
 <% } else { %>
 <section class="confirm-box" style="max-width:820px">
-  <% if (channel === 'whatsapp') { %>
-  <h2 class="mt-0">You are about to send WhatsApp messages to <%= list.length.toLocaleString('en-IN') %> eligible voter<%= list.length === 1 ? '' : 's' %>.</h2>
+  <% if (channel !== 'email') { const cname = channel === 'sms' ? 'SMS' : 'WhatsApp', provider = channel === 'sms' ? 'Twilio' : 'WhatsApp'; %>
+  <h2 class="mt-0">You are about to send <%= cname %> messages to <%= list.length.toLocaleString('en-IN') %> eligible voter<%= list.length === 1 ? '' : 's' %>.</h2>
   <ul>
-    <li>Each WhatsApp message contains that voter's own voting code. No new codes are created.</li>
-    <li>WhatsApp charges per message. Check the count above before confirming.</li>
-    <% if (resends) { %><li><strong><%= resends %></strong> of these voter(s) have already received a WhatsApp message; this will be recorded as a <strong>resend</strong>.</li><% } %>
-    <% if (mailMode !== 'smtp') { %><li>Test mode: WhatsApp is not connected yet, so messages will be stored in the outbox, not delivered.</li><% } %>
+    <li>Each <%= cname %> message contains that voter's own voting code. No new codes are created.</li>
+    <li><%= provider %> charges per message. Check the count above before confirming.</li>
+    <% if (resends) { %><li><strong><%= resends %></strong> of these voter(s) have already received <%= channel === 'sms' ? 'an SMS' : 'a WhatsApp message' %>; this will be recorded as a <strong>resend</strong>.</li><% } %>
+    <% if (mailMode !== 'smtp') { %><li>Test mode: <%= provider %> is not connected yet, so messages will be stored in the outbox, not delivered.</li><% } %>
   </ul>
   <% } else { %>
   <h2 class="mt-0">You are about to <%= labels.verb %> <%= list.length.toLocaleString('en-IN') %> eligible voter<%= list.length === 1 ? '' : 's' %>.</h2>
@@ -32,7 +32,7 @@
   </form>
 </section>
 <details class="mt-2"><summary>Show recipients (<%= list.length %>)</summary>
-  <div class="table-wrap mt-1"><table class="data"><thead><tr><th>Name</th><th><%= channel === 'whatsapp' ? 'WhatsApp number' : 'Email' %></th><th>Previously sent</th></tr></thead><tbody>
+  <div class="table-wrap mt-1"><table class="data"><thead><tr><th>Name</th><th><%= channel === 'email' ? 'Email' : channel === 'sms' ? 'Mobile number' : 'WhatsApp number' %></th><th>Previously sent</th></tr></thead><tbody>
   <% list.slice(0, 1000).forEach(function (v) { %><tr><td><%= v.full_name %></td><td class="small"><%= contactOf(v) %></td><td class="num"><%= v.sent_count %></td></tr><% }) %>
   </tbody></table></div>
 </details>

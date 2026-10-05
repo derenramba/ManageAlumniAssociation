@@ -33,10 +33,12 @@ router.get('/', (req, res) => {
   const issues = readiness.items.filter((i) => i.level !== 'ok');
   const inv = invitationSummary(e.id);
   const wa = invitationSummary(e.id, 'whatsapp');
+  const smsSum = invitationSummary(e.id, 'sms');
   if (inv.failed) issues.push({ level: 'warning', label: `${inv.failed} invitation(s) failed to send`, link: '/admin/invitations?status=failed' });
+  if (smsSum.failed) issues.push({ level: 'warning', label: `${smsSum.failed} SMS message(s) failed to send`, link: '/admin/invitations#sms' });
   if (wa.failed) issues.push({ level: 'warning', label: `${wa.failed} WhatsApp message(s) failed to send`, link: '/admin/invitations?wa=failed#whatsapp' });
   const recent = d.prepare(`SELECT v.full_name, b.submitted_at FROM ballots b JOIN voters v ON v.id = b.voter_id WHERE b.election_id = ? ORDER BY b.id DESC LIMIT 8`).all(e.id);
-  res.render('admin/dashboard', { title: 'Dashboard', t, counts, issues, inv, wa, readiness, mailMode: mailer.mode(), recent, transitions: election.TRANSITIONS });
+  res.render('admin/dashboard', { title: 'Dashboard', t, counts, issues, inv, wa, smsSum, readiness, mailMode: mailer.mode(), recent, transitions: election.TRANSITIONS });
 });
 
 router.get('/turnout', requireElection, requirePerm('view_turnout'), (req, res) => {

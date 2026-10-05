@@ -53,6 +53,12 @@ module.exports = {
     verifyToken: env.WHATSAPP_VERIFY_TOKEN || '',
     appSecret: env.WHATSAPP_APP_SECRET || '',
   },
+  // Twilio SMS. TWILIO_FROM = Twilio phone number (+1…) or Messaging Service SID (MG…). Empty = test mode.
+  twilio: {
+    accountSid: env.TWILIO_ACCOUNT_SID || '',
+    authToken: env.TWILIO_AUTH_TOKEN || '',
+    from: env.TWILIO_FROM || '',
+  },
   // Messages per minute the background mailer will send (protects SMTP quotas).
   mailRatePerMinute: parseInt(env.MAIL_RATE_PER_MINUTE || '120', 10),
   adminSessionHours: parseInt(env.ADMIN_SESSION_HOURS || '8', 10),

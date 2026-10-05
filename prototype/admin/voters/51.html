@@ -91,11 +91,13 @@
 
 
 
+
 </dd>
     <dt>Vote status</dt><dd>
 
 
 <span class="badge neutral">Not voted</span>
+
 
 
 </dd>
@@ -126,6 +128,7 @@
 
 
 
+
 </p>
   
     <p class="row"><span class="code-mask" id="code-51">•••• •••• •••• ••••</span> <button type="button" class="btn secondary small" data-reveal-code="/admin/codes/voter/51/reveal" data-target="code-51">Copy</button></p>
@@ -139,6 +142,7 @@
           <div class="field"><label for="reason">Reason</label><input type="text" id="reason" name="reason" required placeholder="e.g. Voter reports code was shared"></div>
           <label class="check mb-1"><input type="checkbox" name="send_invitation" value="1" checked> <span>Email the new code to nandini.kumar@example.org (replace only)</span></label>
           <label class="check mb-1"><input type="checkbox" name="send_whatsapp" value="1"> <span>WhatsApp the new code to +919613081932 (replace only)</span></label>
+          <label class="check mb-1"><input type="checkbox" name="send_sms" value="1"> <span>SMS the new code to +919613081932 (replace only)</span></label>
           <div class="row">
             <button class="btn secondary" type="submit" formaction="/admin/codes/voter/51/replace" data-confirm="Replace this code? The old code will stop working immediately.">Replace code</button>
             <button class="btn danger secondary" type="submit" formaction="/admin/codes/voter/51/revoke">Revoke only</button>
@@ -150,7 +154,7 @@
   
     <h3 class="mt-2">Code history</h3>
     <ul class="small">
-      <li>2 Oct 2026, 18:47:21, active</li>
+      <li>2 Oct 2026, 21:23:07, active</li>
     </ul>
   
 </section>
@@ -159,6 +163,7 @@
   <h2>Invitations</h2>
   <h3>Email</h3>
   <p>Status: 
+
 
 
 
@@ -182,6 +187,7 @@
 <span class="badge neutral">Not sent</span>
 
 
+
     <br><span class="small muted">Sends to +919613081932 (WhatsApp number)</span></p>
   
   
@@ -191,6 +197,26 @@
       <input type="hidden" name="channel" value="whatsapp">
       
       <button class="btn " type="submit">Send WhatsApp message</button>
+    </form>
+  
+  <h3 class="mt-2">SMS</h3>
+  <p>Status: 
+
+
+
+
+<span class="badge neutral">Not sent</span>
+
+
+    <br><span class="small muted">Sends to +919613081932 (mobile number)</span></p>
+  
+  
+  
+    <form method="post" action="/admin/invitations/voter/51/send" data-once>
+      <input type="hidden" name="_csrf" value="">
+      <input type="hidden" name="channel" value="sms">
+      
+      <button class="btn " type="submit">Send SMS</button>
     </form>
   
   

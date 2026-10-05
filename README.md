@@ -88,6 +88,10 @@ Voting codes can also be sent by WhatsApp from **Invitations → WhatsApp** (and
 
 To connect: create a WhatsApp Business Platform app in Meta, add a phone number, register the `voting_code` template (Utility, English) with the body shown on the Invitations page, then set `WHATSAPP_TOKEN` (permanent system user token) and `WHATSAPP_PHONE_NUMBER_ID`. For delivery receipts, set the webhook callback to `<PUBLIC_BASE_URL>/webhooks/whatsapp` with `WHATSAPP_VERIFY_TOKEN`, subscribe to `messages`, and set `WHATSAPP_APP_SECRET`.
 
+## SMS (Twilio)
+
+Codes can also be sent by SMS from **Invitations → SMS (Twilio)** and per voter, with the same rules as email and WhatsApp. Set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM` (a Twilio number or Messaging Service SID). Delivery receipts arrive automatically at `/webhooks/twilio` (signature checked) when the site runs on https. SMS to Indian numbers may be filtered unless the sender is registered under India's DLT rules; test a few numbers first. Without the settings, SMS runs in test mode and messages go to the outbox.
+
 ## Deployment notes
 
 > **Do not deploy on Vercel, Netlify or other serverless platforms.** They have no persistent disk, so the election database would be wiped between requests and votes would be lost. Use a host with a persistent disk/volume and a single always-on process.

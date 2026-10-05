@@ -2,7 +2,7 @@
 <div class="page-head"><div><h1>Outbox</h1><p><%= mode === 'smtp' ? 'SMTP is configured — new messages are delivered by email. Older messages stored in outbox mode are listed here.' : 'Outbox mode: messages are stored here instead of being sent (no SMTP configured). Use this to verify personalisation during testing.' %></p></div><a class="btn secondary" href="/admin/invitations">Back</a></div>
 <div class="alert warning"><div>These messages contain live voting codes. Treat them as confidential.</div></div>
 <div class="table-wrap"><table class="data"><thead><tr><th>Stored</th><th>Channel</th><th>To</th><th>Subject</th><th></th></tr></thead><tbody>
-<% rows.forEach(function (r) { %><tr><td class="small nowrap"><%= fmtShort(r.created_at) %></td><td class="small"><%= r.channel === 'whatsapp' ? 'WhatsApp' : 'Email' %></td><td><%= r.to_email %></td><td class="small"><%= r.subject %></td><td><a class="btn secondary small" href="/admin/invitations/outbox/<%= r.id %>" target="_blank" rel="noopener">Open</a></td></tr><% }) %>
+<% rows.forEach(function (r) { %><tr><td class="small nowrap"><%= fmtShort(r.created_at) %></td><td class="small"><%= r.channel === 'whatsapp' ? 'WhatsApp' : r.channel === 'sms' ? 'SMS' : 'Email' %></td><td><%= r.to_email %></td><td class="small"><%= r.subject %></td><td><a class="btn secondary small" href="/admin/invitations/outbox/<%= r.id %>" target="_blank" rel="noopener">Open</a></td></tr><% }) %>
 <% if (!rows.length) { %><tr><td colspan="5" class="muted">No messages.</td></tr><% } %>
 </tbody></table></div>
 <%- include('../partials/admin-bottom') %>

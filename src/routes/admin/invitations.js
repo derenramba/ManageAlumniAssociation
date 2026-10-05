@@ -10,16 +10,18 @@ const { flash, clean, asInt, httpError } = require('../../lib/http');
 const { requirePerm, requireElection } = require('./guards');
 const { invitationSummary } = require('./dashboard');
 const whatsapp = require('../../lib/whatsapp');
+const sms = require('../../lib/sms');
 
 const router = express.Router();
 const numericId = (req, res, next) => (/^\d+$/.test(req.params.id) ? next() : next('route'));
 
-const CHANNELS = ['email', 'whatsapp'];
-const channelOf = (v) => (v === 'whatsapp' ? 'whatsapp' : 'email');
+const channelOf = (v) => (v === 'whatsapp' || v === 'sms' ? v : 'email');
+const NOUN = { email: 'invitation', whatsapp: 'WhatsApp message', sms: 'SMS' };
+const phoneLib = { whatsapp, sms };
 
 // Voters who can receive an invitation on a channel right now: eligible, contact detail, active code, not already queued.
 function sendable(channel) {
-  const contact = channel === 'whatsapp'
+  const contact = channel !== 'email'
     ? "((v.mobile IS NOT NULL AND v.mobile <> '') OR (v.whatsapp IS NOT NULL AND v.whatsapp <> ''))"
     : "v.email IS NOT NULL AND v.email <> ''";
   return `v.election_id = @eid AND v.eligibility = 'eligible' AND ${contact}
@@ -48,9 +50,8 @@ function recipients(electionId, mode, ids = [], channel = 'email') {
   } else {
     rows = [];
   }
-  return channelOf(channel) === 'whatsapp'
-    ? rows.filter((r) => whatsapp.voterPhone(r))
-    : rows.filter((r) => mailer.isValidEmail(r.email));
+  const c = channelOf(channel);
+  return c === 'email' ? rows.filter((r) => mailer.isValidEmail(r.email)) : rows.filter((r) => phoneLib[c].voterPhone(r));
 }
 
 router.get('/invitations', requireElection, requirePerm('send_invitations'), (req, res) => {
@@ -71,6 +72,14 @@ router.get('/invitations', requireElection, requirePerm('send_invitations'), (re
     failed: recipients(e.id, 'failed', [], 'whatsapp').length,
     noPhone: eligibleRows.filter((r) => !whatsapp.voterPhone(r)).length,
   };
+  const smsSummary = invitationSummary(e.id, 'sms');
+  const smsCounts = {
+    unsent: recipients(e.id, 'unsent', [], 'sms').length,
+    failed: recipients(e.id, 'failed', [], 'sms').length,
+    noPhone: eligibleRows.filter((r) => !sms.voterPhone(r)).length,
+  };
+  const sampleVoter = d.prepare("SELECT * FROM voters WHERE election_id = ? AND eligibility = 'eligible' ORDER BY id LIMIT 1").get(e.id) || { full_name: 'Sample Voter' };
+  const smsSample = sms.renderText(e, sampleVoter, '2222222222222222');
   const waSample = whatsapp.renderText(e, d.prepare("SELECT * FROM voters WHERE election_id = ? AND eligibility = 'eligible' ORDER BY id LIMIT 1").get(e.id) || { full_name: 'Sample Voter' }, '2222222222222222');
   const status = ['queued', 'sent', 'failed', 'not_sent'].includes(req.query.status) ? req.query.status : '';
   const page = Math.max(1, asInt(req.query.page) || 1);
@@ -80,6 +89,7 @@ router.get('/invitations', requireElection, requirePerm('send_invitations'), (re
     rows: list.rows, total: list.total, page, pages: Math.max(1, Math.ceil(list.total / 50)), status,
     waSummary, waCounts, waMode: whatsapp.mode(), waSample, waTemplate: whatsapp.TEMPLATE_BODY,
     waTemplateName: require('../../config').whatsapp.templateName,
+    smsSummary, smsCounts, smsMode: sms.mode(), smsSample, smsFrom: require('../../config').twilio.from,
   });
 });
 
@@ -136,12 +146,13 @@ function confirmPage(req, res, mode, ids, channel = 'email') {
   const list = recipients(e.id, mode, ids, channel);
   const resends = list.filter((r) => r.sent_count > 0).length;
   const subject = mailer.renderInvitation(e, { full_name: 'X' }, '2222222222222222').subject;
-  const isWa = channel === 'whatsapp';
-  const labels = { ...MODE_LABELS[mode], title: isWa ? MODE_LABELS[mode].title.replace('invitations', 'WhatsApp messages') : MODE_LABELS[mode].title };
+  const phone = channel !== 'email';
+  const plural = { whatsapp: 'WhatsApp messages', sms: 'SMS messages' }[channel];
+  const labels = { ...MODE_LABELS[mode], title: phone ? MODE_LABELS[mode].title.replace('invitations', plural) : MODE_LABELS[mode].title };
   res.render('admin/invitations-confirm', {
     title: labels.title, mode, ids, list, resends, subject, labels, channel,
-    mailMode: isWa ? (whatsapp.mode() === 'api' ? 'smtp' : 'outbox') : mailer.mode(),
-    contactOf: (v) => (isWa ? whatsapp.display(whatsapp.voterPhone(v)) : v.email),
+    mailMode: phone ? (phoneLib[channel].mode() === 'api' ? 'smtp' : 'outbox') : mailer.mode(),
+    contactOf: (v) => (phone ? phoneLib[channel].display(phoneLib[channel].voterPhone(v)) : v.email),
   });
 }
 
@@ -183,12 +194,12 @@ router.post('/invitations/send', requireElection, requirePerm('send_invitations'
     return list;
   }).immediate();
   const resends = queued.filter((v) => v.sent_count > 0).length;
-  const noun = channel === 'whatsapp' ? 'WhatsApp messages' : 'Invitations';
+  const noun = { whatsapp: 'WhatsApp messages', sms: 'SMS messages', email: 'Invitations' }[channel];
   const action = mode === 'failed' ? `Failed ${noun.toLowerCase()} retried` : mode === 'selected' ? `${noun} resent (selected voters)` : `${noun} sent`;
   audit.log(req, action, { category: 'invitations', entityType: 'election', entityId: e.id, entityLabel: e.name, details: { channel, queued: queued.length, resends, first_messages: queued.length - resends } });
   setImmediate(() => mailer.processQueue(50).catch((err) => console.error(err)));
-  flash(res, 'success', `${queued.length} ${channel === 'whatsapp' ? 'WhatsApp message(s)' : 'invitation(s)'} queued for sending${resends ? ` (${resends} resend(s))` : ''}. Status updates appear below as messages are sent.`);
-  res.redirect(303, channel === 'whatsapp' ? '/admin/invitations#whatsapp' : '/admin/invitations');
+  flash(res, 'success', `${queued.length} ${NOUN[channel]}(s) queued for sending${resends ? ` (${resends} resend(s))` : ''}. Status updates appear below as messages are sent.`);
+  res.redirect(303, channel === 'email' ? '/admin/invitations' : `/admin/invitations#${channel}`);
 });
 
 // Single voter send / resend (from voter page)
@@ -203,9 +214,9 @@ router.post('/invitations/voter/:id/send', numericId, requireElection, requirePe
     let why = 'This voter cannot receive an invitation right now.';
     if (v.ballot_id) why = 'This voter has already voted.';
     else if (v.eligibility !== 'eligible') why = 'This voter is not eligible.';
-    else if (channel === 'whatsapp' && !whatsapp.voterPhone(v)) why = 'This voter has no valid mobile or WhatsApp number. Add one first.';
-    else if (channel === 'whatsapp' && v.code_status_raw !== 'active') why = 'This voter has no active voting code.';
-    else if (channel === 'whatsapp') why = 'A WhatsApp message is already queued for this voter.';
+    else if (channel !== 'email' && !phoneLib[channel].voterPhone(v)) why = 'This voter has no valid mobile number. Add one first.';
+    else if (channel !== 'email' && v.code_status_raw !== 'active') why = 'This voter has no active voting code.';
+    else if (channel !== 'email') why = `A ${NOUN[channel]} is already queued for this voter.`;
     else if (!v.email) why = 'This voter has no email address. Add an email or deliver the code externally.';
     else if (!mailer.isValidEmail(v.email)) why = 'The email address is not valid. Correct it first.';
     else if (v.code_status_raw !== 'active') why = 'This voter has no active voting code.';
@@ -219,13 +230,13 @@ router.post('/invitations/voter/:id/send', numericId, requireElection, requirePe
   }
   const r = list[0];
   if (r.sent_count > 0 && req.body.confirm !== 'yes') {
-    flash(res, 'error', `This voter has already been sent ${channel === 'whatsapp' ? 'a WhatsApp message' : 'an invitation'}. Tick the confirmation box to resend it.`);
+    flash(res, 'error', `This voter has already been sent ${channel === 'email' ? 'an invitation' : `a ${NOUN[channel]}`}. Tick the confirmation box to resend it.`);
     return res.redirect(303, back);
   }
   const kind = r.last_status === 'failed' ? 'retry' : r.sent_count > 0 ? 'resend' : 'initial';
   mailer.queueInvitation({ electionId: e.id, voter: r, codeId: r.code_id, kind, adminId: req.admin.id, channel });
-  const to = channel === 'whatsapp' ? whatsapp.display(whatsapp.voterPhone(r)) : v.email;
-  const what = channel === 'whatsapp' ? 'WhatsApp message' : 'Invitation';
+  const to = channel === 'email' ? v.email : phoneLib[channel].display(phoneLib[channel].voterPhone(r));
+  const what = channel === 'email' ? 'Invitation' : NOUN[channel];
   audit.log(req, `${what} ${kind === 'initial' ? 'sent' : 'resent'}`, { category: 'invitations', entityType: 'voter', entityId: v.id, entityLabel: `${v.full_name} (${v.voter_ref})`, details: { channel, kind, to } });
   setImmediate(() => mailer.processQueue(10).catch((err) => console.error(err)));
   flash(res, 'success', `${what} ${kind === 'initial' ? 'queued' : 're-queued'} for ${v.full_name} (same voting code, no new entitlement created).`);

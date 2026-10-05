@@ -50,4 +50,23 @@ router.post('/whatsapp', (req, res) => {
   res.sendStatus(200);
 });
 
+// Twilio SMS status callbacks (StatusCallback is set automatically on each message when the site uses https).
+router.post('/twilio', (req, res) => {
+  const sms = require('../lib/sms');
+  const url = sms.callbackUrl();
+  const params = req.body && typeof req.body === 'object' ? req.body : {};
+  if (!url || !sms.validSignature(req.headers['x-twilio-signature'], url, params)) return res.sendStatus(403);
+  const sid = String(params.MessageSid || params.SmsSid || '');
+  const status = String(params.MessageStatus || params.SmsStatus || '');
+  const d = db.get();
+  if (sid && status === 'delivered') {
+    d.prepare("UPDATE invitations SET status = 'delivered' WHERE channel = 'sms' AND provider_message_id = ? AND status IN ('sent','sending')").run(sid);
+  } else if (sid && (status === 'failed' || status === 'undelivered')) {
+    const code = params.ErrorCode ? ` [code ${String(params.ErrorCode).slice(0, 10)}]` : '';
+    d.prepare("UPDATE invitations SET status = 'failed', error = ? WHERE channel = 'sms' AND provider_message_id = ? AND status <> 'failed'")
+      .run(`SMS ${status === 'undelivered' ? 'could not be delivered by the mobile network' : 'failed'}${code}`, sid);
+  }
+  res.type('text/xml').send('<Response></Response>');
+});
+
 module.exports = router;

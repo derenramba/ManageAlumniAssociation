@@ -37,7 +37,7 @@
 <input type="hidden" name="back_qs" value="<%= qs({}) %>">
 <p class="small muted"><%= total %> voter(s) match.</p>
 <div class="table-wrap"><table class="data">
-  <thead><tr><% if (manage || can('send_invitations')) { %><th><input type="checkbox" data-select-all="ids" aria-label="Select all on this page"></th><% } %><th>Name</th><th>Email</th><th>Mobile</th><th>Batch</th><th>Eligibility</th><th>Code</th><th>Vote</th><th>Email invite</th><th>WhatsApp</th><th>Submitted at</th><th>Actions</th></tr></thead>
+  <thead><tr><% if (manage || can('send_invitations')) { %><th><input type="checkbox" data-select-all="ids" aria-label="Select all on this page"></th><% } %><th>Name</th><th>Email</th><th>Mobile</th><th>Batch</th><th>Eligibility</th><th>Code</th><th>Vote</th><th>Email invite</th><th>WhatsApp</th><th>SMS</th><th>Submitted at</th><th>Actions</th></tr></thead>
   <tbody>
   <% rows.forEach(function (v) { %>
     <tr>
@@ -51,6 +51,7 @@
       <td><%- include('../partials/voter-badges', { v, which: 'vote' }) %></td>
       <td><%- include('../partials/voter-badges', { v, which: 'inv' }) %></td>
       <td><%- include('../partials/voter-badges', { v, which: 'wa' }) %></td>
+      <td><%- include('../partials/voter-badges', { v, which: 'sms' }) %></td>
       <td class="small nowrap"><%= v.submitted_at ? fmtShort(v.submitted_at) : '—' %></td>
       <td><div class="actions">
         <% if (v.ballot_id && can('view_individual_votes')) { %><a class="btn small" href="/admin/records/<%= v.id %>">View vote</a><% } %>
@@ -59,7 +60,7 @@
       </div></td>
     </tr>
   <% }) %>
-  <% if (!rows.length) { %><tr><td colspan="12" class="muted">No voters match these filters.</td></tr><% } %>
+  <% if (!rows.length) { %><tr><td colspan="13" class="muted">No voters match these filters.</td></tr><% } %>
   </tbody></table></div>
 <%- include('../partials/pager') %>
 
@@ -75,7 +76,8 @@
     <% if (counts.pending) { %><button class="btn secondary" type="submit" formaction="/admin/voters/bulk" name="scope" value="all_pending" style="align-self:flex-end" data-confirm-scope>Apply to all <%= counts.pending %> pending voters</button><% } %>
     <% } %>
     <% if (can('send_invitations')) { %><button class="btn secondary" type="submit" formaction="/admin/invitations/confirm" style="align-self:flex-end">Email selected…</button>
-    <button class="btn secondary" type="submit" formaction="/admin/invitations/confirm" name="channel" value="whatsapp" style="align-self:flex-end">WhatsApp selected…</button><% } %>
+    <button class="btn secondary" type="submit" formaction="/admin/invitations/confirm" name="channel" value="whatsapp" style="align-self:flex-end">WhatsApp selected…</button>
+    <button class="btn secondary" type="submit" formaction="/admin/invitations/confirm" name="channel" value="sms" style="align-self:flex-end">SMS selected…</button><% } %>
   </div>
 </section>
 <% } %>

@@ -15,7 +15,7 @@
   <div class="stat"><div class="k">Eligible voters</div><div class="v"><%= t.eligible.toLocaleString('en-IN') %></div><div class="s"><%= counts.voters %> on register<%= counts.pending ? ` · ${counts.pending} pending review` : '' %></div></div>
   <div class="stat"><div class="k">Ballots submitted</div><div class="v"><%= t.voted.toLocaleString('en-IN') %></div><div class="s"><%= t.remaining.toLocaleString('en-IN') %> yet to vote</div></div>
   <div class="stat"><div class="k">Turnout</div><div class="v"><%= t.pctLabel %></div><div class="progress mt-1"><span style="width: <%= Math.min(100, t.pct).toFixed(1) %>%"></span></div></div>
-  <div class="stat"><div class="k">Invitations sent</div><div class="v"><%= inv.sentEver.toLocaleString('en-IN') %></div><div class="s"><%= inv.queued %> queued · <%= inv.failed %> failed · WhatsApp <%= wa.sentEver %> sent</div></div>
+  <div class="stat"><div class="k">Invitations sent</div><div class="v"><%= inv.sentEver.toLocaleString('en-IN') %></div><div class="s"><%= inv.queued %> queued · <%= inv.failed %> failed · WhatsApp <%= wa.sentEver %> · SMS <%= smsSum.sentEver %> sent</div></div>
 </div>
 
 <div class="grid-2">

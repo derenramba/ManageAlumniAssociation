@@ -7,6 +7,7 @@ const { formatCode } = require('./codes');
 const election = require('./election');
 const { cleanText, cleanHtml } = require('./nodash');
 const whatsapp = require('./whatsapp');
+const sms = require('./sms');
 
 let transport = null;
 function smtpConfigured() {
@@ -131,9 +132,24 @@ ${para(closing)}
 // ---------- Queue ----------
 
 function queueInvitation({ electionId, voter, codeId, kind, adminId, channel = 'email' }) {
-  const to = channel === 'whatsapp' ? whatsapp.display(whatsapp.voterPhone(voter)) : voter.email;
+  const to = channel === 'whatsapp' ? whatsapp.display(whatsapp.voterPhone(voter))
+    : channel === 'sms' ? sms.display(sms.voterPhone(voter)) : voter.email;
   return db.get().prepare(`INSERT INTO invitations (election_id, voter_id, code_id, kind, status, to_email, requested_by, created_at, channel)
     VALUES (?, ?, ?, ?, 'queued', ?, ?, ?, ?)`).run(electionId, voter.id, codeId, kind, to || '', adminId || null, nowIso(), channel).lastInsertRowid;
+}
+
+async function deliverSms(d, inv, e, voter, code) {
+  const to = sms.voterPhone(voter);
+  if (!to) throw new Error('Voter has no valid mobile number');
+  const text = sms.renderText(e, voter, code.code);
+  let messageId = null;
+  if (sms.mode() === 'api') {
+    messageId = await sms.send(text, to);
+  } else {
+    d.prepare("INSERT INTO email_outbox (invitation_id, to_email, subject, body_text, body_html, created_at, channel) VALUES (?, ?, ?, ?, ?, ?, 'sms')")
+      .run(inv.id, sms.display(to), 'SMS', text, `<pre style="white-space:pre-wrap;font:16px/1.5 Georgia,serif;padding:16px">${escapeHtml(text)}</pre>`, nowIso());
+  }
+  return { to: sms.display(to), messageId };
 }
 
 async function deliverWhatsApp(d, inv, e, voter, code) {
@@ -199,9 +215,9 @@ async function processQueue(limit = 25) {
         if (!voter || !code || code.voter_id !== voter.id) { fail('Voting code does not belong to this voter'); continue; }
         if (code.status !== 'active') { fail(code.status === 'used' ? 'Voter has already voted' : 'Voting code is no longer active'); continue; }
         if (voter.eligibility !== 'eligible') { fail('Voter is not eligible'); continue; }
-        if (inv.channel === 'whatsapp') {
+        if (inv.channel === 'whatsapp' || inv.channel === 'sms') {
           try {
-            const r = await deliverWhatsApp(d, inv, e, voter, code);
+            const r = inv.channel === 'sms' ? await deliverSms(d, inv, e, voter, code) : await deliverWhatsApp(d, inv, e, voter, code);
             d.prepare("UPDATE invitations SET status = 'sent', sent_at = ?, error = NULL, to_email = ?, provider_message_id = ? WHERE id = ?")
               .run(nowIso(), r.to, r.messageId, inv.id);
           } catch (err) {

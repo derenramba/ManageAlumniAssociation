@@ -32,12 +32,15 @@ const VOTER_LIST_SQL = `SELECT v.*,
     i.status AS inv_status, i.kind AS inv_kind, i.last_attempt_at AS inv_at, i.error AS inv_error,
     (SELECT COUNT(*) FROM invitations x WHERE x.voter_id = v.id AND x.channel = 'email') AS inv_count,
     w.status AS wa_status, w.kind AS wa_kind, w.last_attempt_at AS wa_at, w.error AS wa_error,
-    (SELECT COUNT(*) FROM invitations y WHERE y.voter_id = v.id AND y.channel = 'whatsapp') AS wa_count
+    (SELECT COUNT(*) FROM invitations y WHERE y.voter_id = v.id AND y.channel = 'whatsapp') AS wa_count,
+    s.status AS sms_status, s.kind AS sms_kind, s.last_attempt_at AS sms_at, s.error AS sms_error,
+    (SELECT COUNT(*) FROM invitations z WHERE z.voter_id = v.id AND z.channel = 'sms') AS sms_count
   FROM voters v
   LEFT JOIN voting_codes c ON c.voter_id = v.id AND c.status IN ('active','used')
   LEFT JOIN ballots b ON b.voter_id = v.id
   LEFT JOIN invitations i ON i.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id AND channel = 'email')
-  LEFT JOIN invitations w ON w.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id AND channel = 'whatsapp')`;
+  LEFT JOIN invitations w ON w.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id AND channel = 'whatsapp')
+  LEFT JOIN invitations s ON s.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id AND channel = 'sms')`;
 
 function buildFilter(electionId, q) {
   const where = ['v.election_id = @eid'];
