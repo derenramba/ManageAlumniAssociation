@@ -78,3 +78,47 @@ test('connected SMS: calls Twilio and records delivery from the signed callback'
     Object.assign(config.twilio, { accountSid: '', authToken: '', from: '' });
   }
 });
+
+test('WhatsApp through Twilio: Content Template with five variables, failure from signed callback', async () => {
+  Object.assign(config.twilio, { accountSid: 'AC123', authToken: 'tok', from: '', whatsappFrom: '+14155238886', whatsappContentSid: 'HX0123' });
+  const oldBase = config.publicBaseUrl;
+  config.publicBaseUrl = 'https://vote.test';
+  const realFetch = global.fetch;
+  const calls = [];
+  global.fetch = async (url, opts) => {
+    if (!String(url).startsWith('https://api.twilio.com/')) return realFetch(url, opts);
+    calls.push({ url, form: Object.fromEntries(new URLSearchParams(opts.body)) });
+    return new Response(JSON.stringify({ sid: 'MMWA' + calls.length }), { status: 201 });
+  };
+  try {
+    const r0 = await admin.get('/admin/invitations');
+    assert.match(r0.text, /Connected via Twilio/);
+    const v2 = one("SELECT id FROM voters WHERE voter_ref = 'S2'").id;
+    await admin.post(`/admin/invitations/voter/${v2}/send`, { channel: 'whatsapp', confirm: 'yes' });
+    await mailer.processQueue(10);
+    assert.equal(calls.length, 1);
+    const f = calls[0].form;
+    assert.equal(f.To, 'whatsapp:+447700900456');
+    assert.equal(f.From, 'whatsapp:+14155238886');
+    assert.equal(f.ContentSid, 'HX0123');
+    assert.equal(f.StatusCallback, 'https://vote.test/webhooks/twilio');
+    const vars = JSON.parse(f.ContentVariables);
+    const code = one("SELECT code FROM voting_codes WHERE voter_id = ? AND status = 'active'", v2).code;
+    assert.equal(vars['1'], 'Anna');
+    assert.equal(vars['3'], formatCode(code));
+    assert.equal(vars['4'], 'https://vote.test/');
+
+    const params = { MessageSid: 'MMWA1', MessageStatus: 'undelivered', ErrorCode: '63016' };
+    const data = Object.keys(params).sort().reduce((a, k) => a + k + params[k], 'https://vote.test/webhooks/twilio');
+    const sig = crypto.createHmac('sha1', 'tok').update(data).digest('base64');
+    const r = await fetch(`${srv.base}/webhooks/twilio`, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded', 'x-twilio-signature': sig }, body: new URLSearchParams(params) });
+    assert.equal(r.status, 200);
+    const inv = one("SELECT status, error FROM invitations WHERE provider_message_id = 'MMWA1'");
+    assert.equal(inv.status, 'failed');
+    assert.match(inv.error, /WhatsApp message could not be delivered.*63016/);
+  } finally {
+    global.fetch = realFetch;
+    config.publicBaseUrl = oldBase;
+    Object.assign(config.twilio, { accountSid: '', authToken: '', from: '', whatsappFrom: '', whatsappContentSid: '' });
+  }
+});

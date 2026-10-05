@@ -87,7 +87,7 @@ router.get('/invitations', requireElection, requirePerm('send_invitations'), (re
   res.render('admin/invitations', {
     title: 'Invitations', summary, counts, tpl: mailer.template(e), variables: mailer.VARIABLES, mode: mailer.mode(),
     rows: list.rows, total: list.total, page, pages: Math.max(1, Math.ceil(list.total / 50)), status,
-    waSummary, waCounts, waMode: whatsapp.mode(), waSample, waTemplate: whatsapp.TEMPLATE_BODY,
+    waSummary, waCounts, waMode: whatsapp.mode(), waProvider: whatsapp.provider(), waFrom: require('../../config').twilio.whatsappFrom, waSample, waTemplate: whatsapp.TEMPLATE_BODY,
     waTemplateName: require('../../config').whatsapp.templateName,
     smsSummary, smsCounts, smsMode: sms.mode(), smsSample, smsFrom: require('../../config').twilio.from,
   });

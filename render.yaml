@@ -41,6 +41,11 @@ services:
         sync: false
       - key: TWILIO_FROM
         sync: false
+      # WhatsApp through Twilio (approved sender number + Content Template SID HX...)
+      - key: TWILIO_WHATSAPP_FROM
+        sync: false
+      - key: TWILIO_WHATSAPP_CONTENT_SID
+        sync: false
       # WhatsApp Business Platform (optional; leave empty to keep WhatsApp in test mode)
       - key: WHATSAPP_TOKEN
         sync: false

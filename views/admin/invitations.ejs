@@ -29,7 +29,7 @@
 
 <section class="card mt-2" id="whatsapp">
   <div class="card-header"><h2>WhatsApp</h2>
-    <span class="badge <%= waMode === 'api' ? 'success' : 'warning' %>"><%= waMode === 'api' ? 'Connected' : 'Test mode (not connected)' %></span></div>
+    <span class="badge <%= waMode === 'api' ? 'success' : 'warning' %>"><%= waMode === 'api' ? (waProvider === 'twilio' ? 'Connected via Twilio' + (waFrom ? ' · from ' + waFrom.replace(/^whatsapp:/i, '') : '') : 'Connected via Meta') : 'Test mode (not connected)' %></span></div>
   <% if (waMode !== 'api') { %>
     <div class="alert warning"><div>WhatsApp is not connected yet. Messages you send are stored in the <a href="/admin/invitations/outbox">outbox</a> so you can check them, but nobody receives them. Ask your technical contact to add the WhatsApp settings in Render.</div></div>
   <% } %>
@@ -48,8 +48,8 @@
   <h3 class="mt-3">Message preview</h3>
   <p class="small muted">A real voter's name with a sample code. Each voter receives their own code.</p>
   <div class="wa-preview"><%= waSample %></div>
-  <details class="mt-2"><summary><strong>Template to register with Meta</strong> (for your technical contact)</summary>
-    <p class="small mt-1">In WhatsApp Manager, create a template named <code><%= waTemplateName %></code>, category <strong>Utility</strong>, language <strong>English</strong>, with exactly this body:</p>
+  <details class="mt-2"><summary><strong>Message template to register</strong> (for your technical contact)</summary>
+    <p class="small mt-1"><strong>Twilio:</strong> in Twilio Console, Messaging, Content Template Builder, create a template named <code><%= waTemplateName %></code>, type <strong>Text</strong>, language <strong>English</strong>, and submit it for WhatsApp approval as <strong>Utility</strong>. Put its SID (HX…) in <code>TWILIO_WHATSAPP_CONTENT_SID</code>.<br><strong>Meta directly:</strong> in WhatsApp Manager, create a template named <code><%= waTemplateName %></code>, category <strong>Utility</strong>, language <strong>English</strong>.<br>In both cases use exactly this body:</p>
     <pre class="wa-template"><%= waTemplate %></pre>
     <p class="small muted mb-0">{{1}} first name · {{2}} election name · {{3}} voting code · {{4}} voting link · {{5}} closing date</p>
   </details>

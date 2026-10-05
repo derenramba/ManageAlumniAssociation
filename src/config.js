@@ -58,6 +58,9 @@ module.exports = {
     accountSid: env.TWILIO_ACCOUNT_SID || '',
     authToken: env.TWILIO_AUTH_TOKEN || '',
     from: env.TWILIO_FROM || '',
+    // WhatsApp through Twilio: approved WhatsApp sender number and the approved Content Template SID (HX…).
+    whatsappFrom: env.TWILIO_WHATSAPP_FROM || '',
+    whatsappContentSid: env.TWILIO_WHATSAPP_CONTENT_SID || '',
   },
   // Messages per minute the background mailer will send (protects SMTP quotas).
   mailRatePerMinute: parseInt(env.MAIL_RATE_PER_MINUTE || '120', 10),
