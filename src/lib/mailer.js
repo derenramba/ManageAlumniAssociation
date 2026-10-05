@@ -6,6 +6,7 @@ const { nowIso, formatDateTime } = require('./time');
 const { formatCode } = require('./codes');
 const election = require('./election');
 const { cleanText, cleanHtml } = require('./nodash');
+const whatsapp = require('./whatsapp');
 
 let transport = null;
 function smtpConfigured() {
@@ -129,9 +130,24 @@ ${para(closing)}
 
 // ---------- Queue ----------
 
-function queueInvitation({ electionId, voter, codeId, kind, adminId }) {
-  return db.get().prepare(`INSERT INTO invitations (election_id, voter_id, code_id, kind, status, to_email, requested_by, created_at)
-    VALUES (?, ?, ?, ?, 'queued', ?, ?, ?)`).run(electionId, voter.id, codeId, kind, voter.email, adminId || null, nowIso()).lastInsertRowid;
+function queueInvitation({ electionId, voter, codeId, kind, adminId, channel = 'email' }) {
+  const to = channel === 'whatsapp' ? whatsapp.display(whatsapp.voterPhone(voter)) : voter.email;
+  return db.get().prepare(`INSERT INTO invitations (election_id, voter_id, code_id, kind, status, to_email, requested_by, created_at, channel)
+    VALUES (?, ?, ?, ?, 'queued', ?, ?, ?, ?)`).run(electionId, voter.id, codeId, kind, to || '', adminId || null, nowIso(), channel).lastInsertRowid;
+}
+
+async function deliverWhatsApp(d, inv, e, voter, code) {
+  const to = whatsapp.voterPhone(voter);
+  if (!to) throw Object.assign(new Error('Voter has no valid mobile or WhatsApp number'), { final: true });
+  const text = whatsapp.renderText(e, voter, code.code);
+  let messageId = null;
+  if (whatsapp.mode() === 'api') {
+    messageId = await whatsapp.send(e, voter, code.code, to);
+  } else {
+    d.prepare("INSERT INTO email_outbox (invitation_id, to_email, subject, body_text, body_html, created_at, channel) VALUES (?, ?, ?, ?, ?, ?, 'whatsapp')")
+      .run(inv.id, whatsapp.display(to), 'WhatsApp message', text, `<pre style="white-space:pre-wrap;font:16px/1.5 Georgia,serif;padding:16px">${escapeHtml(text)}</pre>`, nowIso());
+  }
+  return { to: whatsapp.display(to), messageId };
 }
 
 async function deliver(message) {
@@ -183,6 +199,16 @@ async function processQueue(limit = 25) {
         if (!voter || !code || code.voter_id !== voter.id) { fail('Voting code does not belong to this voter'); continue; }
         if (code.status !== 'active') { fail(code.status === 'used' ? 'Voter has already voted' : 'Voting code is no longer active'); continue; }
         if (voter.eligibility !== 'eligible') { fail('Voter is not eligible'); continue; }
+        if (inv.channel === 'whatsapp') {
+          try {
+            const r = await deliverWhatsApp(d, inv, e, voter, code);
+            d.prepare("UPDATE invitations SET status = 'sent', sent_at = ?, error = NULL, to_email = ?, provider_message_id = ? WHERE id = ?")
+              .run(nowIso(), r.to, r.messageId, inv.id);
+          } catch (err) {
+            fail(String(err && err.message ? err.message : err).slice(0, 300));
+          }
+          continue;
+        }
         if (!voter.email || !isValidEmail(voter.email)) { fail('Voter has no valid email address'); continue; }
         const msg = renderInvitation(e, { ...voter }, code.code);
         const messageId = await deliver(msg);

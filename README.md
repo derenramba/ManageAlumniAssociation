@@ -82,6 +82,12 @@ npm run build:prototype
 
 The pages are rendered from the real templates in `views/` and `public/`, so front-end changes made there apply to both the prototype and the full app.
 
+## WhatsApp
+
+Voting codes can also be sent by WhatsApp from **Invitations → WhatsApp** (and per voter), with the same confirmation, status tracking, retry and resend rules as email. Each message carries that voter's own existing code; numbers without a country code get `WHATSAPP_DEFAULT_COUNTRY_CODE` (91). Without `WHATSAPP_TOKEN` the platform runs in test mode and stores messages in the outbox.
+
+To connect: create a WhatsApp Business Platform app in Meta, add a phone number, register the `voting_code` template (Utility, English) with the body shown on the Invitations page, then set `WHATSAPP_TOKEN` (permanent system user token) and `WHATSAPP_PHONE_NUMBER_ID`. For delivery receipts, set the webhook callback to `<PUBLIC_BASE_URL>/webhooks/whatsapp` with `WHATSAPP_VERIFY_TOKEN`, subscribe to `messages`, and set `WHATSAPP_APP_SECRET`.
+
 ## Deployment notes
 
 > **Do not deploy on Vercel, Netlify or other serverless platforms.** They have no persistent disk, so the election database would be wiped between requests and votes would be lost. Use a host with a persistent disk/volume and a single always-on process.

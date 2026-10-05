@@ -42,6 +42,17 @@ module.exports = {
     from: env.SMTP_FROM || 'MANAGE Alumni Association Elections <elections@example.org>',
     replyTo: env.SMTP_REPLY_TO || '',
   },
+  // WhatsApp Business Platform (Meta Cloud API). Leave the token empty to use outbox (test) mode.
+  whatsapp: {
+    token: env.WHATSAPP_TOKEN || '',
+    phoneNumberId: env.WHATSAPP_PHONE_NUMBER_ID || '',
+    templateName: env.WHATSAPP_TEMPLATE_NAME || 'voting_code',
+    templateLang: env.WHATSAPP_TEMPLATE_LANG || 'en',
+    defaultCountryCode: (env.WHATSAPP_DEFAULT_COUNTRY_CODE || '91').replace(/\D/g, ''),
+    apiVersion: env.WHATSAPP_API_VERSION || 'v21.0',
+    verifyToken: env.WHATSAPP_VERIFY_TOKEN || '',
+    appSecret: env.WHATSAPP_APP_SECRET || '',
+  },
   // Messages per minute the background mailer will send (protects SMTP quotas).
   mailRatePerMinute: parseInt(env.MAIL_RATE_PER_MINUTE || '120', 10),
   adminSessionHours: parseInt(env.ADMIN_SESSION_HOURS || '8', 10),

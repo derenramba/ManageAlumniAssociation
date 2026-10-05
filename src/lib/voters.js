@@ -30,11 +30,14 @@ const VOTER_LIST_SQL = `SELECT v.*,
          ELSE 'none' END AS code_status,
     b.id AS ballot_id, b.submitted_at,
     i.status AS inv_status, i.kind AS inv_kind, i.last_attempt_at AS inv_at, i.error AS inv_error,
-    (SELECT COUNT(*) FROM invitations x WHERE x.voter_id = v.id) AS inv_count
+    (SELECT COUNT(*) FROM invitations x WHERE x.voter_id = v.id AND x.channel = 'email') AS inv_count,
+    w.status AS wa_status, w.kind AS wa_kind, w.last_attempt_at AS wa_at, w.error AS wa_error,
+    (SELECT COUNT(*) FROM invitations y WHERE y.voter_id = v.id AND y.channel = 'whatsapp') AS wa_count
   FROM voters v
   LEFT JOIN voting_codes c ON c.voter_id = v.id AND c.status IN ('active','used')
   LEFT JOIN ballots b ON b.voter_id = v.id
-  LEFT JOIN invitations i ON i.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id)`;
+  LEFT JOIN invitations i ON i.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id AND channel = 'email')
+  LEFT JOIN invitations w ON w.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id AND channel = 'whatsapp')`;
 
 function buildFilter(electionId, q) {
   const where = ['v.election_id = @eid'];
@@ -58,6 +61,9 @@ function buildFilter(electionId, q) {
     where.push(q.invitation === 'queued' ? "i.status IN ('queued','sending')" : 'i.status = @inv');
     params.inv = q.invitation;
   }
+  if (q.whatsapp === 'not_sent') where.push('w.id IS NULL');
+  if (['sent', 'failed'].includes(q.whatsapp)) { where.push('w.status = @wa'); params.wa = q.whatsapp; }
+  if (q.whatsapp === 'queued') where.push("w.status IN ('queued','sending')");
   if (q.filter === 'no_email') where.push("(v.email IS NULL OR v.email = '')");
   if (q.filter === 'no_mobile') where.push("(v.mobile IS NULL OR v.mobile = '')");
   return { where: where.join(' AND '), params };

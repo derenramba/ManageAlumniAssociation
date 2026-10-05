@@ -27,6 +27,34 @@
   <p class="small muted mt-1 mb-0">You will see a confirmation with the exact number of recipients before anything is sent.</p>
 </section>
 
+<section class="card mt-2" id="whatsapp">
+  <div class="card-header"><h2>WhatsApp</h2>
+    <span class="badge <%= waMode === 'api' ? 'success' : 'warning' %>"><%= waMode === 'api' ? 'Connected' : 'Test mode (not connected)' %></span></div>
+  <% if (waMode !== 'api') { %>
+    <div class="alert warning"><div>WhatsApp is not connected yet. Messages you send are stored in the <a href="/admin/invitations/outbox">outbox</a> so you can check them, but nobody receives them. Ask your technical contact to add the WhatsApp settings in Render.</div></div>
+  <% } %>
+  <div class="stats">
+    <div class="stat"><div class="k">Ready to send</div><div class="v"><%= waCounts.unsent %></div><div class="s">eligible · phone number · active code · not yet sent</div></div>
+    <div class="stat"><div class="k">Sent</div><div class="v"><%= waSummary.sentEver %></div></div>
+    <div class="stat"><div class="k">Queued</div><div class="v"><%= waSummary.queued %></div></div>
+    <div class="stat"><div class="k">Failed</div><div class="v"><%= waSummary.failed %></div></div>
+    <div class="stat"><div class="k">No phone number</div><div class="v"><%= waCounts.noPhone %></div></div>
+  </div>
+  <div class="row">
+    <a class="btn large <%= waCounts.unsent ? '' : 'disabled' %>" href="/admin/invitations/confirm?mode=unsent&channel=whatsapp">Send WhatsApp messages (<%= waCounts.unsent %>)</a>
+    <a class="btn secondary <%= waCounts.failed ? '' : 'disabled' %>" href="/admin/invitations/confirm?mode=failed&channel=whatsapp">Retry failed (<%= waCounts.failed %>)</a>
+    <a class="btn ghost" href="/admin/voters">Send to selected voters…</a>
+  </div>
+  <h3 class="mt-3">Message preview</h3>
+  <p class="small muted">A real voter's name with a sample code. Each voter receives their own code.</p>
+  <div class="wa-preview"><%= waSample %></div>
+  <details class="mt-2"><summary><strong>Template to register with Meta</strong> (for your technical contact)</summary>
+    <p class="small mt-1">In WhatsApp Manager, create a template named <code><%= waTemplateName %></code>, category <strong>Utility</strong>, language <strong>English</strong>, with exactly this body:</p>
+    <pre class="wa-template"><%= waTemplate %></pre>
+    <p class="small muted mb-0">{{1}} first name · {{2}} election name · {{3}} voting code · {{4}} voting link · {{5}} closing date</p>
+  </details>
+</section>
+
 <section class="card mt-2" id="test">
   <h2>Send a test email</h2>
   <p class="muted">Check that email delivery works before inviting voters. The test uses a sample code that cannot be used to vote.</p>
@@ -64,14 +92,15 @@
       <% [['','All'],['not_sent','Not sent'],['queued','Queued'],['sent','Sent'],['failed','Failed']].forEach(function ([v,l]) { %><a href="?status=<%= v %>" class="<%= status === v ? 'active' : '' %>"><%= l %></a><% }) %>
     </div></div>
   <div class="table-wrap"><table class="data">
-    <thead><tr><th>Voter</th><th>Email</th><th>Status</th><th>Last attempt</th><th>Sends</th><th>Vote</th></tr></thead>
+    <thead><tr><th>Voter</th><th>Email</th><th>Status</th><th>WhatsApp</th><th>Last attempt</th><th>Sends</th><th>Vote</th></tr></thead>
     <tbody>
     <% rows.forEach(function (v) { %>
       <tr><td><a href="/admin/voters/<%= v.id %>#invite"><%= v.full_name %></a></td><td class="small"><%= v.email || '—' %></td>
         <td><%- include('../partials/voter-badges', { v, which: 'inv' }) %><% if (v.inv_status === 'failed' && v.inv_error) { %><div class="small muted"><%= v.inv_error %></div><% } %></td>
+        <td><%- include('../partials/voter-badges', { v, which: 'wa' }) %><% if (v.wa_status === 'failed' && v.wa_error) { %><div class="small muted"><%= v.wa_error %></div><% } %></td>
         <td class="small nowrap"><%= v.inv_at ? fmtShort(v.inv_at) : '—' %></td><td class="num"><%= v.inv_count %></td><td><%- include('../partials/voter-badges', { v, which: 'vote' }) %></td></tr>
     <% }) %>
-    <% if (!rows.length) { %><tr><td colspan="6" class="muted">No voters in this view.</td></tr><% } %>
+    <% if (!rows.length) { %><tr><td colspan="7" class="muted">No voters in this view.</td></tr><% } %>
     </tbody></table></div>
   <%- include('../partials/pager') %>
 </section>

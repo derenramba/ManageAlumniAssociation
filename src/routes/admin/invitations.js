@@ -9,35 +9,48 @@ const { nowIso } = require('../../lib/time');
 const { flash, clean, asInt, httpError } = require('../../lib/http');
 const { requirePerm, requireElection } = require('./guards');
 const { invitationSummary } = require('./dashboard');
+const whatsapp = require('../../lib/whatsapp');
 
 const router = express.Router();
 const numericId = (req, res, next) => (/^\d+$/.test(req.params.id) ? next() : next('route'));
 
-// Voters who can receive an invitation right now: eligible, valid email, active code, not already queued.
-const SENDABLE = `v.election_id = @eid AND v.eligibility = 'eligible' AND v.email IS NOT NULL AND v.email <> ''
-  AND c.status = 'active'
-  AND NOT EXISTS (SELECT 1 FROM invitations q WHERE q.voter_id = v.id AND q.status IN ('queued','sending'))`;
+const CHANNELS = ['email', 'whatsapp'];
+const channelOf = (v) => (v === 'whatsapp' ? 'whatsapp' : 'email');
 
-function recipients(electionId, mode, ids = []) {
+// Voters who can receive an invitation on a channel right now: eligible, contact detail, active code, not already queued.
+function sendable(channel) {
+  const contact = channel === 'whatsapp'
+    ? "((v.mobile IS NOT NULL AND v.mobile <> '') OR (v.whatsapp IS NOT NULL AND v.whatsapp <> ''))"
+    : "v.email IS NOT NULL AND v.email <> ''";
+  return `v.election_id = @eid AND v.eligibility = 'eligible' AND ${contact}
+  AND c.status = 'active'
+  AND NOT EXISTS (SELECT 1 FROM invitations q WHERE q.voter_id = v.id AND q.channel = '${channel}' AND q.status IN ('queued','sending'))`;
+}
+
+function recipients(electionId, mode, ids = [], channel = 'email') {
   const d = db.get();
+  const ch = `'${channelOf(channel)}'`;
+  const latest = `(SELECT MAX(id) FROM invitations WHERE voter_id = v.id AND channel = ${ch})`;
   const base = `SELECT v.*, c.id AS code_id,
-      (SELECT COUNT(*) FROM invitations x WHERE x.voter_id = v.id AND x.status IN ('sent','delivered')) AS sent_count,
-      (SELECT status FROM invitations y WHERE y.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id)) AS last_status
-    FROM voters v JOIN voting_codes c ON c.voter_id = v.id AND c.status = 'active' WHERE ${SENDABLE}`;
+      (SELECT COUNT(*) FROM invitations x WHERE x.voter_id = v.id AND x.channel = ${ch} AND x.status IN ('sent','delivered')) AS sent_count,
+      (SELECT status FROM invitations y WHERE y.id = ${latest}) AS last_status
+    FROM voters v JOIN voting_codes c ON c.voter_id = v.id AND c.status = 'active' WHERE ${sendable(channelOf(channel))}`;
   let rows;
   if (mode === 'unsent') {
-    // Standard first invitation for the voter's current code (never duplicated).
-    rows = d.prepare(`${base} AND NOT EXISTS (SELECT 1 FROM invitations s WHERE s.voter_id = v.id AND s.code_id = c.id AND s.status IN ('sent','delivered'))
-      AND NOT EXISTS (SELECT 1 FROM invitations f WHERE f.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id) AND f.status = 'failed')`).all({ eid: electionId });
+    // Standard first message for the voter's current code (never duplicated).
+    rows = d.prepare(`${base} AND NOT EXISTS (SELECT 1 FROM invitations s WHERE s.voter_id = v.id AND s.channel = ${ch} AND s.code_id = c.id AND s.status IN ('sent','delivered'))
+      AND NOT EXISTS (SELECT 1 FROM invitations f WHERE f.id = ${latest} AND f.status = 'failed')`).all({ eid: electionId });
   } else if (mode === 'failed') {
-    rows = d.prepare(`${base} AND EXISTS (SELECT 1 FROM invitations f WHERE f.id = (SELECT MAX(id) FROM invitations WHERE voter_id = v.id) AND f.status = 'failed')`).all({ eid: electionId });
+    rows = d.prepare(`${base} AND EXISTS (SELECT 1 FROM invitations f WHERE f.id = ${latest} AND f.status = 'failed')`).all({ eid: electionId });
   } else if (mode === 'selected') {
     if (!ids.length) return [];
     rows = d.prepare(`${base} AND v.id IN (${ids.map(() => '?').join(',')})`.replace(/@eid/g, '?')).all(electionId, ...ids);
   } else {
     rows = [];
   }
-  return rows.filter((r) => mailer.isValidEmail(r.email));
+  return channelOf(channel) === 'whatsapp'
+    ? rows.filter((r) => whatsapp.voterPhone(r))
+    : rows.filter((r) => mailer.isValidEmail(r.email));
 }
 
 router.get('/invitations', requireElection, requirePerm('send_invitations'), (req, res) => {
@@ -51,12 +64,22 @@ router.get('/invitations', requireElection, requirePerm('send_invitations'), (re
     invalidEmail: d.prepare("SELECT email FROM voters WHERE election_id = ? AND eligibility = 'eligible' AND email IS NOT NULL AND email <> ''").all(e.id).filter((r) => !mailer.isValidEmail(r.email)).length,
     noCode: d.prepare(`SELECT COUNT(*) n FROM voters v WHERE v.election_id = ? AND v.eligibility = 'eligible' AND NOT EXISTS (SELECT 1 FROM voting_codes c WHERE c.voter_id = v.id AND c.status IN ('active','used'))`).get(e.id).n,
   };
+  const waSummary = invitationSummary(e.id, 'whatsapp');
+  const eligibleRows = d.prepare("SELECT mobile, whatsapp FROM voters WHERE election_id = ? AND eligibility = 'eligible'").all(e.id);
+  const waCounts = {
+    unsent: recipients(e.id, 'unsent', [], 'whatsapp').length,
+    failed: recipients(e.id, 'failed', [], 'whatsapp').length,
+    noPhone: eligibleRows.filter((r) => !whatsapp.voterPhone(r)).length,
+  };
+  const waSample = whatsapp.renderText(e, d.prepare("SELECT * FROM voters WHERE election_id = ? AND eligibility = 'eligible' ORDER BY id LIMIT 1").get(e.id) || { full_name: 'Sample Voter' }, '2222222222222222');
   const status = ['queued', 'sent', 'failed', 'not_sent'].includes(req.query.status) ? req.query.status : '';
   const page = Math.max(1, asInt(req.query.page) || 1);
   const list = voters.listVoters(e.id, { eligibility: 'eligible', invitation: status, q: clean(req.query.q, 100) }, { limit: 50, offset: (page - 1) * 50, order: 'COALESCE(i.last_attempt_at, i.created_at) DESC, v.full_name' });
   res.render('admin/invitations', {
     title: 'Invitations', summary, counts, tpl: mailer.template(e), variables: mailer.VARIABLES, mode: mailer.mode(),
     rows: list.rows, total: list.total, page, pages: Math.max(1, Math.ceil(list.total / 50)), status,
+    waSummary, waCounts, waMode: whatsapp.mode(), waSample, waTemplate: whatsapp.TEMPLATE_BODY,
+    waTemplateName: require('../../config').whatsapp.templateName,
   });
 });
 
@@ -108,17 +131,23 @@ const MODE_LABELS = {
   selected: { title: 'Resend selected invitations', verb: 'send voting invitations to', kind: 'resend' },
 };
 
-function confirmPage(req, res, mode, ids) {
+function confirmPage(req, res, mode, ids, channel = 'email') {
   const e = req.election;
-  const list = recipients(e.id, mode, ids);
+  const list = recipients(e.id, mode, ids, channel);
   const resends = list.filter((r) => r.sent_count > 0).length;
   const subject = mailer.renderInvitation(e, { full_name: 'X' }, '2222222222222222').subject;
-  res.render('admin/invitations-confirm', { title: MODE_LABELS[mode].title, mode, ids, list, resends, subject, labels: MODE_LABELS[mode], mailMode: mailer.mode() });
+  const isWa = channel === 'whatsapp';
+  const labels = { ...MODE_LABELS[mode], title: isWa ? MODE_LABELS[mode].title.replace('invitations', 'WhatsApp messages') : MODE_LABELS[mode].title };
+  res.render('admin/invitations-confirm', {
+    title: labels.title, mode, ids, list, resends, subject, labels, channel,
+    mailMode: isWa ? (whatsapp.mode() === 'api' ? 'smtp' : 'outbox') : mailer.mode(),
+    contactOf: (v) => (isWa ? whatsapp.display(whatsapp.voterPhone(v)) : v.email),
+  });
 }
 
 router.get('/invitations/confirm', requireElection, requirePerm('send_invitations'), (req, res) => {
   const mode = ['unsent', 'failed'].includes(req.query.mode) ? req.query.mode : 'unsent';
-  confirmPage(req, res, mode, []);
+  confirmPage(req, res, mode, [], channelOf(req.query.channel));
 });
 
 router.post('/invitations/confirm', requireElection, requirePerm('send_invitations'), (req, res) => {
@@ -127,7 +156,7 @@ router.post('/invitations/confirm', requireElection, requirePerm('send_invitatio
     flash(res, 'error', 'Select at least one voter.');
     return res.redirect(303, '/admin/invitations');
   }
-  confirmPage(req, res, 'selected', ids);
+  confirmPage(req, res, 'selected', ids, channelOf(req.body.channel));
 });
 
 router.post('/invitations/send', requireElection, requirePerm('send_invitations'), (req, res) => {
@@ -143,21 +172,23 @@ router.post('/invitations/send', requireElection, requirePerm('send_invitations'
     return res.redirect(303, '/admin/invitations');
   }
   const ids = [].concat(req.body.ids || []).map(asInt).filter(Boolean);
+  const channel = channelOf(req.body.channel);
   const d = db.get();
   const queued = d.transaction(() => {
-    const list = recipients(e.id, mode, ids); // re-evaluated inside the transaction
+    const list = recipients(e.id, mode, ids, channel); // re-evaluated inside the transaction
     for (const v of list) {
       const kind = mode === 'failed' ? 'retry' : v.sent_count > 0 ? 'resend' : 'initial';
-      mailer.queueInvitation({ electionId: e.id, voter: v, codeId: v.code_id, kind, adminId: req.admin.id });
+      mailer.queueInvitation({ electionId: e.id, voter: v, codeId: v.code_id, kind, adminId: req.admin.id, channel });
     }
     return list;
   }).immediate();
   const resends = queued.filter((v) => v.sent_count > 0).length;
-  const action = mode === 'failed' ? 'Failed invitations retried' : mode === 'selected' ? 'Invitations resent (selected voters)' : 'Invitations sent';
-  audit.log(req, action, { category: 'invitations', entityType: 'election', entityId: e.id, entityLabel: e.name, details: { queued: queued.length, resends, first_invitations: queued.length - resends } });
+  const noun = channel === 'whatsapp' ? 'WhatsApp messages' : 'Invitations';
+  const action = mode === 'failed' ? `Failed ${noun.toLowerCase()} retried` : mode === 'selected' ? `${noun} resent (selected voters)` : `${noun} sent`;
+  audit.log(req, action, { category: 'invitations', entityType: 'election', entityId: e.id, entityLabel: e.name, details: { channel, queued: queued.length, resends, first_messages: queued.length - resends } });
   setImmediate(() => mailer.processQueue(50).catch((err) => console.error(err)));
-  flash(res, 'success', `${queued.length} invitation(s) queued for sending${resends ? ` (${resends} resend(s))` : ''}. Status updates appear below as messages are sent.`);
-  res.redirect(303, '/admin/invitations');
+  flash(res, 'success', `${queued.length} ${channel === 'whatsapp' ? 'WhatsApp message(s)' : 'invitation(s)'} queued for sending${resends ? ` (${resends} resend(s))` : ''}. Status updates appear below as messages are sent.`);
+  res.redirect(303, channel === 'whatsapp' ? '/admin/invitations#whatsapp' : '/admin/invitations');
 });
 
 // Single voter send / resend (from voter page)
@@ -165,12 +196,16 @@ router.post('/invitations/voter/:id/send', numericId, requireElection, requirePe
   const e = req.election;
   const v = voters.getVoterRow(e.id, asInt(req.params.id));
   if (!v) throw httpError(404, 'Voter not found.');
-  const back = `/admin/voters/${v.id}`;
-  const list = recipients(e.id, 'selected', [v.id]);
+  const back = `/admin/voters/${v.id}#invite`;
+  const channel = channelOf(req.body.channel);
+  const list = recipients(e.id, 'selected', [v.id], channel);
   if (!list.length) {
     let why = 'This voter cannot receive an invitation right now.';
     if (v.ballot_id) why = 'This voter has already voted.';
     else if (v.eligibility !== 'eligible') why = 'This voter is not eligible.';
+    else if (channel === 'whatsapp' && !whatsapp.voterPhone(v)) why = 'This voter has no valid mobile or WhatsApp number. Add one first.';
+    else if (channel === 'whatsapp' && v.code_status_raw !== 'active') why = 'This voter has no active voting code.';
+    else if (channel === 'whatsapp') why = 'A WhatsApp message is already queued for this voter.';
     else if (!v.email) why = 'This voter has no email address. Add an email or deliver the code externally.';
     else if (!mailer.isValidEmail(v.email)) why = 'The email address is not valid. Correct it first.';
     else if (v.code_status_raw !== 'active') why = 'This voter has no active voting code.';
@@ -184,20 +219,22 @@ router.post('/invitations/voter/:id/send', numericId, requireElection, requirePe
   }
   const r = list[0];
   if (r.sent_count > 0 && req.body.confirm !== 'yes') {
-    flash(res, 'error', 'This voter has already been sent an invitation. Tick the confirmation box to resend it.');
+    flash(res, 'error', `This voter has already been sent ${channel === 'whatsapp' ? 'a WhatsApp message' : 'an invitation'}. Tick the confirmation box to resend it.`);
     return res.redirect(303, back);
   }
   const kind = r.last_status === 'failed' ? 'retry' : r.sent_count > 0 ? 'resend' : 'initial';
-  mailer.queueInvitation({ electionId: e.id, voter: r, codeId: r.code_id, kind, adminId: req.admin.id });
-  audit.log(req, kind === 'initial' ? 'Invitation sent' : 'Invitation resent', { category: 'invitations', entityType: 'voter', entityId: v.id, entityLabel: `${v.full_name} (${v.voter_ref})`, details: { kind, to: v.email } });
+  mailer.queueInvitation({ electionId: e.id, voter: r, codeId: r.code_id, kind, adminId: req.admin.id, channel });
+  const to = channel === 'whatsapp' ? whatsapp.display(whatsapp.voterPhone(r)) : v.email;
+  const what = channel === 'whatsapp' ? 'WhatsApp message' : 'Invitation';
+  audit.log(req, `${what} ${kind === 'initial' ? 'sent' : 'resent'}`, { category: 'invitations', entityType: 'voter', entityId: v.id, entityLabel: `${v.full_name} (${v.voter_ref})`, details: { channel, kind, to } });
   setImmediate(() => mailer.processQueue(10).catch((err) => console.error(err)));
-  flash(res, 'success', `Invitation ${kind === 'initial' ? 'queued' : 're-queued'} for ${v.full_name} (same voting code — no new entitlement created).`);
+  flash(res, 'success', `${what} ${kind === 'initial' ? 'queued' : 're-queued'} for ${v.full_name} (same voting code, no new entitlement created).`);
   res.redirect(303, back);
 });
 
 // ---------- Outbox (development mode without SMTP) ----------
 router.get('/invitations/outbox', requireElection, requirePerm('send_invitations'), requirePerm('manage_codes'), (req, res) => {
-  const rows = db.get().prepare(`SELECT o.id, o.to_email, o.subject, o.created_at FROM email_outbox o JOIN invitations i ON i.id = o.invitation_id
+  const rows = db.get().prepare(`SELECT o.id, o.to_email, o.subject, o.created_at, o.channel FROM email_outbox o JOIN invitations i ON i.id = o.invitation_id
     WHERE i.election_id = ? ORDER BY o.id DESC LIMIT 200`).all(req.election.id);
   res.render('admin/outbox', { title: 'Email outbox', rows, mode: mailer.mode() });
 });

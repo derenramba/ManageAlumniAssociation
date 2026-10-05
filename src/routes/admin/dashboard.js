@@ -7,13 +7,13 @@ const { requireElection, requirePerm } = require('./guards');
 
 const router = express.Router();
 
-function invitationSummary(electionId) {
-  // Latest invitation per voter
+function invitationSummary(electionId, channel = 'email') {
+  // Latest invitation per voter on this channel
   const rows = db.get().prepare(`SELECT i.status, COUNT(*) n FROM invitations i
-    WHERE i.election_id = ? AND i.id = (SELECT MAX(id) FROM invitations WHERE voter_id = i.voter_id)
-    GROUP BY i.status`).all(electionId);
+    WHERE i.election_id = ? AND i.channel = ? AND i.id = (SELECT MAX(id) FROM invitations WHERE voter_id = i.voter_id AND channel = i.channel)
+    GROUP BY i.status`).all(electionId, channel);
   const by = Object.fromEntries(rows.map((r) => [r.status, r.n]));
-  const sentEver = db.get().prepare("SELECT COUNT(DISTINCT voter_id) n FROM invitations WHERE election_id = ? AND status IN ('sent','delivered')").get(electionId).n;
+  const sentEver = db.get().prepare("SELECT COUNT(DISTINCT voter_id) n FROM invitations WHERE election_id = ? AND channel = ? AND status IN ('sent','delivered')").get(electionId, channel).n;
   return { queued: (by.queued || 0) + (by.sending || 0), sent: (by.sent || 0) + (by.delivered || 0), failed: by.failed || 0, sentEver };
 }
 
@@ -32,9 +32,11 @@ router.get('/', (req, res) => {
   const readiness = election.readinessChecklist(e);
   const issues = readiness.items.filter((i) => i.level !== 'ok');
   const inv = invitationSummary(e.id);
+  const wa = invitationSummary(e.id, 'whatsapp');
   if (inv.failed) issues.push({ level: 'warning', label: `${inv.failed} invitation(s) failed to send`, link: '/admin/invitations?status=failed' });
+  if (wa.failed) issues.push({ level: 'warning', label: `${wa.failed} WhatsApp message(s) failed to send`, link: '/admin/invitations?wa=failed#whatsapp' });
   const recent = d.prepare(`SELECT v.full_name, b.submitted_at FROM ballots b JOIN voters v ON v.id = b.voter_id WHERE b.election_id = ? ORDER BY b.id DESC LIMIT 8`).all(e.id);
-  res.render('admin/dashboard', { title: 'Dashboard', t, counts, issues, inv, readiness, mailMode: mailer.mode(), recent, transitions: election.TRANSITIONS });
+  res.render('admin/dashboard', { title: 'Dashboard', t, counts, issues, inv, wa, readiness, mailMode: mailer.mode(), recent, transitions: election.TRANSITIONS });
 });
 
 router.get('/turnout', requireElection, requirePerm('view_turnout'), (req, res) => {

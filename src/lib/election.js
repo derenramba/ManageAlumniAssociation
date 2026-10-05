@@ -151,7 +151,7 @@ function readinessChecklist(e) {
     AND NOT EXISTS (SELECT 1 FROM voting_codes c WHERE c.voter_id = v.id AND c.status IN ('active','used'))`).get(e.id).n;
   add(eligible > 0 && withoutCode === 0, withoutCode ? `${withoutCode} eligible voter(s) do not have a voting code yet` : 'Every eligible voter has a voting code', { link: '/admin/codes' });
   const uninvited = d.prepare(`SELECT COUNT(*) n FROM voters v WHERE v.election_id = ? AND v.eligibility = 'eligible' AND v.email IS NOT NULL AND v.email <> ''
-    AND NOT EXISTS (SELECT 1 FROM invitations i WHERE i.voter_id = v.id AND i.status IN ('sent','delivered'))`).get(e.id).n;
+    AND NOT EXISTS (SELECT 1 FROM invitations i WHERE i.voter_id = v.id AND i.channel = 'email' AND i.status IN ('sent','delivered'))`).get(e.id).n;
   add(uninvited === 0, uninvited ? `${uninvited} voter(s) with email have not yet received an invitation` : 'Invitations sent to all voters with email', { level: 'warning', link: '/admin/invitations' });
   const noEmail = d.prepare("SELECT COUNT(*) n FROM voters WHERE election_id = ? AND eligibility = 'eligible' AND (email IS NULL OR email = '')").get(e.id).n;
   add(noEmail === 0, `${noEmail} eligible voter(s) have no email — deliver their codes externally`, { level: 'warning', link: '/admin/voters?filter=no_email' });

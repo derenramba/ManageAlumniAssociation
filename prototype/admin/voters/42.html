@@ -90,11 +90,13 @@
 
 
 
+
 </dd>
     <dt>Vote status</dt><dd>
 
 
 <span class="badge neutral">Not voted</span>
+
 
 </dd>
     <dt>Voting timestamp</dt><dd></dd>
@@ -123,6 +125,7 @@
 <span class="badge info">Active</span>
 
 
+
 </p>
   
     <p class="row"><span class="code-mask" id="code-42">•••• •••• •••• ••••</span> <button type="button" class="btn secondary small" data-reveal-code="/admin/codes/voter/42/reveal" data-target="code-42">Copy</button></p>
@@ -135,6 +138,7 @@
           <input type="hidden" name="_csrf" value="">
           <div class="field"><label for="reason">Reason</label><input type="text" id="reason" name="reason" required placeholder="e.g. Voter reports code was shared"></div>
           <label class="check mb-1"><input type="checkbox" name="send_invitation" value="1" checked> <span>Email the new code to kavitha.patel@example.org (replace only)</span></label>
+          <label class="check mb-1"><input type="checkbox" name="send_whatsapp" value="1"> <span>WhatsApp the new code to +919885632574 (replace only)</span></label>
           <div class="row">
             <button class="btn secondary" type="submit" formaction="/admin/codes/voter/42/replace" data-confirm="Replace this code? The old code will stop working immediately.">Replace code</button>
             <button class="btn danger secondary" type="submit" formaction="/admin/codes/voter/42/revoke">Revoke only</button>
@@ -146,32 +150,53 @@
   
     <h3 class="mt-2">Code history</h3>
     <ul class="small">
-      <li>2 Oct 2026, 05:08:11, active</li>
+      <li>2 Oct 2026, 18:47:12, active</li>
     </ul>
   
 </section>
 
 <section class="card" id="invite">
-  <h2>Invitation</h2>
+  <h2>Invitations</h2>
+  <h3>Email</h3>
   <p>Status: 
 
 
 
+
 <span class="badge success" title="">Sent</span>
- <span class="small muted">last attempt 3 Oct 2026, 05:49:29</span></p>
+ <span class="small muted">last attempt 3 Oct 2026, 19:28:30</span></p>
   
   
   
     <form method="post" action="/admin/invitations/voter/42/send" data-once>
       <input type="hidden" name="_csrf" value="">
       <label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>Resend the invitation with the <strong>same</strong> voting code to kavitha.patel@example.org</span></label>
-      <button class="btn secondary" type="submit">Resend invitation</button>
+      <button class="btn secondary" type="submit">Resend email invitation</button>
+    </form>
+  
+  <h3 class="mt-2">WhatsApp</h3>
+  <p>Status: 
+
+
+
+<span class="badge neutral">Not sent</span>
+
+
+    <br><span class="small muted">Sends to +919885632574 (WhatsApp number)</span></p>
+  
+  
+  
+    <form method="post" action="/admin/invitations/voter/42/send" data-once>
+      <input type="hidden" name="_csrf" value="">
+      <input type="hidden" name="channel" value="whatsapp">
+      
+      <button class="btn " type="submit">Send WhatsApp message</button>
     </form>
   
   
     <h3 class="mt-2">Send history</h3>
-    <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
-    <tr><td class="small nowrap">3 Oct 2026, 05:49:29</td><td class="small">First invitation</td><td><span class="badge success" title="">sent</span></td><td class="small">kavitha.patel@example.org</td><td class="small">Demo Main Administrator</td></tr>
+    <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Channel</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
+    <tr><td class="small nowrap">3 Oct 2026, 19:28:30</td><td class="small">Email</td><td class="small">First invitation</td><td><span class="badge success" title="">sent</span></td><td class="small">kavitha.patel@example.org</td><td class="small">Demo Main Administrator</td></tr>
     </tbody></table></div>
   
 </section>

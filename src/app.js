@@ -36,7 +36,7 @@ function createApp() {
   }));
 
   app.use(express.urlencoded({ extended: true, limit: '2mb', parameterLimit: 20000 }));
-  app.use(express.json({ limit: '1mb' }));
+  app.use(express.json({ limit: '1mb', verify: (req, res, buf) => { req.rawBody = buf; } }));
   app.use(sessions.middleware);
 
   // No dashes anywhere in visible text (client requirement).
@@ -81,10 +81,12 @@ function createApp() {
   // CSRF protection for all state-changing requests (multipart routes verify after parsing).
   app.use((req, res, next) => {
     if (req.method !== 'POST') return next();
+    if (req.path.startsWith('/webhooks/')) return next(); // signed by the provider instead
     if ((req.headers['content-type'] || '').startsWith('multipart/form-data')) return next();
     return verifyCsrf(req, res, next);
   });
 
+  app.use('/webhooks', require('./routes/webhooks'));
   app.use('/', require('./routes/public'));
   app.use('/admin', require('./routes/admin'));
 

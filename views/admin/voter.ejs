@@ -60,6 +60,7 @@
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <div class="field"><label for="reason">Reason</label><input type="text" id="reason" name="reason" required placeholder="e.g. Voter reports code was shared"></div>
           <% if (v.email && can('send_invitations')) { %><label class="check mb-1"><input type="checkbox" name="send_invitation" value="1" checked> <span>Email the new code to <%= v.email %> (replace only)</span></label><% } %>
+          <% if (waPhone && can('send_invitations')) { %><label class="check mb-1"><input type="checkbox" name="send_whatsapp" value="1"> <span>WhatsApp the new code to <%= waPhone %> (replace only)</span></label><% } %>
           <div class="row">
             <button class="btn secondary" type="submit" formaction="/admin/codes/voter/<%= v.id %>/replace" data-confirm="Replace this code? The old code will stop working immediately.">Replace code</button>
             <button class="btn danger secondary" type="submit" formaction="/admin/codes/voter/<%= v.id %>/revoke">Revoke only</button>
@@ -82,7 +83,8 @@
 </section>
 
 <section class="card" id="invite">
-  <h2>Invitation</h2>
+  <h2>Invitations</h2>
+  <h3>Email</h3>
   <p>Status: <%- include('../partials/voter-badges', { v, which: 'inv' }) %><% if (v.inv_at) { %> <span class="small muted">last attempt <%= fmtShort(v.inv_at) %></span><% } %></p>
   <% if (v.inv_status === 'failed' && v.inv_error) { %><div class="alert error"><div><%= v.inv_error %></div></div><% } %>
   <% if (!v.email && !voted) { %><div class="alert warning"><div>This voter has no email address. They remain eligible — add an email, or copy the code and deliver it externally (phone, SMS, WhatsApp, letter).</div></div><% } %>
@@ -90,13 +92,26 @@
     <form method="post" action="/admin/invitations/voter/<%= v.id %>/send" data-once>
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <% if (v.inv_count > 0) { %><label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>Resend the invitation with the <strong>same</strong> voting code to <%= v.email %></span></label><% } %>
-      <button class="btn <%= v.inv_count ? 'secondary' : '' %>" type="submit"><%= v.inv_count ? 'Resend invitation' : 'Send invitation' %></button>
+      <button class="btn <%= v.inv_count ? 'secondary' : '' %>" type="submit"><%= v.inv_count ? 'Resend email invitation' : 'Send email invitation' %></button>
+    </form>
+  <% } %>
+  <h3 class="mt-2">WhatsApp</h3>
+  <p>Status: <%- include('../partials/voter-badges', { v, which: 'wa' }) %><% if (v.wa_at) { %> <span class="small muted">last attempt <%= fmtShort(v.wa_at) %></span><% } %>
+    <% if (waPhone) { %><br><span class="small muted">Sends to <%= waPhone %><%= v.whatsapp ? ' (WhatsApp number)' : ' (mobile number)' %></span><% } %></p>
+  <% if (v.wa_status === 'failed' && v.wa_error) { %><div class="alert error"><div><%= v.wa_error %></div></div><% } %>
+  <% if (!waPhone && !voted) { %><div class="alert warning"><div>No usable mobile or WhatsApp number. Add one under Edit details to send the code by WhatsApp.</div></div><% } %>
+  <% if (can('send_invitations') && !voted && !closed && waPhone && v.code_status_raw === 'active') { %>
+    <form method="post" action="/admin/invitations/voter/<%= v.id %>/send" data-once>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="channel" value="whatsapp">
+      <% if (v.wa_count > 0) { %><label class="check mb-1"><input type="checkbox" name="confirm" value="yes" required> <span>Resend the WhatsApp message with the <strong>same</strong> voting code to <%= waPhone %></span></label><% } %>
+      <button class="btn <%= v.wa_count ? 'secondary' : '' %>" type="submit"><%= v.wa_count ? 'Resend WhatsApp message' : 'Send WhatsApp message' %></button>
     </form>
   <% } %>
   <% if (invitations.length) { %>
     <h3 class="mt-2">Send history</h3>
-    <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
-    <% invitations.forEach(function (i) { %><tr><td class="small nowrap"><%= fmtShort(i.last_attempt_at || i.created_at) %></td><td class="small"><%= i.kind === 'initial' ? 'First invitation' : i.kind === 'resend' ? 'Resend' : 'Retry' %></td><td><span class="badge <%= i.status === 'failed' ? 'error' : i.status === 'sent' || i.status === 'delivered' ? 'success' : 'info' %>" title="<%= i.error || '' %>"><%= i.status %></span></td><td class="small"><%= i.to_email %></td><td class="small"><%= i.admin_name || 'System' %></td></tr><% }) %>
+    <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Channel</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
+    <% invitations.forEach(function (i) { %><tr><td class="small nowrap"><%= fmtShort(i.last_attempt_at || i.created_at) %></td><td class="small"><%= i.channel === 'whatsapp' ? 'WhatsApp' : 'Email' %></td><td class="small"><%= i.kind === 'initial' ? 'First invitation' : i.kind === 'resend' ? 'Resend' : 'Retry' %></td><td><span class="badge <%= i.status === 'failed' ? 'error' : i.status === 'sent' || i.status === 'delivered' ? 'success' : 'info' %>" title="<%= i.error || '' %>"><%= i.status %></span></td><td class="small"><%= i.to_email %></td><td class="small"><%= i.admin_name || 'System' %></td></tr><% }) %>
     </tbody></table></div>
   <% } %>
 </section>

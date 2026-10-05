@@ -113,7 +113,8 @@ router.get('/voters/:id', numericId, requirePerm('manage_voters', 'view_turnout'
   const codeHistory = d.prepare('SELECT * FROM voting_codes WHERE voter_id = ? ORDER BY id DESC').all(v.id);
   const invitations = d.prepare('SELECT i.*, a.full_name AS admin_name FROM invitations i LEFT JOIN admin_users a ON a.id = i.requested_by WHERE i.voter_id = ? ORDER BY i.id DESC').all(v.id);
   const history = d.prepare("SELECT * FROM audit_log WHERE entity_type = 'voter' AND entity_id = ? ORDER BY id DESC LIMIT 50").all(v.id);
-  res.render('admin/voter', { title: v.full_name, v, codeHistory, invitations, history, listApproved: !!req.election.voter_list_approved_at });
+  const wa = require('../../lib/whatsapp');
+  res.render('admin/voter', { title: v.full_name, v, codeHistory, invitations, history, listApproved: !!req.election.voter_list_approved_at, waPhone: wa.display(wa.voterPhone(v)) });
 });
 
 router.get('/voters/:id/edit', numericId, requirePerm('manage_voters'), (req, res) => {

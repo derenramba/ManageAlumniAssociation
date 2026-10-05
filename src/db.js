@@ -264,6 +264,13 @@ function open(file = config.dbFile) {
 
 // Idempotent data fixes applied at start-up.
 function migrate(d) {
+  // Invitations can be sent by email or WhatsApp.
+  const invCols = d.prepare('PRAGMA table_info(invitations)').all().map((c) => c.name);
+  if (!invCols.includes('channel')) d.exec("ALTER TABLE invitations ADD COLUMN channel TEXT NOT NULL DEFAULT 'email'");
+  d.exec('CREATE INDEX IF NOT EXISTS idx_invitations_channel ON invitations(voter_id, channel, id)');
+  const outCols = d.prepare('PRAGMA table_info(email_outbox)').all().map((c) => c.name);
+  if (!outCols.includes('channel')) d.exec("ALTER TABLE email_outbox ADD COLUMN channel TEXT NOT NULL DEFAULT 'email'");
+
   // Batch ranges are displayed as "2012-14" (earlier imports stored "2012 to 2014").
   for (const table of ['voters', 'candidates']) {
     const rows = d.prepare(`SELECT id, batch FROM ${table} WHERE batch LIKE '____ to ____'`).all();
