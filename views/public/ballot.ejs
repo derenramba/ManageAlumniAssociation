@@ -1,10 +1,7 @@
 <%- include('../partials/public-top') %>
 <%- include('../partials/steps', { step: 1 }) %>
 <section class="card voter-welcome" aria-labelledby="welcome-h">
-  <div class="row between">
-    <h1 id="welcome-h" class="mb-0">Welcome, <%= voter.name %></h1>
-    <form method="post" action="/exit" class="inline-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn ghost small" type="submit">Exit</button></form>
-  </div>
+  <h1 id="welcome-h" class="mb-0">Welcome, <%= voter.name %></h1>
   <% if (voter.batch) { %><p class="voter-batch">Batch <%= voter.batch %></p><% } %>
   <p class="voter-check">Please check that these are your details before voting. If they are incorrect, contact the Chief Election Commissioner on WhatsApp at <a href="https://wa.me/447770677777" target="_blank" rel="noopener">+44 7770 677777</a>.</p>
 </section>

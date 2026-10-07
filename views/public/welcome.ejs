@@ -13,6 +13,8 @@
   </dl>
 </section>
 
+<%- include('../partials/turnout', { turnout }) %>
+
 <% if (votingOpen) { %>
 <section class="card code-card" aria-labelledby="code-h">
   <span class="overline">Step 1</span>
@@ -74,5 +76,4 @@
 </section>
 <% } %>
 
-<%- include('../partials/turnout', { turnout }) %>
 <%- include('../partials/public-bottom') %>
