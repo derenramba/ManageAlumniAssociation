@@ -154,7 +154,7 @@
   
     <h3 class="mt-2">Code history</h3>
     <ul class="small">
-      <li>7 Oct 2026, 16:30:07, active</li>
+      <li>7 Oct 2026, 16:35:31, active</li>
     </ul>
   
 </section>
@@ -186,12 +186,11 @@
   
   
   
-    <form method="post" action="/admin/invitations/voter/7/send" data-once>
-      <input type="hidden" name="_csrf" value="">
-      <input type="hidden" name="channel" value="whatsapp">
-      
-      <button class="btn " type="submit">Send WhatsApp message</button>
+    <form method="post" action="/admin/invitations/voter/7/manual" target="_blank">
+      <input type="hidden" name="_csrf" value=""><input type="hidden" name="channel" value="whatsapp">
+      <button class="btn" type="submit">Open WhatsApp to send the code</button>
     </form>
+    <p class="small muted mt-1">Opens WhatsApp on this device with a chat to +919424602206 and the voter's message and code typed in. Press Send in WhatsApp.</p>
   
   <h3 class="mt-2">SMS</h3>
   <p>Status: 
@@ -217,10 +216,7 @@
     <h3 class="mt-2" id="manual">Send manually</h3>
     <p class="small muted">If the voter has not received their code, send it yourself. This opens WhatsApp or your email app on this device with the voter's message and <strong>same</strong> code already filled in. Check it, then press Send.</p>
     <div class="row">
-      <form method="post" action="/admin/invitations/voter/7/manual" target="_blank" class="inline-form">
-        <input type="hidden" name="_csrf" value=""><input type="hidden" name="channel" value="whatsapp">
-        <button class="btn secondary" type="submit">Send manually by WhatsApp</button>
-      </form>
+      
       
     </div>
     

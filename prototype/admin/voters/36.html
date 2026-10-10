@@ -154,7 +154,7 @@
   
     <h3 class="mt-2">Code history</h3>
     <ul class="small">
-      <li>7 Oct 2026, 16:30:36, active</li>
+      <li>7 Oct 2026, 16:36:00, active</li>
     </ul>
   
 </section>
@@ -169,7 +169,7 @@
 
 
 <span class="badge success" title="">Sent</span>
- <span class="small muted">last attempt 8 Oct 2026, 17:06:00</span></p>
+ <span class="small muted">last attempt 8 Oct 2026, 17:11:24</span></p>
   
   
   
@@ -192,12 +192,11 @@
   
   
   
-    <form method="post" action="/admin/invitations/voter/36/send" data-once>
-      <input type="hidden" name="_csrf" value="">
-      <input type="hidden" name="channel" value="whatsapp">
-      
-      <button class="btn " type="submit">Send WhatsApp message</button>
+    <form method="post" action="/admin/invitations/voter/36/manual" target="_blank">
+      <input type="hidden" name="_csrf" value=""><input type="hidden" name="channel" value="whatsapp">
+      <button class="btn" type="submit">Open WhatsApp to send the code</button>
     </form>
+    <p class="small muted mt-1">Opens WhatsApp on this device with a chat to +919719248295 and the voter's message and code typed in. Press Send in WhatsApp.</p>
   
   <h3 class="mt-2">SMS</h3>
   <p>Status: 
@@ -223,10 +222,7 @@
     <h3 class="mt-2" id="manual">Send manually</h3>
     <p class="small muted">If the voter has not received their code, send it yourself. This opens WhatsApp or your email app on this device with the voter's message and <strong>same</strong> code already filled in. Check it, then press Send.</p>
     <div class="row">
-      <form method="post" action="/admin/invitations/voter/36/manual" target="_blank" class="inline-form">
-        <input type="hidden" name="_csrf" value=""><input type="hidden" name="channel" value="whatsapp">
-        <button class="btn secondary" type="submit">Send manually by WhatsApp</button>
-      </form>
+      
       <form method="post" action="/admin/invitations/voter/36/manual" class="inline-form">
         <input type="hidden" name="_csrf" value=""><input type="hidden" name="channel" value="email">
         <button class="btn secondary" type="submit">Send manually by email</button>
@@ -237,7 +233,7 @@
   
     <h3 class="mt-2">Send history</h3>
     <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Channel</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
-    <tr><td class="small nowrap">8 Oct 2026, 17:06:00</td><td class="small">Email</td><td class="small">First invitation</td><td><span class="badge success" title="">sent</span></td><td class="small">naveen.gupta@example.org</td><td class="small">Demo Main Administrator</td></tr>
+    <tr><td class="small nowrap">8 Oct 2026, 17:11:24</td><td class="small">Email</td><td class="small">First invitation</td><td><span class="badge success" title="">sent</span></td><td class="small">naveen.gupta@example.org</td><td class="small">Demo Main Administrator</td></tr>
     </tbody></table></div>
   
 </section>

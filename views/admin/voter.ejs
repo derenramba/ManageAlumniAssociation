@@ -101,7 +101,13 @@
     <% if (waPhone) { %><br><span class="small muted">Sends to <%= waPhone %><%= v.whatsapp ? ' (WhatsApp number)' : ' (mobile number)' %></span><% } %></p>
   <% if (v.wa_status === 'failed' && v.wa_error) { %><div class="alert error"><div><%= v.wa_error %></div></div><% } %>
   <% if (!waPhone && !voted) { %><div class="alert warning"><div>No usable mobile or WhatsApp number. Add one under Edit details to send the code by WhatsApp.</div></div><% } %>
-  <% if (can('send_invitations') && !voted && !closed && waPhone && v.code_status_raw === 'active') { %>
+  <% if (!waConnected && can('send_invitations') && can('manage_codes') && !voted && !closed && waPhone && v.code_status_raw === 'active') { %>
+    <form method="post" action="/admin/invitations/voter/<%= v.id %>/manual" target="_blank">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="channel" value="whatsapp">
+      <button class="btn" type="submit">Open WhatsApp to send the code</button>
+    </form>
+    <p class="small muted mt-1">Opens WhatsApp on this device with a chat to <%= waPhone %> and the voter's message and code typed in. Press Send in WhatsApp.</p>
+  <% } else if (waConnected && can('send_invitations') && !voted && !closed && waPhone && v.code_status_raw === 'active') { %>
     <form method="post" action="/admin/invitations/voter/<%= v.id %>/send" data-once>
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <input type="hidden" name="channel" value="whatsapp">
@@ -126,7 +132,7 @@
     <h3 class="mt-2" id="manual">Send manually</h3>
     <p class="small muted">If the voter has not received their code, send it yourself. This opens WhatsApp or your email app on this device with the voter's message and <strong>same</strong> code already filled in. Check it, then press Send.</p>
     <div class="row">
-      <% if (waPhone) { %><form method="post" action="/admin/invitations/voter/<%= v.id %>/manual" target="_blank" class="inline-form">
+      <% if (waPhone && waConnected) { %><form method="post" action="/admin/invitations/voter/<%= v.id %>/manual" target="_blank" class="inline-form">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="channel" value="whatsapp">
         <button class="btn secondary" type="submit">Send manually by WhatsApp</button>
       </form><% } %>

@@ -57,7 +57,7 @@ test('manual send opens WhatsApp or email with the same code, audited', async ()
   d.prepare("UPDATE voters SET mobile = '98480 22338' WHERE id = ?").run(v);
   const code = one("SELECT code FROM voting_codes WHERE voter_id = ? AND status = 'active'", v).code;
   const page = await admin.get(`/admin/voters/${v}`);
-  assert.match(page.text, /Send manually by WhatsApp/);
+  assert.match(page.text, /Open WhatsApp to send the code/);
   assert.match(page.text, /Send manually by email/);
   let r = await admin.post(`/admin/invitations/voter/${v}/manual`, { channel: 'whatsapp' });
   assert.equal(r.status, 303);
