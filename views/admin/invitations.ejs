@@ -3,6 +3,8 @@
 <% if (summary.queued) { %><div data-autorefresh="6"></div><% } %>
 <% if (mode !== 'smtp') { %>
   <div class="alert warning"><div><strong>Outbox mode:</strong> no SMTP server is configured, so emails are stored in the <a href="/admin/invitations/outbox">Email outbox</a> instead of being delivered. Set <code>SMTP_HOST</code>, <code>SMTP_USER</code>, <code>SMTP_PASS</code> and <code>SMTP_FROM</code> to send real email.</div></div>
+<% } else { %>
+  <p class="small muted"><% if (backupEmail) { %>Backup email account: <strong><%= backupEmail %></strong>. If the main account fails (for example after reaching its daily limit), emails are sent from the backup automatically.<% } else { %>No backup email account is set. If the main account reaches its daily limit, add <code>SMTP2_USER</code> and <code>SMTP2_PASS</code> in Render, then use “Retry failed”.<% } %></p>
 <% } %>
 
 <div class="stats">

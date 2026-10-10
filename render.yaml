@@ -34,6 +34,11 @@ services:
         sync: false
       - key: SMTP_FROM
         sync: false
+      # Optional backup email account, used automatically when the main one fails
+      - key: SMTP2_USER
+        sync: false
+      - key: SMTP2_PASS
+        sync: false
       # Twilio SMS (optional; leave empty to keep SMS in test mode)
       - key: TWILIO_ACCOUNT_SID
         sync: false

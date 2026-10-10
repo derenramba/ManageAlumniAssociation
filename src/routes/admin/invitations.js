@@ -85,7 +85,7 @@ router.get('/invitations', requireElection, requirePerm('send_invitations'), (re
   const page = Math.max(1, asInt(req.query.page) || 1);
   const list = voters.listVoters(e.id, { eligibility: 'eligible', invitation: status, q: clean(req.query.q, 100) }, { limit: 50, offset: (page - 1) * 50, order: 'COALESCE(i.last_attempt_at, i.created_at) DESC, v.full_name' });
   res.render('admin/invitations', {
-    title: 'Invitations', summary, counts, tpl: mailer.template(e), variables: mailer.VARIABLES, mode: mailer.mode(),
+    title: 'Invitations', summary, counts, tpl: mailer.template(e), variables: mailer.VARIABLES, mode: mailer.mode(), backupEmail: mailer.backupConfigured() ? require('../../config').smtp.backup.user : '',
     rows: list.rows, total: list.total, page, pages: Math.max(1, Math.ceil(list.total / 50)), status,
     waSummary, waCounts, waMode: whatsapp.mode(), waProvider: whatsapp.provider(), waFrom: require('../../config').twilio.whatsappFrom, waSample, waTemplate: whatsapp.TEMPLATE_BODY,
     waTemplateName: require('../../config').whatsapp.templateName,

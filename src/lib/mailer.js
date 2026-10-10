@@ -30,6 +30,37 @@ function getTransport() {
 function setTransport(t) {
   transport = t;
 }
+
+// Backup SMTP account, used when the main one fails (e.g. Gmail daily limit reached).
+let backupTransport = null;
+let primaryPausedUntil = 0; // after a main account failure, go straight to the backup for a while
+const PRIMARY_PAUSE_MS = 2 * 60 * 60 * 1000;
+function backupConfigured() {
+  const b = config.smtp.backup;
+  return !!(b && b.host && b.user && b.pass);
+}
+function getBackupTransport() {
+  if (!backupConfigured()) return null;
+  if (!backupTransport) {
+    const b = config.smtp.backup;
+    backupTransport = nodemailer.createTransport({
+      host: b.host, port: b.port, secure: b.secure, auth: { user: b.user, pass: b.pass }, pool: true, maxConnections: 2,
+    });
+  }
+  return backupTransport;
+}
+function setBackupTransport(t) {
+  backupTransport = t;
+  primaryPausedUntil = 0;
+}
+/** The backup's From line: SMTP2_FROM, else the main display name with the backup address (Gmail requires its own address). */
+function backupFrom() {
+  const b = config.smtp.backup;
+  if (b.from) return b.from;
+  const m = String(config.smtp.from || '').match(/^\s*"?([^"<]*?)"?\s*</);
+  const name = (m && m[1].trim()) || 'MANAGE Alumni Association Elections';
+  return `"${name.replace(/"/g, '')}" <${b.user}>`;
+}
 function mode() {
   return smtpConfigured() ? 'smtp' : 'outbox';
 }
@@ -168,15 +199,22 @@ async function deliverWhatsApp(d, inv, e, voter, code) {
 
 async function deliver(message) {
   if (mode() === 'smtp') {
-    const info = await getTransport().sendMail({
-      from: config.smtp.from,
-      replyTo: config.smtp.replyTo || undefined,
-      to: message.to,
-      subject: message.subject,
-      text: message.text,
-      html: message.html,
-    });
-    return info.messageId || null;
+    const mail = { replyTo: config.smtp.replyTo || undefined, to: message.to, subject: message.subject, text: message.text, html: message.html };
+    const viaBackup = async () => (await getBackupTransport().sendMail({ ...mail, from: backupFrom(), replyTo: mail.replyTo || config.smtp.user || undefined })).messageId || null;
+    if (backupConfigured() && Date.now() < primaryPausedUntil) return viaBackup();
+    try {
+      const info = await getTransport().sendMail({ ...mail, from: config.smtp.from });
+      return info.messageId || null;
+    } catch (err) {
+      if (!backupConfigured()) throw err;
+      console.warn('Main email account failed, switching to the backup account:', String(err && err.message ? err.message : err).slice(0, 200));
+      primaryPausedUntil = Date.now() + PRIMARY_PAUSE_MS;
+      try {
+        return await viaBackup();
+      } catch (err2) {
+        throw new Error(`Main account: ${String(err.message || err).slice(0, 140)} | Backup account: ${String(err2.message || err2).slice(0, 140)}`);
+      }
+    }
   }
   return null; // outbox mode: stored by caller
 }
@@ -258,6 +296,6 @@ function isValidEmail(email) {
 }
 
 module.exports = {
-  mode, smtpConfigured, setTransport, renderInvitation, template, VARIABLES, fill, variablesFor,
+  mode, smtpConfigured, setTransport, backupConfigured, setBackupTransport, renderInvitation, template, VARIABLES, fill, variablesFor,
   queueInvitation, processQueue, sendTestEmail, startWorker, isValidEmail, supportDetails,
 };

@@ -41,6 +41,16 @@ module.exports = {
     pass: env.SMTP_PASS || '',
     from: env.SMTP_FROM || 'MANAGE Alumni Association Elections <elections@example.org>',
     replyTo: env.SMTP_REPLY_TO || '',
+    // Optional backup account (e.g. a second Gmail). Used automatically when the main account fails,
+    // for example after hitting Gmail's daily sending limit. Host/port default to the main account's.
+    backup: {
+      host: env.SMTP2_HOST || env.SMTP_HOST || '',
+      port: parseInt(env.SMTP2_PORT || env.SMTP_PORT || '587', 10),
+      secure: (env.SMTP2_SECURE || env.SMTP_SECURE) === 'true',
+      user: env.SMTP2_USER || '',
+      pass: env.SMTP2_PASS || '',
+      from: env.SMTP2_FROM || '',
+    },
   },
   // WhatsApp Business Platform (Meta Cloud API). Leave the token empty to use outbox (test) mode.
   whatsapp: {
