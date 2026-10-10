@@ -243,6 +243,39 @@ router.post('/invitations/voter/:id/send', numericId, requireElection, requirePe
   res.redirect(303, back);
 });
 
+// Manual send: opens the admin's own WhatsApp or email app with this voter's message (same code) filled in.
+router.post('/invitations/voter/:id/manual', numericId, requireElection, requirePerm('send_invitations'), requirePerm('manage_codes'), (req, res) => {
+  const e = req.election;
+  const v = voters.getVoterRow(e.id, asInt(req.params.id));
+  if (!v) throw httpError(404, 'Voter not found.');
+  const back = `/admin/voters/${v.id}#manual`;
+  const channel = req.body.channel === 'whatsapp' ? 'whatsapp' : 'email';
+  const code = db.get().prepare("SELECT * FROM voting_codes WHERE voter_id = ? AND status = 'active' ORDER BY id DESC LIMIT 1").get(v.id);
+  let why = null;
+  if (v.ballot_id) why = 'This voter has already voted.';
+  else if (v.eligibility !== 'eligible') why = 'This voter is not eligible.';
+  else if (['closed', 'results_review', 'published', 'archived'].includes(e.status)) why = 'Voting has closed.';
+  else if (!code) why = 'This voter has no active voting code.';
+  else if (channel === 'whatsapp' && !whatsapp.voterPhone(v)) why = 'This voter has no valid mobile or WhatsApp number.';
+  else if (channel === 'email' && !mailer.isValidEmail(v.email)) why = 'This voter has no valid email address.';
+  if (why) {
+    flash(res, 'error', why);
+    return res.redirect(303, back);
+  }
+  let url; let to;
+  if (channel === 'whatsapp') {
+    const phone = whatsapp.voterPhone(v);
+    to = whatsapp.display(phone);
+    url = `https://wa.me/${phone}?text=${encodeURIComponent(whatsapp.renderText(e, v, code.code))}`;
+  } else {
+    const msg = mailer.renderInvitation(e, { ...v }, code.code);
+    to = String(v.email).trim();
+    url = `mailto:${encodeURIComponent(to).replace(/%40/g, '@')}?subject=${encodeURIComponent(msg.subject)}&body=${encodeURIComponent(msg.text)}`;
+  }
+  audit.log(req, `Voting code sent manually by ${channel === 'whatsapp' ? 'WhatsApp' : 'email'}`, { category: 'invitations', entityType: 'voter', entityId: v.id, entityLabel: `${v.full_name} (${v.voter_ref})`, details: { channel, manual: true, to } });
+  res.redirect(303, url);
+});
+
 // ---------- Outbox (development mode without SMTP) ----------
 router.get('/invitations/outbox', requireElection, requirePerm('send_invitations'), requirePerm('manage_codes'), (req, res) => {
   const rows = db.get().prepare(`SELECT o.id, o.to_email, o.subject, o.created_at, o.channel FROM email_outbox o JOIN invitations i ON i.id = o.invitation_id

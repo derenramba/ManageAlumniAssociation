@@ -154,7 +154,7 @@
   
     <h3 class="mt-2">Code history</h3>
     <ul class="small">
-      <li>7 Oct 2026, 16:20:55, active</li>
+      <li>7 Oct 2026, 16:30:53, active</li>
     </ul>
   
 </section>
@@ -169,7 +169,7 @@
 
 
 <span class="badge success" title="">Sent</span>
- <span class="small muted">last attempt 8 Oct 2026, 17:13:02</span></p>
+ <span class="small muted">last attempt 8 Oct 2026, 17:23:00</span></p>
   
   
   
@@ -220,9 +220,24 @@
     </form>
   
   
+    <h3 class="mt-2" id="manual">Send manually</h3>
+    <p class="small muted">If the voter has not received their code, send it yourself. This opens WhatsApp or your email app on this device with the voter's message and <strong>same</strong> code already filled in. Check it, then press Send.</p>
+    <div class="row">
+      <form method="post" action="/admin/invitations/voter/53/manual" target="_blank" class="inline-form">
+        <input type="hidden" name="_csrf" value=""><input type="hidden" name="channel" value="whatsapp">
+        <button class="btn secondary" type="submit">Send manually by WhatsApp</button>
+      </form>
+      <form method="post" action="/admin/invitations/voter/53/manual" class="inline-form">
+        <input type="hidden" name="_csrf" value=""><input type="hidden" name="channel" value="email">
+        <button class="btn secondary" type="submit">Send manually by email</button>
+      </form>
+    </div>
+    
+  
+  
     <h3 class="mt-2">Send history</h3>
     <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Channel</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
-    <tr><td class="small nowrap">8 Oct 2026, 17:13:02</td><td class="small">Email</td><td class="small">First invitation</td><td><span class="badge success" title="">sent</span></td><td class="small">rajesh.joshi@example.org</td><td class="small">Demo Main Administrator</td></tr>
+    <tr><td class="small nowrap">8 Oct 2026, 17:23:00</td><td class="small">Email</td><td class="small">First invitation</td><td><span class="badge success" title="">sent</span></td><td class="small">rajesh.joshi@example.org</td><td class="small">Demo Main Administrator</td></tr>
     </tbody></table></div>
   
 </section>

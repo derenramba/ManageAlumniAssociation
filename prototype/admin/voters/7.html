@@ -154,7 +154,7 @@
   
     <h3 class="mt-2">Code history</h3>
     <ul class="small">
-      <li>7 Oct 2026, 16:20:09, active</li>
+      <li>7 Oct 2026, 16:30:07, active</li>
     </ul>
   
 </section>
@@ -212,6 +212,18 @@
       
       <button class="btn " type="submit">Send SMS</button>
     </form>
+  
+  
+    <h3 class="mt-2" id="manual">Send manually</h3>
+    <p class="small muted">If the voter has not received their code, send it yourself. This opens WhatsApp or your email app on this device with the voter's message and <strong>same</strong> code already filled in. Check it, then press Send.</p>
+    <div class="row">
+      <form method="post" action="/admin/invitations/voter/7/manual" target="_blank" class="inline-form">
+        <input type="hidden" name="_csrf" value=""><input type="hidden" name="channel" value="whatsapp">
+        <button class="btn secondary" type="submit">Send manually by WhatsApp</button>
+      </form>
+      
+    </div>
+    
   
   
 </section>

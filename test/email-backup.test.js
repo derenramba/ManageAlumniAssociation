@@ -50,3 +50,22 @@ test('main account over its limit: emails go out through the backup account', as
     mailer.setBackupTransport(null);
   }
 });
+
+test('manual send opens WhatsApp or email with the same code, audited', async () => {
+  const d = db.get();
+  const v = one("SELECT id FROM voters WHERE voter_ref = 'B1'").id;
+  d.prepare("UPDATE voters SET mobile = '98480 22338' WHERE id = ?").run(v);
+  const code = one("SELECT code FROM voting_codes WHERE voter_id = ? AND status = 'active'", v).code;
+  const page = await admin.get(`/admin/voters/${v}`);
+  assert.match(page.text, /Send manually by WhatsApp/);
+  assert.match(page.text, /Send manually by email/);
+  let r = await admin.post(`/admin/invitations/voter/${v}/manual`, { channel: 'whatsapp' });
+  assert.equal(r.status, 303);
+  assert.match(r.headers.get('location'), /^https:\/\/wa\.me\/919848022338\?text=/);
+  const { formatCode } = require('../src/lib/codes');
+  assert.ok(decodeURIComponent(r.headers.get('location')).includes(formatCode(code)));
+  r = await admin.post(`/admin/invitations/voter/${v}/manual`, { channel: 'email' });
+  assert.match(r.headers.get('location'), /^mailto:asha@example\.com\?subject=/);
+  assert.ok(decodeURIComponent(r.headers.get('location')).includes(formatCode(code)));
+  assert.equal(one("SELECT COUNT(*) AS n FROM audit_log WHERE action LIKE 'Voting code sent manually%'").n, 2);
+});

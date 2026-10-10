@@ -122,6 +122,21 @@
       <button class="btn <%= v.sms_count ? 'secondary' : '' %>" type="submit"><%= v.sms_count ? 'Resend SMS' : 'Send SMS' %></button>
     </form>
   <% } %>
+  <% if (can('send_invitations') && can('manage_codes') && !voted && !closed && v.code_status_raw === 'active') { %>
+    <h3 class="mt-2" id="manual">Send manually</h3>
+    <p class="small muted">If the voter has not received their code, send it yourself. This opens WhatsApp or your email app on this device with the voter's message and <strong>same</strong> code already filled in. Check it, then press Send.</p>
+    <div class="row">
+      <% if (waPhone) { %><form method="post" action="/admin/invitations/voter/<%= v.id %>/manual" target="_blank" class="inline-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="channel" value="whatsapp">
+        <button class="btn secondary" type="submit">Send manually by WhatsApp</button>
+      </form><% } %>
+      <% if (v.email) { %><form method="post" action="/admin/invitations/voter/<%= v.id %>/manual" class="inline-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="channel" value="email">
+        <button class="btn secondary" type="submit">Send manually by email</button>
+      </form><% } %>
+    </div>
+    <% if (!waPhone && !v.email) { %><p class="small muted">Add a mobile number or email under Edit details to use these buttons.</p><% } %>
+  <% } %>
   <% if (invitations.length) { %>
     <h3 class="mt-2">Send history</h3>
     <div class="table-wrap"><table class="data"><thead><tr><th>When</th><th>Channel</th><th>Type</th><th>Status</th><th>To</th><th>By</th></tr></thead><tbody>
